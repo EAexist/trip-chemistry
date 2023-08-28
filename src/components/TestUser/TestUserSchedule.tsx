@@ -43,7 +43,7 @@ function TestUserSchedule({}:TestUserScheduleProps){
         <CardCarouselContainer>
           {optionList.map((option, index) => {
             return(
-              <CardCarouselItem id = {index} onHoverElement ={<h2 className='absolute z-10 -bottom-20 text-5xl leading-relaxed font-bold opacity-0 animate-reveal'>{option.detail}</h2>}>
+              <CardCarouselItem id = {index} onHoverElement ={<h2 className='absolute z-10 -bottom-20 text-5xl leading-relaxed font-bold opacity-0 animate-reveal-up'>{option.detail}</h2>}>
                 <ImageCard {...interactiveImageCardPropsFromOption(option, index)} />
               </CardCarouselItem>
             )

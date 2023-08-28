@@ -1,5 +1,5 @@
-import React, { PropsWithChildren, useState, useCallback } from "react";
-import { Routes, Route, useLocation, useMatch, Navigate } from 'react-router-dom';
+import React, { useState, useCallback } from "react";
+import { Navigate } from 'react-router-dom';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 import { testPages, testPageRoutes } from '../../pages';
@@ -14,6 +14,14 @@ interface step{
 interface testPageProps{
     // section : 
 };
+
+function WithAnimate({keyProp, className, children}:React.PropsWithChildren<{keyProp: any, className: string}>){
+    return(
+        <div key = {keyProp} className={className}>
+            {children}
+        </div>
+    )
+}
 
 function TestPage({}:testPageProps){
 
@@ -38,13 +46,22 @@ function TestPage({}:testPageProps){
 
     return(
         <div className='page h-screen'>
+            {/* Stepper */}
             <TestStepper steps = {steps} activeStepIndex = {activeSectionIndex}/>
-            <h1 className='test-title'>{testPages[activeSectionIndex].title}</h1>
-            <div className='h-fit'>
-            {testPageRoutes}
+            
+            {/* Title */}
+            <WithAnimate keyProp={activeSectionIndex} className='test-title opacity-0 animate-reveal-left'>
+                {testPages[activeSectionIndex].title}
+            </WithAnimate>
+
+            {/* Routing Sections */}
+            <div key={activeSectionIndex} className='h-fit opacity-0 animate-reveal-left-d1'>
+                {testPageRoutes}
             </div>
             {/* Render Body Element corresponding to current path.*/}
-            <Navigate to={testPages[activeSectionIndex].path} replace/>            
+            <Navigate to={testPages[activeSectionIndex].path} replace/>     
+
+            {/* Next / Previous Navigation Buttons */}
             <div className='relative'>
                 {activeSectionIndex > 0 &&
                     <button onClick={()=>handleClickNavigationButton(-1)} className='text-xl absolute left-0'><KeyboardArrowLeft sx={{ fontSize: '32px' }}/>이전 질문</button>

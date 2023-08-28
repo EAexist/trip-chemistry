@@ -4,10 +4,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import TestPage from './components/Layout/TestPage';
 
 /* Test Page Components */
-import TestUserBudget from "./components/TestUser/TestUserBudget";
+import TestUserBudgetAverage from "./components/TestUser/TestUserBudgetAverage";
 import TestUserLeadership from "./components/TestUser/TestUserLeadership";
 import TestUserSchedule from "./components/TestUser/TestUserSchedule";
-import TestUserSpecialBudget from "./components/TestUser/TestUserSpecialBudget";
+import TestUserBudgetSpecial from "./components/TestUser/TestUserBudgetSpecial";
 import TestUserConfirm from './components/TestUser/TestUserConfirm';
 
 interface page {
@@ -74,20 +74,20 @@ const testPages = [
     {
         label: '예산',
         path: 'budget',
-        element: <TestUserBudget/>,
+        element: <TestUserBudgetAverage/>,
         title: '평균적으로 얼마나 쓰면 좋을까?',
     },
     {
         label: '특별한 예산',
         path: 'specialBudget',
-        element: <TestUserSpecialBudget/>,
+        element: <TestUserBudgetSpecial/>,
         title: '단 하루 특별한 경험을 위해서라면 얼마나 쓰고 싶어? ',
     },   
     {
         label: '결과 확인',
         path: 'confirm',
         element: <TestUserConfirm/>,
-        title: '다시 답변하고 싶은 질문은 없는지 확인해봐!',
+        title: '다시 답변하고 싶은 질문은 없어?\n 다시 한 번 확인해봐!',
     },       
 ];
 
