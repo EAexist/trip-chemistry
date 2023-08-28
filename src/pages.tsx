@@ -75,7 +75,7 @@ const testPages = [
         label: '예산',
         path: 'budget',
         element: <TestUserBudget/>,
-        title: '평균적으로 얼마 정도 쓰면 좋을까?',
+        title: '평균적으로 얼마나 쓰면 좋을까?',
     },
     {
         label: '특별한 예산',

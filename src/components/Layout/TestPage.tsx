@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState, useCallback } from "react";
 import { Routes, Route, useLocation, useMatch, Navigate } from 'react-router-dom';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 import { testPages, testPageRoutes } from '../../pages';
 
@@ -36,18 +37,22 @@ function TestPage({}:testPageProps){
     },[]); 
 
     return(
-        <div>
+        <div className='page h-screen'>
             <TestStepper steps = {steps} activeStepIndex = {activeSectionIndex}/>
-            <Navigate to={testPages[activeSectionIndex].path} replace/>
             <h1 className='test-title'>{testPages[activeSectionIndex].title}</h1>
-            {activeSectionIndex > 0 &&
-                <button onClick={()=>handleClickNavigationButton(-1)}>{'<'}</button>
-            }
-            {activeSectionIndex < maxactiveSectionIndex &&
-                <button onClick={()=>handleClickNavigationButton(1)}>{'>'}</button>
-            }
+            <div className='h-fit'>
             {testPageRoutes}
+            </div>
             {/* Render Body Element corresponding to current path.*/}
+            <Navigate to={testPages[activeSectionIndex].path} replace/>            
+            <div className='relative'>
+                {activeSectionIndex > 0 &&
+                    <button onClick={()=>handleClickNavigationButton(-1)} className='text-xl absolute left-0'><KeyboardArrowLeft sx={{ fontSize: '32px' }}/>이전 질문</button>
+                }
+                {activeSectionIndex < maxactiveSectionIndex &&
+                    <button onClick={()=>handleClickNavigationButton(1)} className='text-xl absolute right-0' >다음 질문<KeyboardArrowRight sx={{ fontSize: '32px' }}/></button>
+                }
+            </div>
         </div>
     );
 }

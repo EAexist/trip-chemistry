@@ -2,7 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'expand': 'spin 3s linear infinite',
+      },
+      keyframes: {
+      }      
+    },
   },
   plugins: [],
 }

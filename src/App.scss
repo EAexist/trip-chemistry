@@ -3,16 +3,68 @@
 @tailwind utilities;
 
 @layer base{
+
+  :root{
+    line-height: 1.5;
+  }
+
   .App {
     text-align: center;
   }
   
+  .page {
+    & > * {
+      margin: 48px 0px;
+    }
+  }
+
   .test-title {
     // font-size: 64px;
-    @apply text-7xl font-bold;
+    @apply text-6xl font-bold;
   }
   
   .equal-columns > * {
     flex: 1;
   }
+
+  .card-carousel-item-active {
+    @apply flex basis-8/12 grow-0 shrink-0;
+  }
+
+  .card-carousel-item-inactive {
+    @apply flex shrink;
+  }
+
+  .animate-flex-unsrhink {
+    animation: flex-unshrink-animation 1s forwards;
+  }
+
+  @keyframes flex-unshrink-animation {
+    100% {
+      flex-shrink: 0;
+    }
+  }
+
+  .animate-reveal {
+    animation: reveal-up 2s 500ms forwards, fade-in 2s 500ms forwards;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes reveal-up {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-200px);
+    }
+  }
+
 }

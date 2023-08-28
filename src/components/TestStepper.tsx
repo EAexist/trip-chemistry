@@ -16,8 +16,8 @@ function TestStepper({ steps, activeStepIndex }:StepperProps){
     return(
       <Stepper activeStep={activeStepIndex} alternativeLabel>
         {steps.map(({label}) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+          <Step key={label}> 
+            <StepLabel><span className='text-xs'>{label}</span></StepLabel>
           </Step>
         ))}
       </Stepper>       

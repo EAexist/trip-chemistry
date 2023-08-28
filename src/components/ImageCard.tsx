@@ -1,7 +1,19 @@
 import { Card, CardHeader, CardMedia, Avatar, Stack } from '@mui/material';
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
 
-const ActiveCardContext = createContext(0);
+interface selectedItemContextProps {
+  selectedItemId: number,
+  setselectedItemId: (id: number)=>void, 
+  isHoveringContainer: boolean, 
+  // setisHoveringContainer: (isHovering: boolean) => void,
+};
+
+const SelectedItemContext = createContext<selectedItemContextProps>({
+  selectedItemId: 0, 
+  setselectedItemId: ()=>{},
+  isHoveringContainer: false,
+  // setisHoveringContainer: ()=>{},
+});
 
 interface CardCarouselContainerProps{
   direction?: 'row' | 'column'
@@ -9,39 +21,68 @@ interface CardCarouselContainerProps{
 
 function CardCarouselContainer({ direction = 'row', children }: PropsWithChildren<CardCarouselContainerProps>){
 
+  const [selectedItemId, setselectedItemId] = useState(-1);
+  const [isHovering, setIsHovering] = useState(false);
+
   return(
-    <ActiveCardContext.Provider value = {0}>
+    <SelectedItemContext.Provider value = {{
+      selectedItemId: selectedItemId,
+      setselectedItemId: setselectedItemId,
+      isHoveringContainer: isHovering
+    }}>
     {/* <Stack spacing={2} direction={direction}> */}
-    <div className='flex equal-columns space-x-2 justify-between w-full'>
-        {children}
+    <div 
+      className={`flex flex-${direction} items-stretch space-x-2`} 
+      onMouseEnter={()=>setIsHovering(true)} 
+      onMouseLeave={()=>setIsHovering(false)}
+    >
+      {children}
     </div>
     {/* </Stack> */}
-    </ActiveCardContext.Provider>
+    </SelectedItemContext.Provider>
   )
 }
 
 interface CardCarouselItemProps{
-  id: number
+  id: number;
+  onHoverElement?: React.ReactNode;
 }
 
-function CardCarouselItem({ id, children }: PropsWithChildren<CardCarouselItemProps>){
+function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<CardCarouselItemProps>){
     
-  const activeCardId = useContext(ActiveCardContext); 
-  const isActive = activeCardId === id;
+  const { selectedItemId, setselectedItemId, isHoveringContainer } = useContext(SelectedItemContext); 
+  const isSelected = selectedItemId === id;
+  const [isHovering, setIsHovering] = useState(false)  
+  const handleClick = () => {
+    console.log('CardCarouselItem handleClick')
+    setselectedItemId(id);
+  }
 
   return(
-    <div className=''>
-      {isActive ?
-      <div className='card-carousel-item-active'>{children}</div> 
-      : <div className='card-carousel-item-active'>{children}</div>
-      } 
+    <div 
+      className={`
+        flex basis-8/12 shrink-1 duration-500 opacity-50
+        ${isSelected && !isHoveringContainer && 'shrink-0 opacity-100'}         
+        hover:shrink-0 hover:opacity-100
+        `} 
+      onClick={handleClick}
+      onMouseEnter={()=>setIsHovering(true)} 
+      onMouseLeave={()=>setIsHovering(false)}
+    >
+      <Card className={`w-full relative
+      ${isSelected && 'border-4 border-slate-500'}`}>
+        {children}
+        {isSelected ?
+        (!isHoveringContainer || isHovering) && onHoverElement
+        : isHovering && onHoverElement}
+      </Card>
     </div>    
   );
 }
 
-interface CardItemProps{
-  cardHeaderAvatarText: string
-  cardHeaderTitle: string
+interface ImageCardProps{
+  cardHeaderAvatarText: string;
+  cardHeaderTitle: string;
   cardMediaProps: {
     image: string
     alt: string
@@ -50,16 +91,19 @@ interface CardItemProps{
     }
     // component = 'img'
     // height: nubmer
-  }
+  };
 };
 
-function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps }:CardItemProps){
-    
-  const activeCardContext = useContext(ActiveCardContext); 
+function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps, }:ImageCardProps){    
 
   return(
-    <Card>
-      <CardMedia component = 'img' sx={{ height: 512 }} {...cardMediaProps}/>
+    <div 
+      className = 'w-full'
+    >
+      {/* <div className = 'relative h-128'> */}
+        <CardMedia className = 'sticky z-0 w-full' component = 'img' sx={{ height: 384 }} {...cardMediaProps}/>
+    
+      {/* </div> */}
       <CardHeader
         avatar={
           <Avatar>
@@ -68,7 +112,7 @@ function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps }:Car
         }
         title={cardHeaderTitle}
       />
-    </Card>        
+    </div>    
   );
 }
 
