@@ -9,24 +9,8 @@ import './App.scss';
 
 function App() {
   
-  const pages = [
-    {
-      path: 'leader',
-      pageProps: {},
-    },
-  ];
-
-  // const pageRouter = pages.map(({ path, pageProps }) => {
-  //   return(
-  //     <Route 
-  //       path={path} 
-  //       element={<Page {...pageProps}/>}
-  //     />
-  //   )
-  // });
-
   return (
-    <div className='App'>
+    <div className='w-screen h-screen p-4'>
         <BrowserRouter>
           {basePageRoutes}        
           {/* <TopNav/> 
@@ -34,6 +18,7 @@ function App() {
           <ContactSection/> */}
         </BrowserRouter>
     </div>
+    
   );
 }
 

@@ -1,14 +1,18 @@
 import ImageCard, { CardCarouselContainer, CardCarouselItem } from '../ImageCard';
 
+import { usePageString } from "../../texts";
+
 interface TestUserLeadershipProps{
 
 };
 
 function TestUserLeadership({}:TestUserLeadershipProps){
-
+    const page = "testUserLeadership";
+    const strings = usePageString(page);
+    
     const optionList = [
       { 
-        title: '내가 리드하기',
+        title: '내가 리드하기', 
         detail: '나는 여행도 많이 다녀봤고 계획하는 걸 좋아하니까 내가 리드하는게 편해',
         imageTitle: 'lead'
       },
@@ -41,6 +45,9 @@ function TestUserLeadership({}:TestUserLeadershipProps){
 
     return(
     <div>
+      <div>
+
+      </div>
       <CardCarouselContainer>
         {optionList.map((option, index) => {
           return(

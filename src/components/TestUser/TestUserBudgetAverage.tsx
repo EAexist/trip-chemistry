@@ -1,4 +1,4 @@
-import TestUserBudgetAccordion from '../TestUserBudgetAccordion';
+import TestUserBudgetAccordion from './TestUserBudgetAccordion';
 import ExclusiveAccordionsContainer from '../ExclusiveAccordionsContainer';
 
 interface TestUserBudgetAverageProps{

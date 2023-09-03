@@ -1,10 +1,21 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, createContext } from "react";
 import { Navigate } from 'react-router-dom';
+
+
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
 import { testPages, testPageRoutes } from '../../pages';
-
 import TestStepper from "../TestStepper";
+import Button from "../Button";
+import IndexNavigationButtonWrapper from "../IndexNavigationButtonWrapper";
+
+interface ActiveSectionContextProps{
+    activeSectionIndex: number;
+    setActiveSectionIndex: (activeSectionIndex: number) => void;
+    incrementActiveSectionIndex?: (offset:number) => void;
+    maxActiveSectionIndex?: number;
+};
+const ActiveSectionContext = createContext<ActiveSectionContextProps>({} as ActiveSectionContextProps);
 
 interface step{
     label: string,
@@ -12,7 +23,6 @@ interface step{
 };
 
 interface testPageProps{
-    // section : 
 };
 
 function WithAnimate({keyProp, className, children}:React.PropsWithChildren<{keyProp: any, className: string}>){
@@ -27,9 +37,9 @@ function TestPage({}:testPageProps){
 
     // Index(0~) of active section (the section user is currently viewing). 
     const [activeSectionIndex, setActiveSectionIndex] = useState(0);
-    
+
     // Current state of each steps' completeness.
-    const [steps, setSteps] = useState(testPages.map(({ label })=>{
+    const [steps, setSteps] = useState(testPages.map(({ label }, index)=>{
         return(
             {
                 label: label, 
@@ -38,17 +48,23 @@ function TestPage({}:testPageProps){
         ); 
     }));
 
-    const maxactiveSectionIndex = testPages.length-1
-    
-    const handleClickNavigationButton = useCallback((sectionOffset: -1 | 1) => {
-        setActiveSectionIndex((prev)=>(prev + sectionOffset));
-    },[]); 
+    const maxActiveSectionIndex = testPages.length-1
 
     return(
-        <div className='page h-screen'>
-            {/* Stepper */}
-            <TestStepper steps = {steps} activeStepIndex = {activeSectionIndex}/>
-            
+        <div className = 'page'>
+            <ActiveSectionContext.Provider value = {{activeSectionIndex: activeSectionIndex, incrementActiveSectionIndex: (offset: number) => setActiveSectionIndex((prev)=>(prev+offset)), setActiveSectionIndex: (activeSectionIndex: number)=>setActiveSectionIndex(activeSectionIndex), maxActiveSectionIndex: maxActiveSectionIndex}}>
+            {/* Stepper and Next / Previous Navigation Buttons */}
+            <div className = 'flex flex-row flex-auto justify-between'>
+                <IndexNavigationButtonWrapper offset={-1}><Button><KeyboardArrowLeft/>이전 질문</Button></IndexNavigationButtonWrapper>
+                <div className='basis-6/12'>
+                <TestStepper 
+                    steps = {steps} 
+                    activeSectionState = {{activeSectionIndex: activeSectionIndex, setActiveSectionIndex: setActiveSectionIndex}}
+                    enableHover = {true}/>
+                </div>
+                <IndexNavigationButtonWrapper offset={1}><Button>다음 질문<KeyboardArrowRight/></Button></IndexNavigationButtonWrapper>
+            </div>
+        
             {/* Title */}
             <WithAnimate keyProp={activeSectionIndex} className='test-title opacity-0 animate-reveal-left'>
                 {testPages[activeSectionIndex].title}
@@ -60,17 +76,9 @@ function TestPage({}:testPageProps){
             </div>
             {/* Render Body Element corresponding to current path.*/}
             <Navigate to={testPages[activeSectionIndex].path} replace/>     
-
-            {/* Next / Previous Navigation Buttons */}
-            <div className='relative'>
-                {activeSectionIndex > 0 &&
-                    <button onClick={()=>handleClickNavigationButton(-1)} className='text-xl absolute left-0'><KeyboardArrowLeft sx={{ fontSize: '32px' }}/>이전 질문</button>
-                }
-                {activeSectionIndex < maxactiveSectionIndex &&
-                    <button onClick={()=>handleClickNavigationButton(1)} className='text-xl absolute right-0' >다음 질문<KeyboardArrowRight sx={{ fontSize: '32px' }}/></button>
-                }
-            </div>
+            </ActiveSectionContext.Provider>
         </div>
     );
 }
 export default TestPage;
+export { ActiveSectionContext };

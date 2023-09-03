@@ -1,7 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 /* Page Components */
+import HomePage from './components/Layout/HomePage';
 import TestPage from './components/Layout/TestPage';
+import ResultPage from './components/Layout/ResultPage';
 
 /* Test Page Components */
 import TestUserBudgetAverage from "./components/TestUser/TestUserBudgetAverage";
@@ -39,19 +41,19 @@ const pageRoutes = ({ pages, indexPath = undefined}:pageRoutesProps) => {
 }
 
 const basePages = [
-    // {
-    //     path: 'home',
-    //     element: <HomePage/>,
-    // },
+    {
+        path: 'home',
+        element: <HomePage/>,
+    },
     {
         title: 'test',
         path: 'test/*',
         element: <TestPage/>,
     },
-    // {
-    //     path: 'result',
-    //     element: <ResultPage/>,
-    // },
+    {
+        path: 'result',
+        element: <ResultPage/>,
+    },
     // {
     //     path: 'chemistry',
     //     element: <ChemistryPage/>,
@@ -91,7 +93,7 @@ const testPages = [
     },       
 ];
 
-const basePageRoutes = pageRoutes({pages: basePages, indexPath: './test'});
+const basePageRoutes = pageRoutes({pages: basePages, indexPath: './home'});
 const testPageRoutes = pageRoutes({pages: testPages, indexPath: './leadership'});
 
 export { basePages, basePageRoutes, testPages, testPageRoutes }
