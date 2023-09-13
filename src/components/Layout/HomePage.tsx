@@ -1,9 +1,6 @@
 import React, { useState, createContext } from "react";
 import { Link } from 'react-router-dom';
 
-import TestStepper from "../TestStepper";
-import IndexNavigationButton from "../IndexNavigationButtonWrapper";
-
 import Button from '../Button'
 
 import { usePageString } from "../../texts";

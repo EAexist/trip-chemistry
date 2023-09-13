@@ -1,33 +1,34 @@
-import { Card, CardHeader, CardMedia, Avatar, Stack } from '@mui/material';
+import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 interface selectedItemContextProps {
   selectedItemId: number,
-  setselectedItemId: (id: number)=>void, 
+  setSelectedItemId: (id: number)=>void, 
   isHoveringContainer: boolean, 
   // setisHoveringContainer: (isHovering: boolean) => void,
 };
 
 const SelectedItemContext = createContext<selectedItemContextProps>({
   selectedItemId: 0, 
-  setselectedItemId: ()=>{},
+  setSelectedItemId: ()=>{},
   isHoveringContainer: false,
   // setisHoveringContainer: ()=>{},
 });
 
 interface CardCarouselContainerProps{
+  selectedItemId: number, 
+  setSelectedItemId: (id: number) => void,
   direction?: 'row' | 'column'
 };
 
-function CardCarouselContainer({ direction = 'row', children }: PropsWithChildren<CardCarouselContainerProps>){
+function CardCarouselContainer({ selectedItemId, setSelectedItemId, direction = 'row', children }: PropsWithChildren<CardCarouselContainerProps>){
 
-  const [selectedItemId, setselectedItemId] = useState(-1);
   const [isHovering, setIsHovering] = useState(false);
 
   return(
     <SelectedItemContext.Provider value = {{
       selectedItemId: selectedItemId,
-      setselectedItemId: setselectedItemId,
+      setSelectedItemId: setSelectedItemId,
       isHoveringContainer: isHovering
     }}>
     {/* <Stack spacing={2} direction={direction}> */}
@@ -50,12 +51,12 @@ interface CardCarouselItemProps{
 
 function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<CardCarouselItemProps>){
     
-  const { selectedItemId, setselectedItemId, isHoveringContainer } = useContext(SelectedItemContext); 
+  const { selectedItemId, setSelectedItemId, isHoveringContainer } = useContext(SelectedItemContext); 
   const isSelected = selectedItemId === id;
   const [isHovering, setIsHovering] = useState(false)  
   const handleClick = () => {
     console.log('CardCarouselItem handleClick')
-    setselectedItemId(id);
+    setSelectedItemId(id);
   }
 
   return(

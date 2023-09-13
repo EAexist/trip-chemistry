@@ -3,13 +3,13 @@ import { ElementType } from '@react-spring/web';
 
 interface CardProps{
     onClick?: ()=>void;
-    title: String | React.ReactElement;
-    body: String | React.ReactElement;
-    tags: String[];
+    title: string | React.ReactElement;
+    body: string | React.ReactElement;
+    tags: string[];
     replaceCardMedia? : React.ReactNode;
     cardMediaComponent? : ElementType;
-    image?: String;    
-    imageTitle?: String;
+    image?: string;    
+    imageTitle?: string;
     useSkeleton?: boolean;
 };
 
@@ -21,7 +21,7 @@ function ClickableCard({onClick = ()=>{}, ...CardProps}: CardProps){
     )
 }
 
-function Card({cardMediaComponent = 'img', ...props}: CardProps){
+function Card({cardMediaComponent = 'img', replaceCardMedia, ...props}: CardProps){
     // if(props.useSkeleton){
     //     Object.keys(props).forEach((key, index) => {
     //         props[key]
@@ -30,27 +30,27 @@ function Card({cardMediaComponent = 'img', ...props}: CardProps){
 
     return(
         
-            <MuiCard className='w-80 h-96 flex flex-col flex-none'>
+            <MuiCard className='w-80 h-96 flex flex-col flex-none no-margin'>
                 <div className='h-full flex items-center justify-center'>
-                {props.replaceCardMedia ?
-                    props.replaceCardMedia :
+                {replaceCardMedia ?
+                    replaceCardMedia :
                     <CardMedia
-                    component={cardMediaComponent}                
-                    // sx={{ height:140 }}
-                    image="/static/images/cards/contemplative-reptile.jpg"
-                    title="green iguana"
+                        component={cardMediaComponent}                
+                        // sx={{ height:140 }}
+                        image={props.image}
+                        title={props.imageTitle}
                     />
                 }
                 </div>
                 <CardContent className=''>
-                    <h2>
+                    <h3>
                         {props.title}
-                    </h2>
+                    </h3>
                     <p>
                         {props.body}
                     </p>
-                    <div className='flex flex-wrap'>
-                        {props.tags.map((tag)=>{
+                    <div className='flex flex-wrap mx-2'>
+                        {props.tags?.map((tag)=>{
                             return(
                                 <Chip label={tag} />
                             )

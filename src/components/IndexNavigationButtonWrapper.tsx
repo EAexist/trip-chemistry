@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import { ActiveSectionContext } from "./Layout/TestPage";
+import { ActiveSectionContext } from "./layout/TestPage";
 
 interface IndexNavigationButtonWrapperProps{
     offset: number

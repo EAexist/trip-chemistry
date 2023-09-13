@@ -4,15 +4,62 @@
 
 @layer base{
 
-  :root{
-    line-height: 1.5;
-  }
-  
-  .page {
-    & > * {
-      margin: 48px 0px;
-      // justify-content: 'center';
+  * {
+    line-height: 1.8;
+    font-family: 'NanumSquare', sans-serif;
+    /* Debugging */
+    border-color: red;
+    border-width: 1px;
+    
+    & h1 {
+      font-size: 56px;
+      font-weight: 600;
     }
+    & h2 {
+      font-size: 48px;
+      // font-weight: 600;
+    }
+    & h3 {
+      font-size: 24px;
+      // font-weight: 600;
+    }
+    & h4 {
+      font-size: 20px;
+      // font-weight: 600;
+    }
+  }
+
+  body {
+    // margin-top: 64px;
+  }
+
+  :root{
+  }  
+
+  .margin {
+    * {
+      margin: 4px; /* Default Margin for all children and nested children */
+    } 
+
+    & > * {
+      padding-top: 48px; /* Margin for direct children. Apply this with <div> tag. */
+      padding-bottom: 48px;
+    }
+    h1, h2, h3, p {
+      padding-left: 64px;
+      padding-right: 64px;
+    }  
+  }
+
+  .no-margin {
+    // * {
+    //   margin: 0px;
+    //   padding: 0px;
+    // }
+    h1, h2, h3, p {
+      margin: 0px;
+      padding: 0px;
+    }  
   }
 
   .test-title {

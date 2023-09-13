@@ -1,5 +1,7 @@
 import React, { createContext, useContext } from 'react';
-import baseLangStrings from './ko-kr.json';
+// import baseLangStrings from './ko-kr.json';
+import baseLangStrings from './texts';
+import { TestResponseKey } from '../interface/interfaces';
 
 type LangKey = "ko-kr";
 type JsonLocalizedStrings = typeof baseLangStrings;
@@ -18,9 +20,7 @@ function AggregateTextProvider({ children }: React.PropsWithChildren){
     );
 }
 
-type Pages = "home" | 
-    "testUserLeadership" | "testUserSchedule" | "testUserBudgetAverage" | "testUserBudgetSpecial" | 
-    "result" | "chemistry"
+type Pages = "home" | "result" | "chemistry" | "test"
 
 function usePageString(page: Pages) {
     return Object(useContext(baseTextContext).public.pages[page]);

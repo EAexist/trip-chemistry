@@ -6,15 +6,19 @@ import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 
 interface AsyncAutoCompleteProps {
     label: string
+    setValue?: (value: string)=>void
 }
 interface option {
     name: string
 };
 
-function AsyncAutoComplete({ label }: AsyncAutoCompleteProps) {
+function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps) {
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<option[]>([{ name: "우동#1234" }]);
     const loading = open && options.length === 0;
+    const handleChangeTextField = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(event.target.value);
+    }
 
     useEffect(() => {
         let active = true;
@@ -58,7 +62,7 @@ function AsyncAutoComplete({ label }: AsyncAutoCompleteProps) {
             }}
             // isOptionEqualToValue={(option, value) => option.name === value.name}
             // getOptionLabel={(option) => option.name}
-            options={options.map((option) => option.name)}
+            options={options?.map((option) => option.name)}
             loading={loading}
             renderInput={(params) => (
                 <TextField
@@ -73,6 +77,7 @@ function AsyncAutoComplete({ label }: AsyncAutoCompleteProps) {
                             </React.Fragment>
                         ),
                     }}
+                    onChange={handleChangeTextField}
                 />
             )}
         />

@@ -1,15 +1,16 @@
 import ImageCard, { CardCarouselContainer, CardCarouselItem } from '../ImageCard';
 
 import { usePageString } from "../../texts";
+import { PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { useSetBudgetResponse, useSetResponse } from '../../reducer/testResponseReducer';
+import { useSelector } from 'react-redux';
+import { BudgetResponse, TestResponseKey, withTestResponseProps } from '../../interface/interfaces';
+import { RootState } from '../../store';
 
-interface TestUserLeadershipProps{
-
-};
-
-function TestUserLeadership({}:TestUserLeadershipProps){
-    const page = "testUserLeadership";
-    const strings = usePageString(page);
+function TestUserLeadership({testName, response, setResponse}: withTestResponseProps){
     
+  const responseValue = useSelector((state:RootState)=>(state.testResponse[testName as TestResponseKey])) as number;
+
     const optionList = [
       { 
         title: '내가 리드하기', 
@@ -45,11 +46,8 @@ function TestUserLeadership({}:TestUserLeadershipProps){
 
     return(
     <div>
-      <div>
-
-      </div>
-      <CardCarouselContainer>
-        {optionList.map((option, index) => {
+      <CardCarouselContainer selectedItemId={response as number} setSelectedItemId = {setResponse ? setResponse : ()=>{}}>
+        {optionList?.map((option, index) => {
           return(
             <CardCarouselItem id = {index} onHoverElement ={<h2 className='absolute z-10 -bottom-20 text-5xl leading-relaxed font-bold opacity-0 animate-reveal-up'>{option.detail}</h2>}>
               <ImageCard {...interactiveImageCardPropsFromOption(option, index)} />

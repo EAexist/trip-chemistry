@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { usePageString } from '../../texts';
-import ImageCard, { CardCarouselContainer, CardCarouselItem } from '../ImageCard';
+import ImageCard, { CardCarouselContainer, CardCarouselItem } from '../ImageCard'; 
 
 import Button from '../Button';
+import { TestResponseKey, withTestResponseProps } from '../../interface/interfaces';
+
 
 interface TestUserScheduleProps{
 
@@ -12,23 +14,21 @@ interface Answer {
   title: String;
 }
 
-function TestUserSchedule({}:TestUserScheduleProps){
+function TestUserSchedule({testName, response, setResponse}: withTestResponseProps ){
 
-  const page = "testUserSchedule";
-  const strings = usePageString(page);
-
-  const [selectedAnswerId, setSelectedAnswerId] = useState<number | false>(false);
+  const strings = usePageString('test')[testName as TestResponseKey];
 
   const handleClick = (index: number)=>{
-    setSelectedAnswerId(index);
+    // setResponse(index);
   }  
+
   return(
   <div>
-    {(strings.answers as Answer[]).map((answer, index)=>{
+    {(strings.answers as Answer[])?.map((answer, index)=>{
       return(
         <Button onClick = {()=>handleClick(index)}>
           <div className={`${
-            selectedAnswerId===index ? 
+            response===index ? 
             'font-bold':
             'font-normal'
           }`}

@@ -1,4 +1,4 @@
-{
+const texts = {
     "_lang": "ko-kr",
     "public":{
         "pages":{
@@ -75,12 +75,12 @@
                     "여행 케미 확인하기"
                 ],
                 "typeIntro" : "내 여행 MBTI는",
-                "characterName" :  "부지런한 벌꿀형",
-                "characterPrefix" : "쉴 틈이 없어요",
-                "characterBody" : "부지런한 꿀벌형은 여행 준비, 교통편과 숙소 예매부터 철두철미하게 게획해요. 몸이 힘들더라도 여행지에서 해볼 수 있는 것들을 최대한 해보는 알찬 여행을 좋아한답니다.",
-                "tripTagList" : [ "자연경관", "하이킹", "꼼꼼한 계획", "알찬 일정"],
+                // "characterName" :  "부지런한 벌꿀형",
+                // "characterPrefix" : "쉴 틈이 없어요",
+                // "characterBody" : "부지런한 꿀벌형은 여행 준비, 교통편과 숙소 예매부터 철두철미하게 게획해요. 몸이 힘들더라도 여행지에서 해볼 수 있는 것들을 최대한 해보는 알찬 여행을 좋아한답니다.",
+                // "tripTagList" : [ "자연경관", "하이킹", "꼼꼼한 계획", "알찬 일정"],
                 "placeIntro" : "나에게 잘 맞는 여행지는",
-                "placeGroupTitle" : "아름다운 자연경관, 산책과 하이킹 명소",
+                // "placeGroupTitle" : "아름다운 자연경관, 산책과 하이킹 명소",
                 "placeListIntro" : "추천 여행지",
                 "startChemistryIntro" : "이제 친구랑 같이 떠나볼까?",
                 "startChemistryTitle" : "여행 케미 확인하기",
@@ -141,3 +141,5 @@
         }
     }
 }
+
+export default texts;

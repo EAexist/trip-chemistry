@@ -12,10 +12,10 @@ function TestPage({}:testPageProps){
     const path = location.pathname
     console.log(`testPage location=${location}`)
 
-    const paths = ['leadership', 'schedule', 'budget', 'specialBudget']
+    const paths = ['leadership', 'schedule', 'budget', 'budgetSpecial']
     const prevPath = paths.indexOf(path) 
     /** Use following pathToIndex object in case of cost issue with indexOf() */
-    // const pathToIndex = paths.map((path, index) => {
+    // const pathToIndex = paths?.map((path, index) => {
     //     return 
     // })
 
@@ -33,12 +33,12 @@ function TestPage({}:testPageProps){
     //         element: <TestBudget/>,
     //     },
     //     {
-    //         path: 'specialBudget',
-    //         element: <TestSpecialBudget/>,
+    //         path: 'budgetSpecial',
+    //         element: <TestbudgetSpecial/>,
     //     },   
     //   ];
     
-    // const testPageRouter = testPages.map(({ path, element }) => {
+    // const testPageRouter = testPages?.map(({ path, element }) => {
     //     return (
     //         <Route
     //             path={path}
