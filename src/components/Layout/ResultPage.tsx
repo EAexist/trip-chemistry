@@ -19,7 +19,8 @@ import { useFetchResultById, useUserList, useUserListLoadStatus } from "../../re
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { UserId } from "../../interface/interfaces";
-import { useFetchPlaceListById, usePlaceList } from "../../reducer/placeListReducer";
+import { useFetchPlaceListById, useNationFilter, usePlaceList } from "../../reducer/placeListReducer";
+import ToggleButton from "../toggleButton";
 
 interface ResultPageProps extends withLoadStatusProps{
     // section : 
@@ -52,7 +53,8 @@ function ResultPage({ status }:ResultPageProps){
     const [, setUserListLoadStatus] = useUserListLoadStatus();
 
     /* placeList Data and Fetcher  */
-    const [placeList, nationFilter] = usePlaceList();
+    const [placeList] = usePlaceList();
+    const [nationFilter, setNationFilter] = useNationFilter();
     const fetchPlaceListById = useFetchPlaceListById();
     const [placeListLoadStatus] = useUserListLoadStatus();
 
@@ -161,17 +163,26 @@ function ResultPage({ status }:ResultPageProps){
                 </div>
 
                 {/* 여행지 추천 */}
-                {/* 타이틀 */}
-                <div> 
-                    <ScrollCheckpoint index = {1}/> {/* ScrollRef 1 */} 
-                    <h3>{strings.placeIntro}</h3>
-                    <h1>{userList[userName].placeGroupTitle}</h1>
-                </div>
-                 {/* 여행지 카드 목록 */}
-                <div>
+                    {/* 타이틀 */}
+                    <div> 
+                        <ScrollCheckpoint index = {1}/> {/* ScrollRef 1 */} 
+                        <h3>{strings.placeIntro}</h3>
+                        <h1>{userList[userName].placeGroupTitle}</h1>
+                    </div>
+                    <div>
                     <h3>{strings.placeListIntro}</h3>
+                    {/* 여행지 국가 필터 */}
+                    <>
+                    {Object.entries(nationFilter).map(([nationId, isOn])=>{
+                            return(
+                                <ToggleButton isOn={isOn} setIsOn={setNationFilter(nationId)}>nationId</ToggleButton>
+                            )
+                        })}    
+                    </>
+                    {/* 여행지 카드 목록 */}
                     <div className='flex flex-row justify-center'>
-                        {placeList?.map(({name, body, tripTagList}, index)=>{
+                        {placeList?.filter(({nationId})=>nationFilter[nationId]) 
+                            .map(({name, body, tripTagList}, index)=>{
                             return(
                                 <ClickableCard title={name} body={body} tags={tripTagList}/>
                             )

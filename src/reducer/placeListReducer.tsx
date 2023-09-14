@@ -15,6 +15,7 @@ interface PlaceListState {
 }; 
 interface Place{
     id: string;
+    nationId: NationId;
     name: string;
     body: string;
     tripTagList: string[]
@@ -62,12 +63,15 @@ const placeListSlice = createSlice({
         setStatus: (state, action: PayloadAction<loadStatus>) => {
             state.loadStatus = action.payload;
         },
-        activateNation: (state, action: PayloadAction<NationId>) => {
-            state.nationFilter[action.payload] = true;
+        setNationFilter: (state, action: PayloadAction<{nationId: NationId, isOn: boolean}>) => {
+            state.nationFilter[action.payload.nationId] = action.payload.isOn;
         },
-        deActivateNation: (state, action: PayloadAction<NationId>) => {
-            state.nationFilter[action.payload] = false;
-        },
+        // activateNation: (state, action: PayloadAction<NationId>) => {
+        //     state.nationFilter[action.payload] = true;
+        // },
+        // deActivateNation: (state, action: PayloadAction<NationId>) => {
+        //     state.nationFilter[action.payload] = false;
+        // },
     },
     extraReducers:(builder) => {
         builder.addCase(fetchPlaceListById.fulfilled, (state, action: PayloadAction<{placeList:Place[], nationIdList: NationId[]}>) => {
@@ -99,6 +103,16 @@ const usePlaceList = () => {
     ] as const);
 }
 
+const useNationFilter = () => {
+    const dispatch = useDispatch();
+    return([
+        useSelector((state:RootState)=>state.placeList.nationFilter),
+        useCallback((nationId: NationId) => (isOn: boolean) =>
+            dispatch(placeListSlice.actions.setNationFilter({nationId, isOn}))
+        , [dispatch])
+    ] as const);
+}
+
 const useFetchPlaceListById = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
     return useCallback((userId: UserId) => 
@@ -118,4 +132,5 @@ const usePlaceListLoadStatus = () => {
 }
 
 export default placeListSlice.reducer;
-export { usePlaceList, useFetchPlaceListById, usePlaceListLoadStatus }
+export { usePlaceList, useFetchPlaceListById, useNationFilter, usePlaceListLoadStatus };
+export type { NationId };
