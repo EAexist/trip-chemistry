@@ -1,4 +1,4 @@
-// import React, { createContext, useContext, useState } from 'react';
+// import { createContext, useContext, useState } from 'react';
 // import { BudgetResponse, TestResponse, budgetResponseType, testNameType } from '../interface/interfaces';
 
 export const TestResponseContext = () => {};
@@ -15,7 +15,7 @@ export const TestResponseContext = () => {};
 
 //     return({
 //         response: testResponse[name], 
-//         setResponse: (response : typeof testResponse[typeof name]) => setTestResponse({ ...testResponse, [name]: response })
+//         setTestResponse: (response : typeof testResponse[typeof name]) => setTestResponse({ ...testResponse, [name]: response })
 //     });
 // }
 
@@ -25,12 +25,12 @@ export const TestResponseContext = () => {};
 
 //     return({
 //         getResponse: (name: testNameType, label: budgetResponseType) => (testResponse[name] as BudgetResponse)? (testResponse[name] as BudgetResponse)[label] : undefined, 
-//         setResponse: (name: testNameType, label: budgetResponseType) => (response : number) => setTestResponse({ ...testResponse, [name]: {...testResponse[name] as {}, [label]:response} })
+//         setTestResponse: (name: testNameType, label: budgetResponseType) => (response : number) => setTestResponse({ ...testResponse, [name]: {...testResponse[name] as {}, [label]:response} })
 //     });
 // }
 
 // interface TestResponseContextProviderProps{
-//     children: React.ReactNode
+//     children: ReactNode
 // };
 
 // function TestResponseContextProvider({children}:TestResponseContextProviderProps) {

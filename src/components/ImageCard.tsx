@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
-import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useState, ReactNode } from 'react';
 
 interface selectedItemContextProps {
   selectedItemId: number,
@@ -46,7 +46,7 @@ function CardCarouselContainer({ selectedItemId, setSelectedItemId, direction = 
 
 interface CardCarouselItemProps{
   id: number;
-  onHoverElement?: React.ReactNode;
+  onHoverElement?: ReactNode;
 }
 
 function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<CardCarouselItemProps>){

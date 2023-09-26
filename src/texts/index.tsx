@@ -1,7 +1,7 @@
-import React, { createContext, useContext } from 'react';
+import { useState, createContext, useContext, PropsWithChildren } from 'react';
 // import baseLangStrings from './ko-kr.json';
 import baseLangStrings from './texts';
-import { TestResponseKey } from '../interface/interfaces';
+// import { TestName } from '../interface/interfaces';
 
 type LangKey = "ko-kr";
 type JsonLocalizedStrings = typeof baseLangStrings;
@@ -9,9 +9,9 @@ type JsonLocalizedStrings = typeof baseLangStrings;
 const baseTextContext = createContext<JsonLocalizedStrings>(baseLangStrings);
 const TextProvidingWrapper = baseTextContext.Provider;
 
-function AggregateTextProvider({ children }: React.PropsWithChildren){
+function AggregateTextProvider({ children }: PropsWithChildren){
 
-    const [langStrings, setLangStrings] = React.useState<JsonLocalizedStrings>(baseLangStrings);
+    const [langStrings, setLangStrings] = useState<JsonLocalizedStrings>(baseLangStrings);
 
     return (
         <TextProvidingWrapper value={langStrings}>
@@ -20,14 +20,19 @@ function AggregateTextProvider({ children }: React.PropsWithChildren){
     );
 }
 
-type Pages = "home" | "result" | "chemistry" | "test"
+type Page = "home" | "result" | "chemistry" | "test";
+type TextKey = "emojis" | "nations";
 
-function usePageString(page: Pages) {
+function usePageString(page: Page) {
     return Object(useContext(baseTextContext).public.pages[page]);
 }
 
-function usePageAsset(page: Pages) {
+function useString(key: TextKey) {
+    return Object(useContext(baseTextContext).public[key]);
+}
+
+function usePageAsset(page: Page) {
     // return useContext(baseTextContext).public.assets[page];
 }
 
-export { AggregateTextProvider, usePageAsset, usePageString }
+export { AggregateTextProvider, usePageAsset, usePageString, useString }

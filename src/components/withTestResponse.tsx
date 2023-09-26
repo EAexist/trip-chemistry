@@ -1,33 +1,49 @@
-import { connect, useSelector } from "react-redux";
-import { useSetResponse, useSetBudgetResponse } from "../reducer/testResponseReducer";
-import { RootState } from "../store";
-import { BudgetResponse, BudgetResponseKey, TestResponse, TestResponseKey } from "../interface/interfaces";
+import { ComponentType } from "react";
+import { useSetTestResponse, useTestResponse, TestResponse, TestName, SubTestName } from "../reducer/testResponseReducer";
+import { usePageString } from "../texts";
+// import { BudgetResponse, SubTestName, TestResponse, TestName } from "../interface/interfaces";
 
-const withTestResponse = <T extends {}>(WrappedComponent: React.ComponentType<T>) => (testName: TestResponseKey, isBudget: boolean) => (props: T) => {
+interface WithTestResponseProps{
+    testName: TestName;
+    subTestName: SubTestName;
+    testResponse: number; 
+    setTestResponse: (value: TestResponse[TestName]) => void;    
+    strings: any;
+    // setBudgetResponse?: (SubTestName: SubTestName, value: BudgetResponse[SubTestName]) => void;    
+};
+
+const withTestResponse = <P extends WithTestResponseProps>(WrappedComponent: ComponentType<P>) => 
+    (testName: TestName, subTestName?: SubTestName) => 
+    (props: Omit<P, keyof WithTestResponseProps>) => {
     
-    const response = useSelector((state:RootState)=>(state.testResponse[testName as TestResponseKey]));
-
-    // const response = useSelector((state:RootState)=>(state.testResponse.leadership)) as number;
-    const setResponse = useSetResponse();
-    const setBudgetResponse = useSetBudgetResponse();
+    const testResponse = useTestResponse(testName, subTestName);
+    const setTestResponse = useSetTestResponse();
+    const strings = subTestName? 
+        usePageString('test')[testName as TestName].subTests[subTestName as SubTestName]
+        : usePageString('test')[testName as TestName];
 
     return (
         <WrappedComponent 
-            testName = {testName}
-            response = {response}
-            setResponse = {(value: number) => setResponse({
+        {...{
+            testName: testName,
+            subTestName: subTestName,
+            testResponse: testResponse,
+            setTestResponse: (value: number) => {console.log(`withTestResponse-value=${value}`); setTestResponse({
                 testName: testName,
-                value: value
-            })}
-            setBudgetResponse = {(value: number, budgetName: BudgetResponseKey) => setBudgetResponse({
-                testName: testName,
-                budgetName: budgetName,
-                value: value
-            })}
-            {...props as T}
+                subTestName: subTestName,
+                value: value,
+            })},
+            // setBudgetResponse: (value: number, SubTestName: SubTestName) => setTestResponse({
+            //     testName: testName,
+            //     subTestName: SubTestName,
+            //     value: value,
+            // }),            
+            strings: strings
+        }}
+            {...props as P}
         />
     );
 }
 
 export default withTestResponse;
-
+export type { WithTestResponseProps };

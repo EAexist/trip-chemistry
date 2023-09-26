@@ -8,7 +8,7 @@ interface useServerApiProps{
         // {
         //     "Content-Type": "application/json",
         // },
-        body: any,
+        body?: any,
     };
 };
 
@@ -18,6 +18,7 @@ const useServerApi = ({path, handleResponse, handleNoResponse, fetchProps}:useSe
 
     fetch(path, fetchProps) 
     .then((response) => {
+        console.log(`useServerApi response=${JSON.stringify(response)}`);
         return response.json();
     })
     .then((data) => {
@@ -33,11 +34,12 @@ const useServerApi = ({path, handleResponse, handleNoResponse, fetchProps}:useSe
 
 const useServerAPI = ({path, fetchProps}:useServerApiProps) => {
 
-    console.log(`useServerAPI path=${path} body=${fetchProps.body}`)
+    // console.log(`useServerAPI path=${path} body=${fetchProps.body}`)
 
     return(
         fetch(path, fetchProps) 
             .then((response) => {
+                console.log(`useServerAPI- response=${JSON.stringify(response)}`);
                 if(!response.ok) throw new Error(response.statusText);
                 else return response.json();
         })

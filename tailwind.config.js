@@ -7,7 +7,39 @@ module.exports = {
         'expand': 'spin 3s linear infinite',
       },
       keyframes: {
-      }      
+      },      
+      backgroundImage: {
+      },
+      strokeWidth: {
+        '6': '6px',
+        '8': '8px',
+        '10': '10px',
+        '12': '12px',
+      },
+      spacing: {
+        '128': '32rem',
+        '256': '64rem',
+      },
+      minWidth:{
+        '6': '1.5rem',
+        '96': '24rem',
+        '128': '32rem',
+        '256': '64rem',
+      },
+      transitionProperty: {
+        width: "width"
+      },
+      backgroundPosition: {
+        '-bottom-4': 'center bottom -1rem',
+        '-bottom-8': 'center bottom -2rem',
+        '-bottom-32': 'center bottom -8rem',
+        '-bottom-40': 'center bottom -10rem',
+        '-top-4': 'center top -1rem',
+        '-top-8': 'center top -2rem',
+        '-top-24': 'center top -6rem',
+        '-top-32': 'center top -8rem',
+        '-top-40': 'center top -10rem',
+      }
     },
   },
   plugins: [],

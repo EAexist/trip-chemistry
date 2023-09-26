@@ -1,41 +1,52 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserId, TestResultSummary, TestResult } from "../interface/interfaces";
+import { TestResult, TripCharacter, UserId } from "../interface/interfaces";
 import { useServerAPI } from "../components/utils/useServerApi";
 import { loadStatus } from "../components/ApiLoader";
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
+import { TestResponse } from "./testResponseReducer";
 
 interface UserListState { 
     userList: UserList; 
+    chemistry: any;
     loadStatus: loadStatus; 
 }; 
 
-type UserList = {[userid: UserId]: TestResult}
+type UserList = {[userId: UserId]: UserData};
+
+interface UserData {
+    testResponse?: TestResponse;
+    testResult?: TestResult;
+};
 
 interface userListPayload{
     userId: UserId,
     value: TestResult,
 };
 
-const initialState : UserListState = {userList:{}, loadStatus:loadStatus.PENDING};
+const initialState : UserListState = {
+    userList:{},
+    chemistry: undefined,
+    loadStatus:loadStatus.PENDING,
+};
 
-const fetchResultById = createAsyncThunk("user/id/result", 
+const asyncGetResultById = createAsyncThunk("user/id/result", 
     async (userId: UserId, thunkAPI) => {
+        console.log("Called: asyncGetResultById")
         try{
             const data = await useServerAPI({
                 path:`user/${userId}/result`,
                 fetchProps:{
                     method: "GET", 
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json"
                     },
-                    body: undefined,
                 }
             })
-            console.log(`fetchResultById:${JSON.stringify(data)}`);
-            return {userId: userId, data: data};
+            console.log(`asyncGetResultById:${JSON.stringify(data)}`);
+            return {userId: userId, testResult: data};
         }
         catch (e: any) {
             return thunkAPI.rejectWithValue(e);
@@ -54,26 +65,35 @@ const userListSlice = createSlice({
         setStatus: (state, action: PayloadAction<loadStatus>) => {
             state.loadStatus = action.payload;
         },
-        delete: (state, action: PayloadAction<userListPayload>) => {
-            delete state.userList[action.payload.userId];
+        add: (state, action: PayloadAction<UserId>) => {
+            if(! Object.keys(state.userList).includes(action.payload)){
+                state.userList = {...state.userList, [action.payload]:{}};
+            }
+        },
+        delete: (state, action: PayloadAction<UserId>) => {
+            delete state.userList[action.payload];
         },
     },
     extraReducers:(builder) => {
-        builder.addCase(fetchResultById.fulfilled, (state, action: PayloadAction<{userId: UserId, data: TestResult}>) => {
-            state.userList[action.payload.userId] = action.payload.data as TestResult;
+        builder.addCase(asyncGetResultById.fulfilled, (state, action: PayloadAction<{userId: UserId, testResult: TestResult}>) => {
+            console.log(`asyncGetResultById.fulfilled: users=${Object.keys(state.userList)}`)
+            state.userList[action.payload.userId].testResult = {
+                tripTagList: action.payload.testResult.tripTagList || [], 
+                tripCharacter: action.payload.testResult.tripCharacter || {} as TripCharacter
+            } as TestResult;
 
-            console.log(`fetchResultById.fulfilled - 
+            console.log(`asyncGetResultById.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)} 
             \nstate.userList[${action.payload.userId}]=${JSON.stringify(state.userList[action.payload.userId])}`);
 
             state.loadStatus = loadStatus.REST;
         });
-        builder.addCase(fetchResultById.pending, (state) => {
-            console.log(`fetchResultById.pending`);
+        builder.addCase(asyncGetResultById.pending, (state) => {
+            console.log(`asyncGetResultById.pending`);
             state.loadStatus = loadStatus.PENDING;
         });
-        builder.addCase(fetchResultById.rejected, (state) => {
-            console.log(`fetchResultById.rejected`);
+        builder.addCase(asyncGetResultById.rejected, (state) => {
+            console.log(`asyncGetResultById.rejected`);
             state.loadStatus = loadStatus.FAIL;
         });
     },
@@ -83,10 +103,12 @@ const useUserList = () => {
     return(useSelector((state:RootState)=>state.userList.userList));
 }
 
-const useFetchResultById = () => {
+const useGetResultById = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    return useCallback((userId: UserId) => 
-        dispatch(fetchResultById(userId))
+    return useCallback((userId: UserId) => {
+        dispatch(userListSlice.actions.add(userId));
+        dispatch(asyncGetResultById(userId));
+    }
     , [dispatch]);
 }
 
@@ -112,7 +134,7 @@ const useUserListLoadStatus = () => {
 //             return {...state,
 //                 [action.payload.testName] : {
 //                     ...state[action.payload.testName] as {},
-//                     [action.payload.budgetName]: action.payload.value
+//                     [action.payload.SubTestName]: action.payload.value
 //                 }
 //             };
 //         default : 
@@ -121,4 +143,4 @@ const useUserListLoadStatus = () => {
 // }
 
 export default userListSlice.reducer;
-export { useUserList, useFetchResultById, useUserListLoadStatus, }
+export { useUserList, useGetResultById, useUserListLoadStatus, }

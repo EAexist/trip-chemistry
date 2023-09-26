@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import Button from "./Button";
 import { CircularProgress } from "@mui/material";
 import { Done, QuestionMark } from "@mui/icons-material"
@@ -20,7 +20,7 @@ interface ApiLoaderProps{
 
 function ApiLoader({status, setStatus, alertText, confirmButtonText, children}: PropsWithChildren<ApiLoaderProps>){
 
-    let WrappedComponent : React.ReactNode;
+    let WrappedComponent : ReactNode;
 
     switch(status) {
         case 'rest':

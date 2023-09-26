@@ -1,29 +1,12 @@
-import { testResponsePayload } from "../reducer/testResponseReducer";
+import { TestResponsePayload } from "../reducer/testResponseReducer";
 
 /* GET/POST /{id}/response  */
-interface TestResponse{
-    leadership:number|undefined;    
-    schedule:number|undefined;   
-    budgetSpecial:BudgetResponse;
-    budgetAverage:BudgetResponse;
-    // foodBudget:BudgetResponse;
-    // accomodateBudget:BudgetResponse;
-    activityPreference:undefined;
-};
-type TestResponseKey = keyof TestResponse;
 
-interface BudgetResponse{
-    food: number| undefined;
-    accomodate: number| undefined;
-};
-
-type BudgetResponseKey= keyof BudgetResponse;
-
-/* GET /{id}/summary  */
+/* DTO: GET /{id}/summary  */
 interface TestResult{
-    tripCharacter: TripCharacter;
     tripTagList: string[];
-    placeGroupTitle : string;
+    tripCharacter: TripCharacter;
+    // placeGroup: string[];
 }
 
 interface TripCharacter {
@@ -61,17 +44,10 @@ interface ChemistryResult{
 
 };
 
-interface withTestResponseProps{
-    testName?: TestResponseKey;
-    response?: TestResponse[TestResponseKey]; 
-    setResponse?: (value: TestResponse[TestResponseKey]) => void;    
-    setBudgetResponse?: (budgetName: BudgetResponseKey, value: BudgetResponse[BudgetResponseKey]) => void;    
-};
+
 
 export type { 
     UserId,
-    TestResponse, BudgetResponse, 
-    TestResponseKey, BudgetResponseKey,
-    withTestResponseProps,
-    TestResult, TestResultSummary, TestResultDetail
+    // TestResponse, BudgetResponse, 
+    TestResultSummary, TestResult, TestResultDetail, TripCharacter
 }

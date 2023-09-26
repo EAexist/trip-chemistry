@@ -2,17 +2,22 @@ import { PropsWithChildren} from 'react';
 import { ButtonBase, Button as MuiButton } from "@mui/material";
 
 interface ButtonProps{
-    onClick?: ()=>void;
+    isActive?: boolean,
     disabled?: boolean;
     variant?: "text" | "contained" | "outlined";
-    // className?: String,
+    onClick?: ()=>void;
+    state?: 'hovered' | 'active' | undefined
+    className?: string;
+    classNameHovered? : string,
+    classNameActive? : string,
 }
 
-function Button( {children, ...buttonProps} : PropsWithChildren<ButtonProps>){
+function Button({state, classNameHovered, classNameActive, children, ...buttonProps} : PropsWithChildren<ButtonProps>){
+
     return(
-        <MuiButton {...buttonProps}>
+        <button {...buttonProps}>
             {children}
-        </MuiButton>
+        </button>
     )
 }
 

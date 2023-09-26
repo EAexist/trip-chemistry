@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserId, TestResultSummary, TestResult, TestResponse } from "../interface/interfaces";
+import { TestResult, UserId } from "../interface/interfaces";
 import { useServerAPI } from "../components/utils/useServerApi";
 import { loadStatus } from "../components/ApiLoader";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
 import { useUserList } from "./userListReducer";
+import { TestResponse } from "./testResponseReducer";
 
 
 interface ChemistryState { 
@@ -23,8 +24,6 @@ interface Place{
     body: string;
     tripTagList: string[]
 };
-
-type NationId = string;
 
 // interface chemistryPayload{
 //     userId: UserId,
@@ -110,11 +109,11 @@ const chemistrySlice = createSlice({
 // }
 
     /* Initiate state based on userList */
-const useSetChemistryTestResult = () => {
-    const dispatch = useDispatch();
-    const userList = useUserList();   
-    dispatch(chemistrySlice.actions.setTestResult(userList));
-}
+// const useSetChemistryTestResult = () => {
+//     const dispatch = useDispatch();
+//     const userList = useUserList();   
+//     dispatch(chemistrySlice.actions.setTestResult(userList));
+// }
 
 /* Fetch Chemistry from Id */
 const useFetchChemistryByIdList = () => {
@@ -136,4 +135,4 @@ const useChemistryLoadStatus = () => {
 }
 
 export default chemistrySlice.reducer;
-export { useSetChemistryTestResult, useFetchChemistryByIdList, useChemistryLoadStatus }
+export { useFetchChemistryByIdList, useChemistryLoadStatus }

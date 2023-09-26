@@ -4,9 +4,12 @@ interface SliderProps {
     step: number;
     min: number;
     max: number; 
-    onChange?: () => void;
-    getAriaValueText?: () => void;
+    valueLabelDisplay:'on'|'off'|'auto'
+    size?: 'small'
+    onChange?: (event: Event, newValue: number | number[]) => void;
+    getAriaValueText?: ((value: number, index: number) => string) | undefined;
     'aria-label'?: string;
+    sx?:{width:string};
 }
 
 export default function Slider (sliderProps : SliderProps) {
@@ -16,9 +19,8 @@ export default function Slider (sliderProps : SliderProps) {
         <MuiSlider
             aria-label='budget'
             defaultValue={sliderProps.min}
-            valueLabelDisplay='on'
             marks
-            sx={{width: '75%'}}
+            {...sliderProps}
         />        
         </>
     );

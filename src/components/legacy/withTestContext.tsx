@@ -4,19 +4,19 @@ const withTestContext = () => {};
 
 // interface ResponseContextProps{
 //     response: number | BudgetResponse;
-//     setResponse: (response: number | BudgetResponse) => void;
+//     setTestResponse: (response: number | BudgetResponse) => void;
 //     // getResponse: ()=> (response: (number | BudgetResponse));
 // };
 
 // const ResponseContext = createContext<ResponseContextProps>({} as ResponseContextProps);
 
-// const withTestContext = (name : testNameType) => <T extends {}>(WrappedComponent: React.ComponentType<T>) => {
+// const withTestContext = (name : testNameType) => <T extends {}>(WrappedComponent: ComponentType<T>) => {
 
     // const WrappedElement = (props: T) => {
 
     //     const {testResponse, setTestResponse} = useContext(TestResponseContext);
     
-    //     const [response, setResponse] = useState<typeof testResponse[typeof name]>(testResponse[name]);
+    //     const [response, setTestResponse] = useState<typeof testResponse[typeof name]>(testResponse[name]);
         
     //     useEffect(() => {
     //         console.log(response)
@@ -34,9 +34,9 @@ const withTestContext = () => {};
     //     return(
     //         <ResponseContext.Provider value={{
     //             // response: response,
-    //             // setResponse: setResponse,
+    //             // setTestResponse: setTestResponse,
     //             response: response,
-    //             setResponse: (response) => setTestResponse({ ...testResponse, [name]: response }),
+    //             setTestResponse: (response) => setTestResponse({ ...testResponse, [name]: response }),
     //         }}>
     //             <WrappedComponent {...props}/>
     //         </ResponseContext.Provider>

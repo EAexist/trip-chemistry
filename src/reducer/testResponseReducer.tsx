@@ -1,71 +1,188 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TestResponse, BudgetResponseKey } from "../interface/interfaces";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { useServerAPI } from "../components/utils/useServerApi";
+import { UserId } from "../interface/interfaces";
+import { loadStatus } from "../components/ApiLoader";
+import { HttpStatusCode } from "axios";
 
-interface TestResponseState extends TestResponse {}; 
-
-type TestResponseKey = keyof TestResponseState;
-
-interface testResponsePayload{
-    testName: TestResponseKey;
-    value: TestResponse[TestResponseKey];
+interface TestResponse{
+    leadership: number|undefined;       
+    schedule: number|undefined;   
+    budget: subTestResponse
+    city: {
+        metropolis: number | undefined;
+        history: number | undefined;
+        nature: number | undefined;
+    };
+    activity:{
+        food: number | undefined;
+        walk: number | undefined;
+        shopping: number | undefined;
+        mesuem: number | undefined;
+        themePark: number | undefined;
+    };
 };
 
-interface budgetTestResponsePayload extends testResponsePayload{
-    budgetName: BudgetResponseKey;
+interface TestResponseState extends TestResponse{
+    loadStatus: loadStatus; 
 };
 
-const initialState : TestResponse = {
+type subTestResponse = {[key: string]: number | undefined};
+
+type SubTestName = 'food'|'foodSpecial'|'accomodate'|'accomodateSpecial'
+    |'metropolis'|'history';
+
+type TestName = keyof TestResponse;
+
+interface TestResponsePayload{
+    testName: TestName;
+    subTestName?: SubTestName;
+    value: TestResponse[TestName];
+};
+
+const initialState : TestResponseState = {
     leadership : undefined,
     schedule : undefined,
-    budgetAverage : {
-        food: undefined,
-        accomodate: undefined
+    budget : {
+        food: undefined, /* 식사 평균 */
+        foodSpecial: undefined, /* 특별한 식사 */
+        accomodate: undefined, /* 숙소 평균 */
+        accomodateSpecial: undefined, /* 특별한 숙소 */
     },
-    budgetSpecial : {
-        food: undefined,
-        accomodate: undefined
+    city: {
+        metropolis: undefined,
+        history: undefined,
+        nature: undefined,
     },
-    activityPreference : undefined
+    activity:{
+        food: undefined,
+        walk: undefined,
+        shopping: undefined,
+        mesuem: undefined,
+        themePark: undefined,
+    },
+    loadStatus:loadStatus.PENDING,
 };
+
+interface asyncPutResponseByIdProps{
+    userId: UserId;
+    response: TestResponse;
+};
+const asyncPutResponseById = createAsyncThunk("user/id/response", 
+    async ({userId, response}: asyncPutResponseByIdProps, thunkAPI) => {
+        try{
+            
+            // const data = await useServerAPI({
+            //     path:`user/${userId}/response`,
+            //     fetchProps:{
+            //         method: "PUT", 
+            //         headers: {
+            //             "Content-Type": "application/json"
+            //         },
+            //         body: JSON.stringify(response)
+            //     }
+            // })
+
+            const path = `user/${userId}/response`;
+            const fetchProps = {
+                method: "PUT", 
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(response)
+            };
+
+            const data = await fetch(path, fetchProps) 
+                .then((response) => {
+                    console.log(`useServerAPI- response=${JSON.stringify(response)}`);
+                    if(!response.ok) throw new Error(response.statusText);
+                    else return response.status;
+                })
+
+            console.log(`asyncPutResponseById: data=${JSON.stringify(data)}`);
+            return data;
+        }
+        catch (e: any) {
+            return thunkAPI.rejectWithValue(e);
+        }
+    }
+);
 
 const testResponseSlice = createSlice({
     name: 'testResponse',
     initialState: initialState,
     reducers:
     {
-        setResponse : (state, action: PayloadAction<testResponsePayload>) => {
-            console.log(`testResponseSlice - setResponse - state=${JSON.stringify(state)} payload=${action.payload}` );
+        setTestResponse : (state, action: PayloadAction<TestResponsePayload>) => {
+            console.log(`testResponseSlice: setTestResponse: state=${JSON.stringify(state)} payload=${JSON.stringify(action.payload)}` );
             return {...state,
-                [action.payload.testName] : action.payload.value
-            };
-        },
-        setBudgetResponse : (state, action: PayloadAction<budgetTestResponsePayload>) => {
-            console.log(`testResponseSlice - setBudgetResponse - value=${action.payload.value}`)
-            return {...state,
-                [action.payload.testName] : {
-                    ...state[action.payload.testName] as {},
-                    [action.payload.budgetName]: action.payload.value
+                [action.payload.testName] : 
+                action.payload.subTestName === undefined ? 
+                action.payload.value
+                :{
+                    ...state[action.payload.testName] as object,
+                    [action.payload.subTestName as SubTestName]: action.payload.value
                 }
             };
-        }
-    }
+        },
+        setStatus: (state, action: PayloadAction<loadStatus>) => {
+            state.loadStatus = action.payload;
+        },
+    },
+    extraReducers:(builder) => {
+        builder.addCase(asyncPutResponseById.fulfilled, (state, action: PayloadAction<HttpStatusCode>) => {
+            
+            console.log(`asyncPutResponseById.fulfilled - 
+            \naction.payload=${JSON.stringify(action.payload)}`);
+            state.loadStatus = loadStatus.REST;
+        });
+        builder.addCase(asyncPutResponseById.pending, (state) => {
+            console.log(`asyncPutResponseById.pending`);
+            state.loadStatus = loadStatus.PENDING;
+        });
+        builder.addCase(asyncPutResponseById.rejected, (state) => {
+            console.log(`asyncPutResponseById.rejected`);
+            state.loadStatus = loadStatus.FAIL;
+        });
+    },
 });
 
-const useSetResponse = () => {
-    const dispatch = useDispatch();
-    return useCallback((payload: testResponsePayload) => 
-        dispatch(testResponseSlice.actions.setResponse(payload))
-    , [dispatch]);
-}
+const useTestResponse = (testName: TestName, SubTestName?: SubTestName) => (
+    useSelector((state:RootState)=>((SubTestName? (state.testResponse[testName] as subTestResponse)[SubTestName] : state.testResponse[testName]))) as number
+);
 
-const useSetBudgetResponse = () => {
+const useSetTestResponse = () => {
     const dispatch = useDispatch();
-    return useCallback((payload: budgetTestResponsePayload) => 
-        dispatch(testResponseSlice.actions.setBudgetResponse(payload))
+    return useCallback((payload: TestResponsePayload) => 
+        dispatch(testResponseSlice.actions.setTestResponse(payload))
     , [dispatch]);
+};
+
+const usePutResponseById = () => {
+    const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
+    const {loadStatus, ...testResponse} = useSelector((state:RootState)=>state.testResponse)
+    return useCallback((userId: UserId) => 
+        dispatch(asyncPutResponseById({userId: userId, response: testResponse}))
+    , [dispatch, testResponse]);
 }
+const useTestResponseStatus = () => {
+    const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
+    const status = useSelector((state:RootState)=>state.userList.loadStatus);
+    return ([
+        status,
+        useCallback((status: loadStatus) =>
+            dispatch(testResponseSlice.actions.setStatus(status))
+        , [dispatch])
+    ] as const);
+}
+const useBudgetResponse = (SubTestName: SubTestName) => (
+    useSelector((state:RootState)=>((state.testResponse.budget)[SubTestName])) as number
+)
+
+
 
 /* Deprecated */
 // function testResponseReducer(state=initialState, action: testResponseAction) {
@@ -78,7 +195,7 @@ const useSetBudgetResponse = () => {
 //             return {...state,
 //                 [action.payload.testName] : {
 //                     ...state[action.payload.testName] as {},
-//                     [action.payload.budgetName]: action.payload.value
+//                     [action.payload.SubTestName]: action.payload.value
 //                 }
 //             };
 //         default : 
@@ -87,33 +204,33 @@ const useSetBudgetResponse = () => {
 // }
 
 /* Deprecated */
-// const mapState = (testResponsekey: TestResponseKey) => (state: RootState) => ({
-//     response: state.testResponse[testResponsekey]
+// const mapState = (TestName: TestName) => (state: RootState) => ({
+//     response: state.testResponse[TestName]
 // });
 
-// const mapDispatch = (testName : TestResponseKey) => (
+// const mapDispatch = (testName : TestName) => (
 //     {   
-//         setResponse: (value: TestResponse[TestResponseKey]) => {testResponseSlice.actions.setResponse({
+//         setTestResponse: (value: TestResponse[TestName]) => {testResponseSlice.actions.setTestResponse({
 //         testName: testName,
 //         value: value
 //     })},
-//         setBudgetResponse: (budgetName: BudgetResponseKey, value: BudgetResponse[BudgetResponseKey]) => {testResponseSlice.actions.setBudgetResponse({
+//         setBudgetResponse: (SubTestName: SubTestName, value: BudgetResponse[SubTestName]) => {testResponseSlice.actions.setBudgetResponse({
 //         testName: testName,
-//         budgetName: budgetName,
+//         SubTestName: SubTestName,
 //         value: value
 //     })}, 
 //     }
 // );
 
-// const connector = (testResponsekey: TestResponseKey) => connect(
-//     mapState(testResponsekey), 
-//     mapDispatch(testResponsekey)
+// const connector = (TestName: TestName) => connect(
+//     mapState(TestName), 
+//     mapDispatch(TestName)
 // )
 
 // type PropsFromReduxTestResponse = ConnectedProps<typeof connector>;
 
-// const useConnectTestResponse = (component : React.ComponentType) => {
-//     const mapStateToProps = (state : RootState, testResponsekey: TestResponseKey) => ({
+// const useConnectTestResponse = (component : ComponentType) => {
+//     const mapStateToProps = (state : RootState, TestName: TestName) => ({
 //         response: state.testResponse
 //     });
       
@@ -125,5 +242,5 @@ const useSetBudgetResponse = () => {
 // }
 
 export default testResponseSlice.reducer;
-export { useSetResponse, useSetBudgetResponse }
-export type { testResponsePayload }
+export { useTestResponse, useSetTestResponse, usePutResponseById, useTestResponseStatus }
+export type { TestResponsePayload, TestResponse, TestName, SubTestName }

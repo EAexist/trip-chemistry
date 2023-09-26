@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect,  Fragment, ChangeEvent } from 'react'
 import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 
 /* @mui
@@ -14,9 +14,9 @@ interface option {
 
 function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps) {
     const [open, setOpen] = useState(false);
-    const [options, setOptions] = useState<option[]>([{ name: "우동#1234" }]);
+    const [options, setOptions] = useState<option[]>([{ name: "우동1234" }]);
     const loading = open && options.length === 0;
-    const handleChangeTextField = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeTextField = (event: ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
     }
 
@@ -31,7 +31,7 @@ function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps)
             await sleep(1e3); // For demo purposes.
 
             if (active) {
-                setOptions([{ name: "우동#1234" }]);
+                setOptions([{ name: "우동1234" }]);
             }
         })();
 
@@ -71,10 +71,10 @@ function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps)
                     InputProps={{
                         ...params.InputProps,
                         endAdornment: (
-                            <React.Fragment>
+                            <Fragment>
                                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
                                 {params.InputProps.endAdornment}
-                            </React.Fragment>
+                            </Fragment>
                         ),
                     }}
                     onChange={handleChangeTextField}

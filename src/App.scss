@@ -1,54 +1,165 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 100;
+//   src: url("./fonts/AppleSDGothicNeoT.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 200;
+//   src: url("./fonts/AppleSDGothicNeoUL.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 300;
+//   src: url("./fonts/AppleSDGothicNeoL.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url("./fonts/AppleSDGothicNeoR.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 500;
+//   src: url("./fonts/AppleSDGothicNeoM.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-weight: 600;
+//   font-style: normal;
+//   src: url("./fonts/AppleSDGothicNeoSB.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 700;
+//   src: url("./fonts/AppleSDGothicNeoB.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-style: normal;
+//   font-weight: 800;
+//   src: url("./fonts/AppleSDGothicNeoEB.woff2") format("woff2");
+// }
+
+// @font-face {
+//   font-family: 'Apple SD Gothic Neo';
+//   font-style: normal;
+//   font-weight: 900;
+//   src: url("./fonts/AppleSDGothicNeoH.woff2") format("woff2");
+// }
+
+
+@font-face {
+  font-family: 'Apple SD Gothic Neo';
+  font-style: normal;
+  font-weight: 300;
+  src: url("./fonts/AppleSDGothicNeoL.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Apple SD Gothic Neo';
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/AppleSDGothicNeoM.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Apple SD Gothic Neo';
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fonts/AppleSDGothicNeoB.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Apple SD Gothic Neo';
+  font-style: normal;
+  font-weight: 800;
+  src: url("./fonts/AppleSDGothicNeoEB.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Apple SD Gothic Neo';
+  font-style: normal;
+  font-weight: 900;
+  src: url("./fonts/AppleSDGothicNeoH.ttf") format("truetype");
+}
+
 
 @layer base{
 
   * {
     line-height: 1.8;
-    font-family: 'NanumSquare', sans-serif;
+    font-family: 'Apple SD Gothic Neo', sans-serif;
     /* Debugging */
     border-color: red;
-    border-width: 1px;
+    // border-width: 1px;
     
     & h1 {
       font-size: 56px;
-      font-weight: 600;
+      font-weight: 800;
     }
     & h2 {
       font-size: 48px;
-      // font-weight: 600;
+      font-weight: 800;
     }
     & h3 {
-      font-size: 24px;
-      // font-weight: 600;
+      font-size: 32px;
+      font-weight: 800;
     }
     & h4 {
       font-size: 20px;
-      // font-weight: 600;
+      font-weight: 500;
+    }
+    & h5 {
+      font-size: 16px;
+      font-weight: 300;
+    }
+    & h6 {
+      font-size: 12px;
+      font-weight: 300;
+    }
+    & p {
+      font-size: 12px;
+      font-weight: 300;
+    }
+    & div{
     }
   }
 
   body {
     // margin-top: 64px;
+    // font-family: 'Apple SD Gothic Neo', sans-serif;
   }
 
   :root{
   }  
 
   .margin {
-    * {
-      margin: 4px; /* Default Margin for all children and nested children */
-    } 
+    // * {
+    //   margin: 4px; /* Default Margin for all children and nested children */
+    // } 
 
-    & > * {
-      padding-top: 48px; /* Margin for direct children. Apply this with <div> tag. */
-      padding-bottom: 48px;
-    }
-    h1, h2, h3, p {
-      padding-left: 64px;
-      padding-right: 64px;
-    }  
+    // & > * {
+    //   padding-top: 48px; /* Margin for direct children. Apply this with <div> tag. */
+    //   padding-bottom: 48px;
+    // }
+    // h1, h2, h3, p {
+    //   padding-left: 64px;
+    //   padding-right: 64px;
+    // }  
   }
 
   .no-margin {
@@ -123,4 +234,23 @@
   .animate-reveal-left-d1 {
     animation: reveal-left 3s 1s forwards, fade-in 2s 1s forwards;
   }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+      // transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      // transform: translateY(0);
+    }
+  }
+  .fadeIn {
+    animation: fade 0.75s ease-in-out 0s 1 normal forwards;
+  }
+  
+  .fadeOut {
+    animation: fade 0.75s ease-in-out 0s 1 reverse forwards;
+  }
+
 }

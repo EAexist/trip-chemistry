@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, ComponentType } from "react";
 import ApiLoader, { loadStatus } from "../ApiLoader";
 
 /*  HOC <withIsLoaded/>.
@@ -6,32 +6,33 @@ import ApiLoader, { loadStatus } from "../ApiLoader";
     https://blog.bitsrc.io/building-a-universal-higher-order-component-page-loader-for-your-react-app-46d74f7a6958 */
 
 interface withLoadStatusProps{
+    isLoaded?: boolean,
     status?: loadStatus,
     setStatus?: (status: loadStatus)=>void
 };
 
-const withLoadStatus = <T extends {}>(WrappedComponent: React.ComponentType<T>) =>(LoaderComponent: React.ComponentType<withLoadStatusProps>, status: loadStatus, setStatus:(status:loadStatus)=>void) => (props: T) => {
+const withLoadStatus = <T extends {}>(WrappedComponent: ComponentType<T>) =>(LoaderComponent: ComponentType<withLoadStatusProps>, isLoaded: boolean, status?: loadStatus, setStatus?:(status:loadStatus)=>void) => (props: T) => {
 
     return(
         <>
-        <LoaderComponent status={status} setStatus={setStatus}/>
-        <WrappedComponent status={status} setStatus={setStatus} {...props as T} />                                
+        <LoaderComponent isLoaded={isLoaded} status={status}/>
+        <WrappedComponent isLoaded={isLoaded} status={status} setStatus={setStatus} {...props as T} />                        
         </>
     ); 
 }
 
-function Loader({status}:withLoadStatusProps){
+function Loader({isLoaded}:withLoadStatusProps){
     return(
         <>
-        {(status as loadStatus) !== loadStatus.REST && 
-        <h1>Loading...</h1>}
+        {!isLoaded && 
+        <h2>Loading...</h2>}
         </>
     );
 }
 
 // const [setStatus] = useState<loadStatus>(loadStatus.REST);
 // const status = useSelector((state:RootState)=>state.userList.loadStatus);
-// const fetchResultById = useFetchResultById();
+// const fetchResultById = useGetResultById();
 
 export default withLoadStatus;
 export { Loader };

@@ -1,7 +1,6 @@
 /* @mui
 https://mui.com/material-ui/react-accordion/ */
-
-import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { PropsWithChildren, createContext, useContext, useState, ComponentType, SyntheticEvent } from 'react';
 
 const ExclusiveAccordionsContext = createContext({expanded: false as number | string | false, setExpanded: (index: number | string | false) => {} });
 
@@ -20,9 +19,9 @@ const ExclusiveAccordionsContextProvider = ({children}:PropsWithChildren) => {
     )
 }
 
-const withExclusiveAccordionsContext = <T extends {}>(WrappedComponent: React.ComponentType<T>) => (index:number) => (props: T) => {
+const withExclusiveAccordionsContext = <T extends {}>(WrappedComponent: ComponentType<T>) => (index:number) => (props: T) => {
     const {expanded, setExpanded} = useContext(ExclusiveAccordionsContext);
-    const handleChangeAccordion = (index: number | string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    const handleChangeAccordion = (index: number | string) => (event: SyntheticEvent, isExpanded: boolean) => {
         // console.log(`withExclusiveAccordionsContext - handleChangeAccordion - index = ${index} isExpanded = ${isExpanded}`);    
         setExpanded(isExpanded ? index : false); 
     };
@@ -50,11 +49,11 @@ const withExclusiveAccordionsContext = <T extends {}>(WrappedComponent: React.Co
 
 //     return (
 //         <>
-//             {React.Children?.map(children, (child, index) => {
-//                 if (React.isValidElement(child)) {
+//             {Children?.map(children, (child, index) => {
+//                 if (isValidElement(child)) {
 //                     return (
 //                     <>
-//                         {React.cloneElement(child as JSX.Element, {
+//                         {cloneElement(child as JSX.Element, {
 //                             expanded: expanded === index,
 //                             handleChangeAccordion: () => handleChangeAccordion(index),
 //                         })}

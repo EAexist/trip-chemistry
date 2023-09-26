@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState, Key } from 'react';
 
 import { Stepper, Step, StepLabel } from "@mui/material";
 
@@ -32,7 +32,7 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
         handleClickStepLabel(index)
       }}
     >
-      <WithShowIfHoveringWrapper>
+      <WithShowIfHoveringWrapper  index={index}>
         <div className={`text-xs`}>
           {label}
         </div>
@@ -43,46 +43,46 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
   return(
       <Stepper nonLinear activeStep={activeSectionIndex} alternativeLabel className='h-fill'>
         {steps?.map(({label}, index) => (
-          <Step key={label as React.Key} >
+          <Step>
             {/* <button onClick = {()=>setActiveSectionIndex(index)}> */}
-            <ConditionalWrapper 
+            {/* <ConditionalWrapper 
               isWrapped = {enableHover} 
               wrapper = {IsHoveringContextProvider}
-            >
+            > */}
             {
-              withMouseHover(()=> /* withMouseHover(HOC): StepLabel 호버 가능하도록 함. */
-              (
-                <StepLabel
-                  className='cursor-pointer h-2'
-                  onClick={() => {
-                    handleClickStepLabel(index)
-                  }}
-                >
-                  {
-                    withShowIfHovering(() => ( /* withShowIfHovering(HOC): StepLabel 호버 시 아래 <div> 가 보이도록 함. */
-                      <div className={`text-xs`}>
-                        {label}
-                      </div>
-                    ))({})
-                  }
-                </StepLabel>           
-              ))({})              
+              // withMouseHover(()=> /* withMouseHover(HOC): StepLabel 호버 가능하도록 함. */
+              // (
+              //   // <StepLabel
+              //   //   className='cursor-pointer h-2'
+              //   //   onClick={() => {
+              //   //     handleClickStepLabel(index)
+              //   //   }}
+              //   // >
+              //   //   {
+              //   //     withShowIfHovering(() => ( /* withShowIfHovering(HOC): StepLabel 호버 시 아래 <div> 가 보이도록 함. */
+              //   //       <div className={`text-xs`}>
+              //   //         {label}
+              //   //       </div>
+              //   //     ))({})
+              //   //   }
+              //   // </StepLabel>           
+              // ))({})              
             }
 
-            <WithMouseHoverWrapper>   
+            <WithMouseHoverWrapper index={index}>   
               <StepLabel
                 className='cursor-pointer h-2'
                 onClick = {()=>{
                   handleClickStepLabel(index)}}
               >
-                <WithShowIfHoveringWrapper>
+                <WithShowIfHoveringWrapper index={index}>
                   <div className={`text-xs`}>
                     {label}
                   </div>
                 </WithShowIfHoveringWrapper>
               </StepLabel>       
             </WithMouseHoverWrapper>           
-             </ConditionalWrapper>
+             {/* </ConditionalWrapper> */}
             {/* </button> */}
           </Step>
         ))}
