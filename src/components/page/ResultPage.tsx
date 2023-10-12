@@ -11,13 +11,13 @@ import { usePageString, useString } from "../../texts";
 import Button from "../Button";
 import NavStepper from "../NavStepper";
 import AddFriendDialog from "../ResultPage/AddFriendDialog";
-import withLoadStatus, { Loader, withLoadStatusProps } from "../utils/withLoadStatus";
-import { loadStatus } from "../ApiLoader";
-import { useGetResultById, useUserList, useUserListLoadStatus } from "../../reducer/userListReducer";
-import { UserId } from "../../interface/interfaces";
-import { NationId, useFetchPlaceGroupById, useNationFilter, usePlaceGroup, usePlaceGroupLoadStatus } from "../../reducer/placeGroupReducer";
+import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
+import { loadStatus } from "../../common/hocs/ApiLoader";
+import { useGetResultById, useUserList, useUserListLoadStatus } from "../../common/reducer/userListReducer";
+import { UserId } from "../../common/interface/interfaces";
+import { NationId, useFetchPlaceGroupById, useNationFilter, usePlaceGroup, usePlaceGroupLoadStatus } from "../../common/reducer/placeGroupReducer";
 import ToggleButton from "../ToggleButton";
-import getImgSrc, { formatSvg, formatWebp } from "../utils/getImgSrc";
+import getImgSrc, { formatSvg, formatWebp } from "../../common/utils/getImgSrc";
 import Chip from "../Chip";
 
 interface ResultPageProps extends withLoadStatusProps{
@@ -138,7 +138,7 @@ function ResultPage({ isLoaded }:ResultPageProps){
         isLoaded ?
         <div>
             {/* TopNaV 네비게이션 */}
-            <div className = 'fixed bg-white z-50 w-full h-fit p--4 py-6 flex flex-row items-center justify-between'>
+            <div className = 'fixed bg-white z-50 w-full h-fit p-4 py-6 flex flex-row items-center justify-between'>
                 <Link to ='/test/confirm'>
                 <Button><KeyboardArrowLeft/>{strings.prevButton}</Button>
                 </Link>

@@ -18,7 +18,7 @@ const SelectedItemContext = createContext<selectedItemContextProps>({
 interface CardCarouselContainerProps{
   selectedItemId: number, 
   setSelectedItemId: (id: number) => void,
-  direction?: 'row' | 'column'
+  direction?: 'row' | 'col'
 };
 
 function CardCarouselContainer({ selectedItemId, setSelectedItemId, direction = 'row', children }: PropsWithChildren<CardCarouselContainerProps>){
@@ -33,7 +33,10 @@ function CardCarouselContainer({ selectedItemId, setSelectedItemId, direction = 
     }}>
     {/* <Stack spacing={2} direction={direction}> */}
     <div 
-      className={`flex flex-${direction} items-stretch space-x-2`} 
+      className={`flex flex-${direction} items-stretch space-x-2
+        max-md:flex-col
+      `}
+      // max-md:flex max-md:flex-col max-md:space-y-2`} 
       onMouseEnter={()=>setIsHovering(true)} 
       onMouseLeave={()=>setIsHovering(false)}
     >
@@ -62,7 +65,7 @@ function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<Ca
   return(
     <div 
       className={`
-        flex basis-8/12 shrink-1 duration-500 opacity-50
+        flex basis-8/12 shrink-1 duration-300 opacity-50
         ${isSelected && !isHoveringContainer && 'shrink-0 opacity-100'}         
         hover:shrink-0 hover:opacity-100
         `} 
@@ -70,12 +73,12 @@ function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<Ca
       onMouseEnter={()=>setIsHovering(true)} 
       onMouseLeave={()=>setIsHovering(false)}
     >
-      <Card className={`w-full relative
+      <Card className={`w-full h-full relative
       ${isSelected && 'border-4 border-slate-500'}`}>
         {children}
-        {isSelected ?
-        (!isHoveringContainer || isHovering) && onHoverElement
-        : isHovering && onHoverElement}
+        {( isSelected ?
+        (!isHoveringContainer || isHovering) 
+        : isHovering ) && onHoverElement}
       </Card>
     </div>    
   );
@@ -98,11 +101,9 @@ interface ImageCardProps{
 function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps, }:ImageCardProps){    
 
   return(
-    <div 
-      className = 'w-full'
-    >
+    <div className = 'w-full'>
       {/* <div className = 'relative h-128'> */}
-        <CardMedia className = 'sticky z-0 w-full' component = 'img' sx={{ height: 384 }} {...cardMediaProps}/>
+        <CardMedia className = 'sticky z-0 w-full' component = 'img' sx={{ height: "10%" }} {...cardMediaProps}/>
     
       {/* </div> */}
       <CardHeader

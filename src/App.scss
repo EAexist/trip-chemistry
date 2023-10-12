@@ -106,39 +106,58 @@
     /* Debugging */
     border-color: red;
     // border-width: 1px;
-    
-    & h1 {
-      font-size: 56px;
-      font-weight: 800;
-    }
-    & h2 {
-      font-size: 48px;
-      font-weight: 800;
-    }
-    & h3 {
-      font-size: 32px;
-      font-weight: 800;
-    }
-    & h4 {
-      font-size: 20px;
-      font-weight: 500;
-    }
-    & h5 {
-      font-size: 16px;
-      font-weight: 300;
-    }
-    & h6 {
-      font-size: 12px;
-      font-weight: 300;
-    }
-    & p {
-      font-size: 12px;
-      font-weight: 300;
-    }
-    & div{
-    }
   }
 
+  /* heading & paragraph */
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+  }
+  h2 {
+    font-size: 3rem;
+    font-weight: 800;
+  }
+  h3 {
+    font-size: 2rem;
+    font-weight: 800;
+  }
+  h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  h5 {
+    font-size: 1rem;
+    font-weight: 300;
+  }
+  h6 {
+    font-size: 0.75rem;
+    font-weight: 300;
+  }
+  p {
+    font-size: 0.75rem;
+    font-weight: 300;
+  }
+
+
+  /* heading & paragraph: responsive */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    h5 {
+      font-size: 0.8rem;
+      font-weight: 300;
+    }
+  }
   body {
     // margin-top: 64px;
     // font-family: 'Apple SD Gothic Neo', sans-serif;
@@ -210,17 +229,24 @@
 
   @keyframes reveal-up {
     0% {
-      transform: translateY(0);
+      transform: translateY(200px);
     }
     100% {
-      transform: translateY(-200px);
+      transform: translateY(0);
     }
   }
   .animate-reveal-up {
-    animation: reveal-up 2s 500ms forwards, fade-in 2s 500ms forwards;
+    animation: reveal-up 1.5s 500ms forwards, fade-in 1.5s 500ms forwards;
   }
-
   @keyframes reveal-left {
+    0% {
+      transform: translateX(200px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  @keyframes reveal-left-bounce {
     0% { transform: translateX(180px) }
     20% { transform: translateX(-60px); }
     40% { transform: translateX(30px); }
@@ -229,10 +255,10 @@
     100% { transform: translateX(0px); }
   }  
   .animate-reveal-left {
-    animation: reveal-left 3s 0ms forwards, fade-in 2s 0ms forwards;
+    animation: reveal-left 1.5s 500ms forwards, fade-in 1.5s 500ms forwards;
   }
-  .animate-reveal-left-d1 {
-    animation: reveal-left 3s 1s forwards, fade-in 2s 1s forwards;
+  .animate-reveal-left-bounce {
+    animation: reveal-left-bounce 3s 1s forwards, fade-in 2s 1s forwards;
   }
 
   @keyframes fade {

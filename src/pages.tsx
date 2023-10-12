@@ -5,10 +5,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './components/page/HomePage';
 import TestPage from './components/page/TestPage';
 import ResultPage from './components/page/ResultPage';
-import ChemistryPage from './components/page/ChemistryPage';
-
-import withTestResponse from './components/withTestResponse';
-
 
 interface routeProps {
     path: string,

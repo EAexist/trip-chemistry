@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Chip, Dialog, DialogContent, CircularProgress } from '@mui/material';
-import { Done, QuestionMark } from "@mui/icons-material"
-import { usePageString } from '../../texts';
-import AsyncAutoComplete from "../AsyncAutoComplete";
-import Button from '../Button';
-import User from '../../common/interface/User';
-import ApiLoader, { loadStatus } from '../../common/hocs/ApiLoader';
-import { useGetResultById, useUserListLoadStatus } from '../../common/reducer/userListReducer';
+import { Chip, Dialog, DialogContent } from '@mui/material';
+import { usePageString } from '../../../texts';
+import AsyncAutoComplete from "../../AsyncAutoComplete";
+import Button from '../../Button';
+import ApiLoader, { loadStatus } from '../../../common/hocs/ApiLoader';
+import { useGetResultById, useUserListLoadStatus } from '../../../common/reducer/userListReducer';
 
 const userName = '디클1234'
 
@@ -49,28 +47,6 @@ function AddFriendDialog({ setOpen, ...dialogProps }: AddFriendDialogProps){
     const handleClickAdd = () => {
         setAddFriendStatus(loadStatus.PENDING);
         fetchResultById(idToSearch);
-        
-        /* ! Deprecated API 호출
-         * :port/users/{Id}
-         */
-        // fetch(`${getFriendApiPath}/${idToSearch}`)
-        //     .then((response) => {
-        //         return response.json();
-        //     })
-        //     .then((data) => {
-        //         /* Find Success. 입력한 id가 UserInfo DB에 존재하며 사용자 정보를 응답으로 받음. 
-        //          * data: user 객체.*/
-        //         if(data){
-        //             console.log(data);
-        //             setAddFriendStatus(loadStatus.SUCCESS);
-        //             setUserCardInfoList([...userCardInfoList, data]);
-        //             setOpen(false);  
-        //         }         
-        //         /* Find miss. 입력한 id가 UserInfo DB에 존재하지 않음.  */     
-        //         else{
-        //             setAddFriendStatus(loadStatus.MISS);                    
-        //         }
-        //     })
     };
 
     const handleClickConfirmmiss = () => {

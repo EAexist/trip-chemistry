@@ -2,8 +2,8 @@ import { useContext, useState, Key } from 'react';
 
 import { Stepper, Step, StepLabel } from "@mui/material";
 
-import ConditionalWrapper from './utils/ConditionalWrapper';
-import { IsHoveringContextProvider, withMouseHover, withShowIfHovering, WithMouseHoverWrapper, WithShowIfHoveringWrapper } from '../context/IsHoveringContext'
+import ConditionalWrapper from '../common/utils/ConditionalWrapper';
+import { IsHoveringContextProvider, withHover, withShowIfHovering, WithHoverWrapper, WithShowIfHoveringWrapper } from '../common/isHovering/IsHoveringContext'
 
 interface StepperProps{
     steps: step[]; 
@@ -24,7 +24,7 @@ interface step{
 
 function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHover }:StepperProps){
 
-  const Label = (index : number, label: string) => withMouseHover(()=>
+  const Label = (index : number, label: string) => withHover(()=>
   (
     <StepLabel
       className='cursor-pointer h-2'
@@ -32,7 +32,7 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
         handleClickStepLabel(index)
       }}
     >
-      <WithShowIfHoveringWrapper  index={index}>
+      <WithShowIfHoveringWrapper id={index}>
         <div className={`text-xs`}>
           {label}
         </div>
@@ -50,7 +50,7 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
               wrapper = {IsHoveringContextProvider}
             > */}
             {
-              // withMouseHover(()=> /* withMouseHover(HOC): StepLabel 호버 가능하도록 함. */
+              // withHover(()=> /* withHover(HOC): StepLabel 호버 가능하도록 함. */
               // (
               //   // <StepLabel
               //   //   className='cursor-pointer h-2'
@@ -69,19 +69,19 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
               // ))({})              
             }
 
-            <WithMouseHoverWrapper index={index}>   
+            <WithHoverWrapper id={index}>   
               <StepLabel
                 className='cursor-pointer h-2'
                 onClick = {()=>{
                   handleClickStepLabel(index)}}
               >
-                <WithShowIfHoveringWrapper index={index}>
+                <WithShowIfHoveringWrapper id={index}>
                   <div className={`text-xs`}>
                     {label}
                   </div>
                 </WithShowIfHoveringWrapper>
               </StepLabel>       
-            </WithMouseHoverWrapper>           
+            </WithHoverWrapper>           
              {/* </ConditionalWrapper> */}
             {/* </button> */}
           </Step>

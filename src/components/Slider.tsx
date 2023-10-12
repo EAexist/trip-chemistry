@@ -1,4 +1,4 @@
-import { Slider as MuiSlider } from "@mui/material";
+import { Slider as MuiSlider, SxProps } from "@mui/material";
 
 interface SliderProps {
     step: number;
@@ -9,7 +9,7 @@ interface SliderProps {
     onChange?: (event: Event, newValue: number | number[]) => void;
     getAriaValueText?: ((value: number, index: number) => string) | undefined;
     'aria-label'?: string;
-    sx?:{width:string};
+    sx?: SxProps;
 }
 
 export default function Slider (sliderProps : SliderProps) {

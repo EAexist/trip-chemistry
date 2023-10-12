@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      width:{
+        // '11/12screen': '91.666667vw',
+      },
       animation: {
         'expand': 'spin 3s linear infinite',
       },

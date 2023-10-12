@@ -10,11 +10,11 @@ import Card, { ClickableCard, CardProps } from "../Card";
 import { usePageString } from "../../texts";
 import Button from "../Button";
 import NavStepper from "../NavStepper";
-import User, { userId } from "../../interface/User";
-import useServerApi from "../utils/useServerApi";
-import withLoadStatus, { Loader, withLoadStatusProps } from "../utils/withLoadStatus";
-import { loadStatus } from "../ApiLoader";
-import { useUserListLoadStatus } from "../../reducer/userListReducer";
+import User, { userId } from "../../common/interface/User";
+import useServerApi from "../../common/utils/useServerApi";
+import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
+import { loadStatus } from "../../common/hocs/ApiLoader";
+import { useUserListLoadStatus } from "../../common/reducer/userListReducer";
 
 interface ChemistryPageProps extends withLoadStatusProps{
 };

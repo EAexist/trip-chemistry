@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from "react";
 import Button from "./Button";
-import { ShowContextProvider } from "./ShowContext";
+import { ShowContextProvider } from "../legacy/ShowContext";
 
 interface ToggleButtonProps{
     isActive: boolean;

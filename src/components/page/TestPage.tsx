@@ -1,16 +1,15 @@
 import { useState, createContext, useEffect, PropsWithChildren } from "react";
 import { usePageString } from "../../texts";
-import withLoadStatus, { Loader, withLoadStatusProps } from "../utils/withLoadStatus";
-import { loadStatus } from "../ApiLoader";
+import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
+import { loadStatus } from "../../common/hocs/ApiLoader";
 
 /* Test Page Components */
-import TestLeadership from "../TestPage/TestLeadership";
-import TestSchedule from "../TestPage/TestSchedule";
-import TestConfirm from "../TestPage/TestConfirm";
-import TestBudget from "../TestPage/TestBudget";
-import TestWithSubTestPage from "../TestPage/TestWithSubTestPage";
-
-import withTestResponse from "../withTestResponse";
+import TestLeadership from "./testLeadership/TestLeadership";
+import TestSchedule from "./testPage/testSchedule/TestSchedule";
+import TestConfirm from "./testConfirm/TestConfirm";
+import TestBudget from "./testPage/testBudget/TestBudget";
+import TestWithSubTestPage from "./testPage/TestWithSubTestPage";
+import withTestResponse from "../../common/hocs/withTestResponse";
 
 // Swiper
 import { Navigation, Pagination, Mousewheel, HashNavigation, Parallax } from 'swiper/modules';
@@ -21,7 +20,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 /* Reducer */
-import { SubTestName, TestName } from "../../reducer/testResponseReducer";
+import { SubTestName, TestName } from "../../common/reducer/testResponseReducer";
 
 interface TestPageProps extends withLoadStatusProps{
     defaultActiveSectionIndex?: number;
@@ -35,7 +34,7 @@ interface ActiveSectionContextProps{
 };
 const ActiveSectionContext = createContext<ActiveSectionContextProps>({} as ActiveSectionContextProps);
 
-function WithAnimate({keyProp, className, children}: PropsWithChildren<{keyProp: any, className: string}>){
+function WithAnimationWrapperate({keyProp, className, children}: PropsWithChildren<{keyProp: any, className: string}>){
     return(
         <div key = {keyProp} className={className}>
             {children}
@@ -138,13 +137,13 @@ function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
                 parallax={true}
                 noSwiping={true}
                 noSwipingClass='swiper-no-swiping'
-                className='h-screen'
+                className='h-screen w-screen'
             >
                 {testElements.map(({testName, subTestName, Element})=>{
                     const TestComponent = withTestResponse(Element)(testName as TestName, subTestName ? (subTestName as SubTestName): undefined);
                     return(
                         
-                    <SwiperSlide data-hash={`${testName}${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-screen h-screen'>
+                    <SwiperSlide data-hash={`${testName}${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>
                         {/* https://swiperjs.com/react#swiperslide-render-function */}   
                         {({ isActive }) => (
                             <TestComponent/>
@@ -159,9 +158,9 @@ function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
         //     {/* Stepper and Next / Previous Navigation Buttons */}
         //     <TopNavTest/>       
         //     {/* Title */}
-        //     <WithAnimate keyProp={activeSectionIndex} className='test-title opacity-0 animate-reveal-left'>
+        //     <WithAnimationWrapperate keyProp={activeSectionIndex} className='test-title opacity-0 animate-reveal-left'>
         //         {strings[sections[activeSectionIndex]].title}
-        //     </WithAnimate>
+        //     </WithAnimationWrapperate>
         //     </div>
         //     {/* Routing Sections */}
         //     {/* <div key={activeSectionIndex} className='h-fit opacity-0 animate-reveal-left-d1'>
