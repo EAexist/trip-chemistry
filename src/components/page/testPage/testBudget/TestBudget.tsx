@@ -8,9 +8,6 @@ import Trail from '../../../spring/Trail';
 import Card from '../../../Card';
 import { WithAnimationWrapper } from '../../../../common/hocs/withAnimation';
 import { CardActions, CardContent, CardMedia, Divider } from '@mui/material';
-import { IsHoveringType } from '../../../../common/isHovering/IsHoveringContext';
-import Button from '../../../Button';
-import { usePageString } from '../../../../texts';
 import { ArrowRight } from '@mui/icons-material';
 import TestContainer from '../../../TestContainer';
 

@@ -1,7 +1,5 @@
 import GoogleMapReact from 'google-map-react';
 import { PropsWithChildren } from 'react';
-import { useIsHoveringContext } from '../../../common/isHovering/IsHoveringContext';
-import { GoogleMapPosition } from '../common/types';
 
 interface GoogleMapProps{isHovering?: number};
 
@@ -9,7 +7,7 @@ function GoogleMap({ isHovering, children }: PropsWithChildren<GoogleMapProps>){
 
     /* Debug  */
     const defaultProps = {
-        center: { lat: 25.0474428, lng: 121.5147137 },
+        center: { lat: 33.5905178, lng: 130.3873198 },
         zoom: 12.5
     };
 

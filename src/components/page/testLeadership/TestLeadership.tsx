@@ -1,7 +1,6 @@
 import ImageCard from '../../ImageCard';
 import { FocusableCarouselContainer, FocusableCarouselDetail, FocusableCarouselItem } from '../../FocusableCarousel';
 import { WithTestResponseProps } from '../../../common/hocs/withTestResponse';
-import { withShowIfHovering } from '../../../common/isHovering/IsHoveringContext';
 import { Avatar, CardHeader, CardMedia, Paper, useMediaQuery } from '@mui/material';
 import Card from '../../Card';
 import TestContainer from '../../TestContainer';

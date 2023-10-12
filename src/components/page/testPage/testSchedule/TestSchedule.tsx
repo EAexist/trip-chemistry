@@ -26,8 +26,6 @@ function TestSchedule({testName, testResponse, setTestResponse, strings}: TestSc
 
   const [positions, setPositions] = useState<MarkerPositionList>(examples.map((list)=>(list.map(()=>undefined))));
   const mapDivRef = useRef<HTMLDivElement>(null);
-  
-  const API_KEY_GOOGLE_MAP = "AIzaSyBTIi-NbUzw9gdHynDTSpwng5GWbXA8D6M";
 
   const handleClick = (index: IsHoveringType)=>{
     setTestResponse && setTestResponse(index as number);

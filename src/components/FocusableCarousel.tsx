@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
-import React, { PropsWithChildren, createContext, useContext, useState, ReactNode } from 'react';
-import { IsHoveringContextProvider, IsHoveringType, WithHoverWrapper, useIsHoveringContext, withHover,  withShowIfHovering } from '../common/isHovering/IsHoveringContext';
+import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { IsHoveringContextProvider, IsHoveringType, useIsHoveringContext, withHover,  withShowIfHovering } from '../common/isHovering/IsHoveringContext';
 import { WithAnimationProps, WithAnimationWrapper } from '../common/hocs/withAnimation';
 
 interface selectedItemContextProps {
