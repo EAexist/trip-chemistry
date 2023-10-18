@@ -8,10 +8,16 @@ import { UserId } from "../interface/interfaces";
 import { loadStatus } from "../hocs/ApiLoader";
 import { HttpStatusCode } from "axios";
 
+interface TestResponseState extends TestResponse{
+    loadStatus: loadStatus; 
+};
+
 interface TestResponse{
     leadership: number|undefined;       
     schedule: number|undefined;   
-    budget: subTestResponse
+    budget: {
+        food: number | undefined;
+    }
     city: {
         metropolis: number | undefined;
         history: number | undefined;
@@ -26,14 +32,9 @@ interface TestResponse{
     };
 };
 
-interface TestResponseState extends TestResponse{
-    loadStatus: loadStatus; 
-};
-
 type subTestResponse = {[key: string]: number | undefined};
 
-type SubTestName = 'food'|'foodSpecial'|'accomodate'|'accomodateSpecial'
-    |'metropolis'|'history';
+type SubTestName = keyof TestResponse['budget'] | keyof TestResponse['city']
 
 type TestName = keyof TestResponse;
 
@@ -48,9 +49,9 @@ const initialState : TestResponseState = {
     schedule : undefined,
     budget : {
         food: undefined, /* 식사 평균 */
-        foodSpecial: undefined, /* 특별한 식사 */
-        accomodate: undefined, /* 숙소 평균 */
-        accomodateSpecial: undefined, /* 특별한 숙소 */
+        // foodSpecial: undefined, /* 특별한 식사 */
+        // accomodate: undefined, /* 숙소 평균 */
+        // accomodateSpecial: undefined, /* 특별한 숙소 */
     },
     city: {
         metropolis: undefined,
@@ -178,11 +179,6 @@ const useTestResponseStatus = () => {
         , [dispatch])
     ] as const);
 }
-const useBudgetResponse = (SubTestName: SubTestName) => (
-    useSelector((state:RootState)=>((state.testResponse.budget)[SubTestName])) as number
-)
-
-
 
 /* Deprecated */
 // function testResponseReducer(state=initialState, action: testResponseAction) {

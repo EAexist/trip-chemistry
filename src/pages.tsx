@@ -46,11 +46,11 @@ const basePageRouteProps = [
 // const testRouteProps = [
 //     {
 //         path: 'leadership',
-//         Element: TestLeadership,
+//         Element: TestLeadershipPage,
 //     },
 //     {
 //         path: 'schedule',
-//         Element: TestSchedule,
+//         Element: TestSchedulePage,
 //     },
 //     {
 //         path: 'budgetAverage',

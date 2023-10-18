@@ -26,7 +26,7 @@ function TestPage({}:testPageProps){
     //     },
     //     {
     //         path: 'schedule',
-    //         element: <TestSchedule/>,
+    //         element: <TestSchedulePage/>,
     //     },
     //     {
     //         path: 'budget',

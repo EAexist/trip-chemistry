@@ -1,24 +1,33 @@
 import { PropsWithChildren } from "react";
+import TestSubtitle from "./TestSubtitle";
+import TestTitle from "./TestTitle";
 
 interface TestContainerProps{
-    title?: string;
-    subTitle?: string;
+    title: string;
+    subtitle?: string;
+    variant?: 'centered' | 'paragraph';
+    className?: string;
     titleClassName?: string;
 };
 
-{/* 테스트 제목 및 옵션 */}
-function TestContainer({ title, subTitle, children, titleClassName }:PropsWithChildren<TestContainerProps>){
+/* 테스트 제목 및 옵션 */
+function TestContainer({ title, subtitle, variant='paragraph', children }:PropsWithChildren<TestContainerProps>){
     return(
-        <div className='flex flex-col min-w-fit h-full'>
-
+        <div 
+            className={`flex flex-col h-full w-full py-8 space-y-8 
+                ${variant==='centered' && 'items-center'}`}
+        >
             {/* 테스트 제목 */}
-            <div className={`flex flex-col py-12 pr-20 max-md:py-6 ${titleClassName}`}>
-                <h6 className='flex-none'>{subTitle}</h6>
-                <h4 className='flex-none'>{title}</h4>
+            <div 
+                className={`flex flex-col max-md:py-6 
+                ${variant==='centered' && 'items-center'}`}
+            >
+                <TestSubtitle>{subtitle}</TestSubtitle>
+                <TestTitle>{title}</TestTitle>  
             </div>
 
             {/* 테스트 입력 */}
-            <div className="h-full w-full">{children}</div>
+            {children}
         </div>
     );
 }

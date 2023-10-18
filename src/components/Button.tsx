@@ -1,19 +1,15 @@
 import { PropsWithChildren} from 'react';
 import { ButtonBase, Button as MuiButton } from "@mui/material";
 
-interface ButtonProps{
+interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
     isActive?: boolean,
     disabled?: boolean;
-    variant?: "text" | "contained" | "outlined";
-    onClick?: ()=>void;
     state?: 'hovered' | 'active' | undefined
-    className?: string;
     classNameHovered? : string,
     classNameActive? : string,
 }
 
 function Button({state, classNameHovered, classNameActive, children, ...buttonProps} : PropsWithChildren<ButtonProps>){
-
     return(
         <button {...buttonProps}>
             {children}
@@ -22,3 +18,4 @@ function Button({state, classNameHovered, classNameActive, children, ...buttonPr
 }
 
 export default Button;
+export type { ButtonProps };

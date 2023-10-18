@@ -3,7 +3,7 @@ import { useContext, useState, Key } from 'react';
 import { Stepper, Step, StepLabel } from "@mui/material";
 
 import ConditionalWrapper from '../common/utils/ConditionalWrapper';
-import { IsHoveringContextProvider, withHover, withShowIfHovering, WithHoverWrapper, WithShowIfHoveringWrapper } from '../common/isHovering/IsHoveringContext'
+import { IsHoveringContextProvider, withHover, withShowOnHover, WithHoverWrapper, WithShowOnHoverWrapper } from '../common/isHovering/IsHoveringContext'
 
 interface StepperProps{
     steps: step[]; 
@@ -32,11 +32,11 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
         handleClickStepLabel(index)
       }}
     >
-      <WithShowIfHoveringWrapper id={index}>
+      <WithShowOnHoverWrapper id={index}>
         <div className={`text-xs`}>
           {label}
         </div>
-      </WithShowIfHoveringWrapper>
+      </WithShowOnHoverWrapper>
     </StepLabel>           
   ))
 
@@ -59,7 +59,7 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
               //   //   }}
               //   // >
               //   //   {
-              //   //     withShowIfHovering(() => ( /* withShowIfHovering(HOC): StepLabel 호버 시 아래 <div> 가 보이도록 함. */
+              //   //     withShowOnHover(() => ( /* withShowOnHover(HOC): StepLabel 호버 시 아래 <div> 가 보이도록 함. */
               //   //       <div className={`text-xs`}>
               //   //         {label}
               //   //       </div>
@@ -75,11 +75,11 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
                 onClick = {()=>{
                   handleClickStepLabel(index)}}
               >
-                <WithShowIfHoveringWrapper id={index}>
+                <WithShowOnHoverWrapper id={index}>
                   <div className={`text-xs`}>
                     {label}
                   </div>
-                </WithShowIfHoveringWrapper>
+                </WithShowOnHoverWrapper>
               </StepLabel>       
             </WithHoverWrapper>           
              {/* </ConditionalWrapper> */}

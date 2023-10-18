@@ -1,11 +1,5 @@
-import { Position as GoogleMapPosition } from "google-map-react";
+import { Coords as GoogleMapCoords } from "google-map-react";
 
-// interface GoogleMapPosition extends Position{};
-interface Position{
-    x:number, y:number
-};
-type MarkerPositionList = (Position | undefined)[][];
+type Coords = GoogleMapCoords;
 
-export type { 
-    GoogleMapPosition, Position, MarkerPositionList
-}
+export type { Coords }

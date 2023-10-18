@@ -1,4 +1,4 @@
-const texts = {
+const TEXTS = {
     "_lang": "ko-kr",
     "public": {
         "emojis":{
@@ -13,6 +13,97 @@ const texts = {
             "HK": "홍콩",
             "KR": "한국",
         },
+        "linkTypes":{
+            "travel-japan": {
+                name: "Travel Japan",
+            },
+            "tabelog": {
+                name: "타베로그",
+            },
+            "tripadvisor": {
+                name: "Tripadvisor",
+            },
+            "website": {
+                name: "웹사이트",
+            },
+            "discovering-hongkong": {
+                name: "홍콩관광청",
+            },
+        },
+        "places":{
+            tokyo:
+                {
+                    name: "도쿄",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kanto/tokyo/",
+                    linkType: "travel-japan",
+                },
+            osaka:
+                {
+                    name: "오사카",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kansai/osaka/",
+                    linkType: "travel-japan",
+                },
+            yokohama: 
+                {
+                    name: "요코하마",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/yokohama-and-around/",
+                    linkType: "travel-japan",
+                },
+                // 삿포로
+            kyoto: 
+                {
+                    name: "교토",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kansai/kyoto/",
+                    linkType: "travel-japan",
+                },
+            nara: 
+                {
+                    name: "나라",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kansai/nara/",
+                    linkType: "travel-japan",
+                },
+            kamakura: 
+                {
+                    name: "가마쿠라",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/kamakura-and-around/",
+                    linkType: "travel-japan",
+                },
+                // 가와고에 가나자와
+            shiretoko: 
+                {
+                    name: "시레토코",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/spot/2143/",
+                    linkType: "travel-japan",
+                },
+            yakushima: 
+                {
+                    name: "야쿠시마",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/destinations/kyushu/kagoshima/yakushima/",
+                    linkType: "travel-japan",
+                }, 
+            biei: 
+                {
+                    name: "비에이",
+                    nation: "JP",
+                    link: "https://www.japan.travel/ko/spot/1890/",
+                    linkType: "travel-japan",
+                },
+            hongkong: 
+                {
+                    name: "홍콩",
+                    nation: "HK",
+                    link: "https://www.discoverhongkong.com/eng/index.html",
+                    linkType: "discovering-hongkong",
+                },
+        },
         "pages": {
             "home": {
                 "appTitle": "여행 케미 테스트",
@@ -24,7 +115,7 @@ const texts = {
             "test": {
                 "leadership": {
                     "title": "여행 계획은 누가 리드해?",
-                    "subTitle": "리더",
+                    "subtitle": "리더",
                     "label": "리더",
                     "answers": [
                         {
@@ -47,8 +138,9 @@ const texts = {
                 },
                 "schedule": {
                     "title": "일정은 얼마나 알차면 좋을까?",
-                    "subTitle": "일정",
+                    "subtitle": "일정",
                     "label": "널널함",
+                    // "credit": "재하(https://blog.naver.com/jcjw1234)님의 여행 계획",
                     "answers": [
                         {
                             "label": "아주 널널하게",
@@ -71,13 +163,286 @@ const texts = {
                             "value": 4
                         }
                     ],
+                    "exampleTitle": "후쿠오카 🇯🇵 여행 지도",
+                    "startPosition": {            
+                        lat:33.596306,
+                        lng:130.4293798,
+                    },
                     "examples": [
-                        [{}]
+                        [
+                            {                                
+                                position:{
+                                    lat:33.5897988,
+                                    lng:130.4085279,
+                                },
+                                label:'캐널시티',
+                                icon:'shopping_cart',                              
+                            },
+                            {                              
+                                position:{
+                                    lat:33.5897904,
+                                    lng:130.3504891,
+                                },
+                                label:'후쿠오카시 박물관',
+                                icon:'museum',   
+                            },
+                        ],
+                        [       
+                            {           
+                                position:{
+                                    lat:33.5838392,
+                                    lng:130.4539866,
+                                },
+                                label:'덴푸라 히라오 본점',
+                                icon:'restaurant',                    
+                            },
+                            {                                
+                                position:{
+                                    lat:33.6147611,
+                                    lng:130.4216325,
+                                },
+                                label:'하코자키 궁',
+                                icon:'temple_buddhist',                                  
+                            },
+                        ],
+                        [
+                            {              
+                                position:{
+                                    lat:33.5893684,
+                                    lng:130.4172629,
+                                },
+                                label:'한큐백화점 하카타점',
+                                icon:'shopping_cart',                                      
+                            },    
+                            {                                
+                                position:{
+                                    lat:33.5934691,
+                                    lng:130.3465043,
+                                },
+                                label:'모모치해변',
+                                icon:'beach_access',                              
+                            },
+                        ],
+                        [
+                            {                                
+                                position:{
+                                    lat:33.5932449,
+                                    lng:130.4020225,
+                                },
+                                label:'이치란 본점',
+                                icon:'restaurant',                              
+                            },
+                            {                                
+                                position:{
+                                    lat:33.5650103,
+                                    lng:130.4388288,
+                                },
+                                label:'건담 파크 후쿠오카',
+                                icon:'tour',     
+                                                           
+                            },
+                        ],
+                        [                 
+                            {                                
+                                position:{
+                                    lat:33.5626837,
+                                    lng:130.3738197,
+                                },
+                                label:'유센테이',
+                                icon:'tour',                              
+                            },
+                            {      
+                                position:{
+                                    lat:33.6133009,
+                                    lng:130.4307441,
+                                },
+                                label:'하쿠하쿠',
+                                icon:'museum',                         
+                            },
+                        ]
                     ]
+                },
+                "budget": {
+                    "subtitle": "예산",
+                    "linkText": "에서 보기",
+                    "defaultPriceText": "슬라이더를 움직여봐!",
+                    "subTests": {
+                        "food": {
+                            "label": "예산",
+                            "title": "한끼에 얼마나 쓰면 좋을까?",
+                            "subtitle": "예산 - 식사",
+                            "examples": {
+                                5000:{
+                                    "kyudong":
+                                        {
+                                            "name": "규동",
+                                            "city": "일본",
+                                            "restaurant": "yoshinoya",
+                                            "restaurantName": "요시노야",
+                                            "nation": "JP",
+                                            "linkType": "website",
+                                            "link": "https://www.yoshinoya.com/",
+                                        },
+                                    "wantang":
+                                        {
+                                            "name": "완탕면",
+                                            "city": "홍콩",
+                                            "restaurant": "tsim-chai-kee",
+                                            "restaurantName": "침차이키",
+                                            "nation": "HK",
+                                            "linkType": "tripadvisor",
+                                            "link": "https://www.tripadvisor.co.kr/Restaurant_Review-g294217-d1094369-Reviews-Tsim_Chai_Kee_Noodle_Shop-Hong_Kong.html",
+                                        },                         
+                                    "churos":
+                                        {
+                                            "name": "츄러스",
+                                            "city": "홍콩",
+                                            "restaurant": "twist&buckle",
+                                            "restaurantName": "Twist & Buckle",
+                                            "nation": "HK",
+                                            "linkType": "website",
+                                            "link": "https://www.twistandbuckle.com/",
+                                        },
+
+                                },
+                                15000:{
+                                    "ramen":
+                                        {
+                                            "name": "라멘",
+                                            "city": "오사카",
+                                            "restaurant": "iida-shouten-ramen",
+                                            "restaurantName": "라멘 이이다쇼텐",
+                                            "nation": "JP",
+                                            "linkType": "tabelog",
+                                            "link": "https://tabelog.com/en/kanagawa/A1410/A141002/14038776/",
+                                        },   
+                                    "udon":
+                                        {
+                                            "name": "우동",
+                                            "city": "도쿄",
+                                            "restaurant": "udon-maruka",
+                                            "restaurantName": "우동 마루카",
+                                            "nation": "JP",
+                                            "linkType": "tabelog",
+                                            "link": "https://tabelog.com/kr/osaka/A2707/A270704/27011240/",
+                                        },         
+                                    "dumpling":
+                                        {
+                                            "name": "딤섬",
+                                            "city": "홍콩",
+                                            "restaurant": "timhowan",
+                                            "restaurantName": "팀호완",
+                                            "nation": "HK",
+                                            "linkType": "website",
+                                            "link": "https://www.timhowan.com/",
+                                        },                      
+                                },
+                                25000:{        
+                                    "sushi":
+                                        {
+                                            "name": "초밥",
+                                            "city": "삿포로",
+                                            "restaurant": "nemuro-hanamaru",
+                                            "restaurantName": "네무로 하나마루",
+                                            "nation": "JP",
+                                            "linkType": "tabelog",
+                                            "link": "https://tabelog.com/kr/hokkaido/A0101/A010101/1001102/",
+                                        },      
+                                    "afternoon-tea":
+                                        {
+                                            "name": "애프터눈 티",
+                                            "city": "홍콩",
+                                            "restaurant": "peninsula-hk",
+                                            "restaurantName": "페닌슐라 호텔 홍콩",
+                                            "nation": "HK",
+                                            "linkType": "website",
+                                            "link": "https://www.peninsula.com/en/hong-kong/hotel-fine-dining/the-lobby-afternoon-tea",
+                                        },   
+                                },
+                                50000:{    
+                                    "hitsumabushi":
+                                        {
+                                            "name": "장어덮밥",
+                                            "city": "도쿄",
+                                            "restaurant": "tomoei",
+                                            "restaurantName": "토모에이",
+                                            "nation": "JP",
+                                            "linkType": "tabelog",
+                                            "link": "https://tabelog.com/en/kanagawa/A1410/A141001/14001626/",
+                                        },    
+                                    "yakitori":
+                                        {
+                                            "name": "야키토리",
+                                            "city": "도쿄",
+                                            "restaurant": "torishiki",
+                                            "restaurantName": "토리시키",
+                                            "nation": "JP",
+                                            "linkType": "tabelog",
+                                            "link": "https://tabelog.com/kr/tokyo/A1316/A131601/13041029/",
+                                        },  
+                                    "chili-crab":
+                                        {
+                                            "name": "칠리크랩",
+                                            "city": "홍콩",
+                                            "restaurant": "underbridge-spicy-crab",
+                                            "restaurantName": "언더브릿지 스파이시 크랩",
+                                            "nation": "HK",
+                                            "linkType": "tripadvisor",
+                                            "link": "https://www.tripadvisor.com/Restaurant_Review-g294217-d1089734-Reviews-Under_the_Bridge_Spicy_Crab-Hong_Kong.html",
+                                        },   
+                                },
+                                75000:{    
+                                    "mandarin-grill":                        
+                                    {
+                                        "name": "퓨전 파인다이닝",
+                                        "city": "홍콩",
+                                        "restaurant": "mandarin-grill",
+                                        "restaurantName": "만다린 그릴",
+                                        "price": 100000,
+                                        "nation": "JP",
+                                        "linkType": "website",
+                                        "link": "https://www.mandarinoriental.com/en/hong-kong/victoria-harbour/dine/mandarin-grill-and-bar",
+                                    },                                  
+                                },
+                            }
+                        },
+                        // "accomodateSpecial": {
+                        //     "title": "하룻밤 묵는데 얼마나 쓰면 좋을까?",
+                        //     "subtitle": "예산 - 숙소",
+                        //     "linkType": "Hotels.com에서 보기",
+                        //     "examples": {
+                        //         20000: [
+                        //             {
+                        //                 "id": "iida-shouten-ramen",
+                        //                 "name": "게로온센 스이메이칸",
+                        //                 "city": "일본 중부",
+                        //                 "room": "룸이름",
+                        //                 "price": 200000,
+                        //                 "priceText": "20만원~ (1인)",
+                        //                 "nation": "JP",
+                        //                 "link": "https://www.suimeikan.co.jp/ko/",
+                        //             },
+                        //         ],
+                        //         60000: [
+                        //             {
+                        //                 "id": "tomoei",
+                        //                 "name": "오타루 긴린소",
+                        //                 "city": "훗카이도",
+                        //                 "room": "룸이름",
+                        //                 "price": 300000,
+                        //                 "priceText": "60만원~ (2인)",
+                        //                 "nation": "JP",
+                        //                 "link": "https://www.ginrinsou.com/ko/"
+                        //             },
+                        //         ],
+                        //     },
+                        // },
+                    },
                 },
                 "city": {
                     "title": "이런 곳은 어때?",
-                    "subTitle": "여행지",
+                    "subtitle": "여행지",
+                    "linkText": "에서 보기",
                     "answers": [
                         {
                             "label": "-2",
@@ -100,8 +465,8 @@ const texts = {
                         {
                             "label": "1",
                             "value": 3,
-                            "quote": "😃",
-                            "emoji": "good" ,
+                            "quote": "좋아",
+                            "emoji": "😃" ,
                         },
                         {
                             "label": "2",
@@ -114,19 +479,32 @@ const texts = {
                         "metropolis": {
                             "title": "현대적인 대도시",
                             "id": "metropolis",
-                            "examples": ["tokyo", "osaka", "yokohama"]
+                            "examples": [
+                                "tokyo",
+                                "osaka",
+                                "yokohama",
+                                "hongkong",
+                            ]
                             // 삿포로
                         },
                         "history": {
                             "title": "유서 깊은 대도시",
                             "id": "history",
-                            "examples": ["kyoto", "nara", "kamakura"]
+                            "examples": [
+                                "kyoto",
+                                "nara",
+                                "kamakura",
+                            ]
                             // 가와고에 가나자와
                         },
                         "nature": {
-                            "title": "자연이 살아있는 곳",
+                            "title": "자연경관이 아름다운 곳",
                             "label": "nature" ,
-                            "examples": ["shiretoko", "yakushima", "biei"] 
+                            "examples": [
+                                "shiretoko",
+                                "yakushima",
+                                "biei",
+                            ] 
                         },
                         // {
                         //     "title": "한적한 시골마을",
@@ -136,7 +514,7 @@ const texts = {
                 },
                 "activity": {
                     "title": "이런 활동은 어때?",
-                    "subTitle": "즐기기",
+                    "subtitle": "즐기기",
                     "answers": [
                         {
                             "label": "-2",
@@ -205,172 +583,6 @@ const texts = {
                         //     "label": "country" 
                         // },
                     }
-                },
-                "budget": {
-                    "linkLabel": "더보기",
-                    "subTests": {
-                        "food": {
-                            "label": "예산",
-                            "title": "한끼에 얼마나 쓰면 좋을까?",
-                            "subTitle": "예산 - 식사",
-                            "examples": {
-                                "iida-shouten-ramen": {
-                                    "name": "라멘 이이다쇼텐",
-                                    "city": "오사카",
-                                    "menu": "쇼유라멘",
-                                    "price": 20000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/en/kanagawa/A1410/A141002/14038776/",
-                                },
-                                "tomoei": {
-                                    "name": "토모에이",
-                                    "city": "도쿄",
-                                    "menu": "장어덮밥",
-                                    "price": 60000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/en/kanagawa/A1410/A141001/14001626/",
-                                },
-                                "mandarin-grill": {
-                                    "name": "만다린 그릴",
-                                    "city": "홍콩",
-                                    "menu": "선셋 디너 코스",
-                                    "price": 100000,
-                                    "nation": "JP",
-                                    "linkLabel": "홈페이지",
-                                    "link": "https://www.mandarinoriental.com/en/hong-kong/victoria-harbour/dine/mandarin-grill-and-bar",
-                                },
-                                "torishiki": {
-                                    "name": "토리시키",
-                                    "city": "도쿄",
-                                    "menu": "야키토리",
-                                    "price": 140000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/kr/tokyo/A1316/A131601/13041029/",
-                                },
-                            }
-                        },
-                        "accomodate": {
-                            "label": "예산",
-                            "title": "하룻밤 묵는데 얼마나 쓰면 좋을까?",
-                            "subTitle": "예산 - 숙소",
-                            "linkLabel": "Hotels.com에서 보기",
-                            "examples": {
-                                "iida-shouten-ramen": {
-                                    "name": "라멘 이이다쇼텐",
-                                    "city": "오사카",
-                                    "menu": "라멘",
-                                    "price": 20000,
-                                    "nation": "JP",
-                                },
-                                "tomoei": {
-                                    "name": "토모에이",
-                                    "city": "도쿄",
-                                    "menu": "장어덮밥",
-                                    "price": 60000,
-                                    "nation": "JP",
-                                },
-                                "mandarin-grill": {
-                                    "name": "만다린 홀",
-                                    "city": "홍콩",
-                                    "menu": "양식",
-                                    "price": 100000,
-                                    "nation": "JP",
-                                },
-                                "torishiki": {
-                                    "name": "토리시키",
-                                    "city": "도쿄",
-                                    "menu": "",
-                                    "price": 140000,
-                                    "nation": "JP",
-                                },
-                            }
-                        },
-                        "foodSpecial": {
-                            "title": "특별한 레스토랑에서 식사를 한다면 얼마까지 쓸 수 있어?",
-                            "subTitle": "예산 - 식도락",
-                            "linkLabel": "다른 식당 보기",
-                            "examples": {
-                                "iida-shouten-ramen": {
-                                    "name": "라멘 이이다쇼텐",
-                                    "city": "도쿄",
-                                    "menu": "쇼유라멘",
-                                    "price": 20000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/en/kanagawa/A1410/A141002/14038776/",
-                                },
-                                "tomoei": {
-                                    "name": "토모에이",
-                                    "city": "도쿄",
-                                    "menu": "장어덮밥",
-                                    "price": 60000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/en/kanagawa/A1410/A141001/14001626/",
-                                },
-                                "mandarin-grill": {
-                                    "name": "만다린 그릴",
-                                    "city": "홍콩",
-                                    "menu": "선셋 디너 코스",
-                                    "price": 100000,
-                                    "nation": "HK",
-                                    "linkLabel": "홈페이지",
-                                    "link": "https://www.mandarinoriental.com/en/hong-kong/victoria-harbour/dine/mandarin-grill-and-bar",
-                                },
-                                "torishiki": {
-                                    "name": "토리시키",
-                                    "city": "도쿄",
-                                    "menu": "야키토리",
-                                    "price": 140000,
-                                    "nation": "JP",
-                                    "linkLabel": "타베로그",
-                                    "link": "https://tabelog.com/kr/tokyo/A1316/A131601/13041029/",
-                                },
-                            }
-                        },
-                        "accomodateSpecial": {
-                            "title": "하루 근사한 숙소에서 묵는다면 얼마까지 쓸 수 있어?",
-                            "subTitle": "예산 - 숙소",
-                            "linkLabel": "Hotels.com에서 보기",
-                            "examples": {
-                                "iida-shouten-ramen": {
-                                    "name": "게로온센 스이메이칸",
-                                    "city": "일본 중부",
-                                    "room": "룸이름",
-                                    "price": 200000,
-                                    "priceText": "20만원~ (1인)",
-                                    "nation": "JP",
-                                    "link": "https://www.suimeikan.co.jp/ko/",
-                                },
-                                "tomoei": {
-                                    "name": "오타루 긴린소",
-                                    "city": "훗카이도",
-                                    "room": "룸이름",
-                                    "price": 300000,
-                                    "priceText": "60만원~ (2인)",
-                                    "nation": "JP",
-                                    "link": "https://www.ginrinsou.com/ko/"
-                                },
-                                "mandarin-grill": {
-                                    "name": "만다린 홀",
-                                    "city": "홍콩",
-                                    "menu": "양식",
-                                    "price": 100000,
-                                    "nation": "HK",
-                                },
-                                "torishiki": {
-                                    "name": "토리시키",
-                                    "city": "도쿄",
-                                    "menu": "",
-                                    "price": 140000,
-                                    "nation": "JP",
-                                },
-                            }
-                        },
-                    },
                 },
                 "confirm": {
                     "label": "특별한 예산",
@@ -450,6 +662,6 @@ const texts = {
 
         }
     }
-}
+};
 
-export default texts;
+export default TEXTS;

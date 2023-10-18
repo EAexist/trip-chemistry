@@ -14,6 +14,7 @@ module.exports = {
       backgroundImage: {
       },
       strokeWidth: {
+        '4': '4px',
         '6': '6px',
         '8': '8px',
         '10': '10px',
@@ -30,7 +31,12 @@ module.exports = {
         '256': '64rem',
       },
       transitionProperty: {
-        width: "width"
+        "size": "width, height",
+        // "height": "height",
+      },
+      transitionDuration: {
+        "2000": "2000ms",
+        "3000": "3000ms",
       },
       backgroundPosition: {
         '-bottom-4': 'center bottom -1rem',

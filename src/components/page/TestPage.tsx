@@ -1,13 +1,14 @@
-import { useState, createContext, useEffect, PropsWithChildren } from "react";
+import { useState, createContext, useEffect, PropsWithChildren, ComponentType } from "react";
 import { usePageString } from "../../texts";
 import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
 import { loadStatus } from "../../common/hocs/ApiLoader";
 
 /* Test Page Components */
-import TestLeadership from "./testLeadership/TestLeadership";
-import TestSchedule from "./testPage/testSchedule/TestSchedule";
-import TestConfirm from "./testConfirm/TestConfirm";
-import TestBudget from "./testPage/testBudget/TestBudget";
+import TestLeadershipPage from "./testPage/testLeadership/TestLeadershipPage";
+import TestSchedulePage from "./testPage/testSchedule/TestSchedulePage";
+import TestBudgetPage from "./testPage/testBudget/TestBudgetPage";
+import TestCityPage from "./testPage/testCity/TestCityPage";
+import TestConfirm from "./testPage/testConfirm/TestConfirm";
 import TestWithSubTestPage from "./testPage/TestWithSubTestPage";
 import withTestResponse from "../../common/hocs/withTestResponse";
 
@@ -42,47 +43,59 @@ function WithAnimationWrapperate({keyProp, className, children}: PropsWithChildr
     )
 }
 
-const testElements = [
+const testElements: {testName: TestName, subTestName?: SubTestName, Element: ComponentType<any>}[] = [
     {
         testName: 'leadership',
-        Element: TestLeadership,
+        Element: TestLeadershipPage,
     },
     {
         testName: 'schedule',
-        Element: TestSchedule,
+        Element: TestSchedulePage,
+    },
+    {
+        testName: 'budget',
+        subTestName: 'food',
+        Element: TestBudgetPage,
     },
     // {
     //     testName: 'budget',
     //     subTestName:'accomodate',
     //     Element: TestBudget,
     // },   
-    {
-        testName: 'budget',
-        subTestName:'accomodateSpecial',
-        Element: TestBudget,
-    },   
+    // {
+    //     testName: 'budget',
+    //     subTestName:'accomodateSpecial',
+    //     Element: TestBudget,
+    // },   
     // {
     //     testName: 'budget',
     //     subTestName:'food',
     //     Element: TestBudget,
     // },
+    // {
+    //     testName: 'budget',
+    //     subTestName:'foodSpecial',
+    //     Element: TestBudget,
+    // },   
     {
-        testName: 'budget',
-        subTestName:'foodSpecial',
-        Element: TestBudget,
+        testName: 'city',
+        subTestName: 'metropolis',
+        Element: TestCityPage,
     },   
     {
         testName: 'city',
-        Element: TestWithSubTestPage,
+        subTestName: 'history',
+        Element: TestCityPage,
     },   
     {
-        testName: 'activity',
-        Element: TestWithSubTestPage,
+        testName: 'city',
+        subTestName: 'nature',
+        Element: TestCityPage,
     },   
-    {
-        testName: 'confirm',
-        Element: TestConfirm,
-    },   
+    // {
+    //     testName: 'activity',
+    //     Element: TestWithSubTestPage,
+    // },   
 ];
 
 function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
@@ -141,36 +154,24 @@ function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
             >
                 {testElements.map(({testName, subTestName, Element})=>{
                     const TestComponent = withTestResponse(Element)(testName as TestName, subTestName ? (subTestName as SubTestName): undefined);
-                    return(
-                        
+                    return(                        
                     <SwiperSlide data-hash={`${testName}${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>
+                        <TestComponent/>
                         {/* https://swiperjs.com/react#swiperslide-render-function */}   
-                        {({ isActive }) => (
-                            <TestComponent/>
-                        )}           
+                        {/* {({ isActive }) => (
+                            isActive && <TestComponent/>
+                        )}            */}
                     </SwiperSlide>
                     )
-                })}                
+                })}
+                <SwiperSlide data-hash={`confirm`} className='swiper-no-swiping w-full h-full'>
+                    {/* https://swiperjs.com/react#swiperslide-render-function */}   
+                    <TestConfirm/>
+                    {/* {({ isActive }) => (
+                        isActive && <TestConfirm/>
+                    )}            */}
+                </SwiperSlide>                
             </Swiper> 
-        // <div className = ''>
-        //     <ActiveSectionContext.Provider value = {{activeSectionIndex: activeSectionIndex, incrementActiveSectionIndex: (offset: number) => setActiveSectionIndex((prev)=>(prev+offset)), setActiveSectionIndex: (activeSectionIndex: number)=>setActiveSectionIndex(activeSectionIndex), maxActiveSectionIndex: maxActiveSectionIndex}}>
-        //     <div className = 'z-10'>
-        //     {/* Stepper and Next / Previous Navigation Buttons */}
-        //     <TopNavTest/>       
-        //     {/* Title */}
-        //     <WithAnimationWrapperate keyProp={activeSectionIndex} className='test-title opacity-0 animate-reveal-left'>
-        //         {strings[sections[activeSectionIndex]].title}
-        //     </WithAnimationWrapperate>
-        //     </div>
-        //     {/* Routing Sections */}
-        //     {/* <div key={activeSectionIndex} className='h-fit opacity-0 animate-reveal-left-d1'>
-        //         {testPageRoutes()}
-        //     </div> */}
-        //     {/* Render Body Element corresponding to current path.*/}
-        //     {/* <div className =''><Navigate to={testRoutePropsWithResponse[activeSectionIndex].path} replace/></div> */}
-              
-        //     </ActiveSectionContext.Provider>
-        // </div>:
         : <></>
     );
 }

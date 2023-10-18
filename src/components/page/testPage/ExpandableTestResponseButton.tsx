@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from "react";
-import { IsHoveringContextProvider, IsHoveringType, WithHoverWrapper, withShowIfHovering } from "../../../common/isHovering/IsHoveringContext";
+import { IsHoveringContextProvider, IsHoveringType, WithHoverWrapper, withShowOnHover } from "../../../common/isHovering/IsHoveringContext";
 import { MenuContainer } from "../../Menu";
 import ToggleButton from "../../ToggleButton";
 import { WithTestResponseProps } from "../../../common/hocs/withTestResponse";
@@ -28,7 +28,7 @@ function ExpandableTestResponseButton({testName, testResponse, setTestResponse, 
 
                         if (isActive || isUsedAsResponse){
 
-                            const OptionDetail = withShowIfHovering(()=>( /* 마우스를 올렸을 때 보이는 Element */
+                            const OptionDetail = withShowOnHover(()=>( /* 마우스를 올렸을 때 보이는 Element */
                                 <div className="flex flex-row">
                                     <p>{emoji}</p>
                                     <p className=''>{quote}</p>
@@ -41,6 +41,14 @@ function ExpandableTestResponseButton({testName, testResponse, setTestResponse, 
                                         <ToggleButton isActive={isActive && isUsedAsResponse} onClick={() => setTestResponse(value)} className='min-w-24'>   
                                             <div className="flex flex-row space-x-4 px-1 min-w-6">
                                                 {label}          
+                                                {
+                                                    // withShowOnHover(()=>( /* 마우스를 올렸을 때 보이는 Element */
+                                                    //     <div className="flex flex-row">
+                                                    //         <p>{emoji}</p>
+                                                    //         <p className=''>{quote}</p>
+                                                    //     </div>
+                                                    // ))({id: index, force: isUsedAsResponse || undefined})({})
+                                                }
                                                 <OptionDetail/>     
                                             </div>   
                                         </ToggleButton>

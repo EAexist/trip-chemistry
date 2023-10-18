@@ -4,6 +4,8 @@ import { Card as MuiCard, ButtonBase, Paper, SxProps, Theme } from '@mui/materia
 interface CardProps{
     className?:string;
     sx?:SxProps<Theme> | undefined;
+    onMouseEnter?: ()=>void;
+    onMouseLeave?: ()=>void;
 };
 
 interface ClickableCardProps extends CardProps{
@@ -18,10 +20,10 @@ function ClickableCard({onClick = ()=>{}, children, ...CardProps}: PropsWithChil
     )
 }
 
-function Card({className, sx, children}: PropsWithChildren<CardProps>){
+function Card({className, children, ...props}: PropsWithChildren<CardProps>){
 
     return(
-        <Paper className = {className? className : 'w-fit h-fit flex flex-col flex-none no-margin'} sx = {sx}>
+        <Paper className = {className? className : 'w-fit h-fit flex flex-col flex-none no-margin'} {...props}>
             {children}
         </Paper>
     );  

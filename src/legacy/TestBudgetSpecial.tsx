@@ -6,7 +6,7 @@
 // import { useSetBudgetResponse, useBudgetResponse } from '../../reducer/testResponseReducer';
 // import { useSelector } from 'react-redux';
 // import { url } from 'inspector';
-// import useLeveledStructure from '../useLeveledStructure';
+// import useValueToBound from '../useValueToBound';
 
 // interface TestBudgetProps extends WithTestResponseProps{
 
@@ -43,7 +43,7 @@
 //     const budgetValue = useBudgetResponse(testName as TestName, SubTestName);
 //     const setBudgetResponse = useSetBudgetResponse();
 
-//     const [example, setExample] = useLeveledStructure(budgetToExampleEntries);
+//     const [example, setExample] = useValueToBound(budgetToExampleEntries);
 //     setExample(budgetValue);
 
 //     const exampleImageStyle = {backgroundImage: `url(${getImageSrc('food', `${example}-1`)})`};

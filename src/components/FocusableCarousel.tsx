@@ -1,7 +1,8 @@
 import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
-import { IsHoveringContextProvider, IsHoveringType, useIsHoveringContext, withHover,  withShowIfHovering } from '../common/isHovering/IsHoveringContext';
+import { IsHoveringContextProvider, IsHoveringType, useIsHoveringContext, withHover,  withShowOnHover } from '../common/isHovering/IsHoveringContext';
 import { WithAnimationProps, WithAnimationWrapper } from '../common/hocs/withAnimation';
+import { TestName, useTestResponse } from '../common/reducer/testResponseReducer';
 
 interface selectedItemContextProps {
   selectedItemId: number,
@@ -71,8 +72,7 @@ function FocusableCarouselItem({ id, children }: PropsWithChildren<FocusableCaro
     withHover(({onMouseEnter, onMouseLeave}) => ( /* 마우스 호버 Listener */
       <div
         className={`
-         duration-300 flex 
-        hover:shrink-0 hover:opacity-100
+        duration-300 hover:shrink-0 hover:opacity-100
         basis-7/12
         max-md:basis-6/12
         ${isSelected && 'border-4 border-slate-500'} 
@@ -103,13 +103,47 @@ function FocusableCarouselDetail({ id, withAnimationProps, children }: PropsWith
     //   {
         isSelected && (isHovering === false) ?
         children
-        : withShowIfHovering(() => ( /* 마우스를 올렸을 때 보이는 Element */
+        : withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
             <WithAnimationWrapper {...withAnimationProps}>{children}</WithAnimationWrapper>
           ))({id: id})({})
     //   }
     // </>
   )
 }
+interface TestResponseDetailProps{
+  id: number; /* Carousel 에서 아이템을 특정하는 id */
+  testName: TestName;
+  compareFunc?: (id:IsHoveringType, contextId:IsHoveringType)=>boolean;
+  withAnimationProps?: WithAnimationProps; /* hover로 디테일이 렌더링 될 때 애니메이션을 실행하기 위한 WithAnimationWrapper 의 props */
+};
+function TestResponseDetailWrapper({ id, testName, withAnimationProps, compareFunc = (id:IsHoveringType, contextId:IsHoveringType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
+  // const { isHovering } = useIsHoveringContext();   
+  // const testResponse = useTestResponse(testName);
+  // const isActive = compareFunc(id, testResponse as IsHoveringType);
+
+  return(
+      // isActive && (isHovering === -1) ?
+      //   children
+      //   : 
+          withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
+            children
+          ))({id: id, compareFunc: compareFunc})({})
+  )
+}
+
+// const withTestResponseDetail({ id, testName, withAnimationProps, compareFunc = (id:IsHoveringType, contextId:IsHoveringType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
+//   const { isHovering } = useIsHoveringContext();   
+//   const testResponse = useTestResponse(testName);
+//   const isActive = compareFunc(id, testResponse as IsHoveringType);
+
+//   return(
+//       isActive && (isHovering === -1) ?
+//         children
+//         : withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
+//             children
+//           ))({id: id, compareFunc: compareFunc})({})
+//   )
+// }
 
 interface ImageCardProps{
   cardHeaderAvatarText: string;
@@ -142,4 +176,4 @@ function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps, }:Im
 
 // "/static/images/test/leadership/lead.jpg"
 export default ImageCard;
-export { FocusableCarouselContainer, FocusableCarouselItem, FocusableCarouselDetail };
+export { FocusableCarouselContainer, FocusableCarouselItem, FocusableCarouselDetail, TestResponseDetailWrapper };

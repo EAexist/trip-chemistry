@@ -21,7 +21,7 @@ function AggregateTextProvider({ children }: PropsWithChildren){
 }
 
 type Page = "home" | "result" | "chemistry" | "test";
-type TextKey = "emojis" | "nations";
+type TextKey = keyof (typeof baseLangStrings["public"]);
 
 function usePageString(page: Page) {
     return Object(useContext(baseTextContext).public.pages[page]);

@@ -26,13 +26,14 @@ function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
   const spaceBetweenTests = 30;
 
   return(
+    /* 페이지 */
     <div className='flex flex-row w-full h-full
-        max-md:flex-col
-      '>  {/* 페이지 */}
-      <TestContainer title={strings.title} subTitle={strings.subTitle}> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */}   
+        max-md:flex-col'
+      >  
+      <TestContainer title={strings.title} subtitle={strings.subtitle}> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */}   
         <div className='w-full h-full flex flex-col items-start space-y-8
-          max-md:flex-row max-md:whitespace-nowrap max-md:flex-wrap max-md:space-y-1
-        '> {/* 질문 목록 */}
+          max-md:flex-row max-md:whitespace-nowrap max-md:flex-wrap max-md:space-y-1'
+        > {/* 질문 목록 */}
           {
             Object.entries(strings.subTests).map(([id, subTest]: [id: string, subTest: any]) => {
               console.log(`TestWithSubTestPage testName=${testName}, id=${id}`);
