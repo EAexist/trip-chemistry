@@ -50,7 +50,8 @@ function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps)
         <Autocomplete
             id="asynchronous-demo"
             freeSolo
-            sx={{ width: 300 }}
+            className='w-full text-sm'
+            // sx={{ fontSize: 12 }}
             open={open}
             onOpen={() => {
                 console.log("OnOpen");
@@ -68,6 +69,7 @@ function AsyncAutoComplete({ label, setValue = ()=>{} }: AsyncAutoCompleteProps)
                 <TextField
                     {...params}
                     label={label}
+                    size='small'
                     InputProps={{
                         ...params.InputProps,
                         endAdornment: (

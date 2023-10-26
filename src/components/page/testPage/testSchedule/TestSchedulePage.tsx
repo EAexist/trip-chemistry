@@ -1,5 +1,5 @@
 import {useState, useRef, RefObject, useCallback, useEffect, } from 'react';
-import { IsHoveringContextProvider, IsHoveringType, WithHoverWrapper, withShowOnResponse, useShowOnResponse, withActiveOnResponse } from '../../../../common/isHovering/IsHoveringContext';
+import { FocusContextProvider, FocusType, Focusable, withShowOnResponse, useShowOnResponse, withActiveOnResponse } from '../../../../common/focus/FocusContext';
 
 import TestContainer from '../../../TestContainer';
 import { Coords } from '../../../googleMap/common/types';
@@ -20,11 +20,11 @@ interface TestSchedulePageProps extends WithTestResponseProps{};
 
 function TestSchedulePage({testName, testResponse, setTestResponse, strings}: TestSchedulePageProps){
 
-  const [isHovering, setIsHovering] = useState<IsHoveringType>(-1);
+  const [focus, setFocus] = useState<FocusType>(-1);
   // const [activeResponse, setActiveResponse] = useState<number>(2);
   const [map, setMap] = useState<google.maps.Map>();
 
-  const handleClick = (index: IsHoveringType)=>{
+  const handleClick = (index: FocusType)=>{
     setTestResponse && setTestResponse(index as number);
   }  
 
@@ -63,7 +63,7 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
               <WithAnimationWrapper>
                 <MapMarker {...place as MapMarkerProps} className='z-10' />
               </WithAnimationWrapper>
-          )({compareFunc: (id: IsHoveringType, contextId: IsHoveringType) => (id <= contextId)})
+          )({compareFunc: (id: FocusType, contextId: FocusType) => (id <= contextId)})
 
           return(
             <GoogleMapComponentWrapper {...place.position} className='z-10'>
@@ -84,7 +84,7 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
       className='w-full h-full pl-16 flex flex-row
         max-md:flex-col'
     > 
-        <IsHoveringContextProvider value={{ isHovering: isHovering, setIsHovering: setIsHovering }}>
+        <FocusContextProvider value={{ focus: focus, setFocus: setFocus }}>
 
           {/* 테스트 제목 및 내용 레이아웃 */}
           <div className='w-128'>            
@@ -92,14 +92,14 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
             title = {strings.title} 
             subtitle = {strings.subtitle}
           >    
-            {/* <WithHoverWrapper listenOnly='leave'> */}
+            {/* <Focusable listenOnly='leave'> */}
               <div 
                 
                 className={`flex flex-col items-start justify-center min-w-fit pr-20
                 max-md:flex-row max-md:pr-0 max-md:whitespace-nowrap`}
               >
                 {strings.answers.map(({label, value}: {label: string, value: number}, index: number) => (                    
-                  <WithHoverWrapper id={index}>
+                  <Focusable id={index}>
                     <h3>
                     <ToggleButton 
                       isActive={testResponse === index} 
@@ -112,11 +112,11 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
                       {label}
                     </ToggleButton>                    
                     </h3>
-                  </WithHoverWrapper>                  
+                  </Focusable>                  
                 ))}
               </div>
               <h6>{strings.credit}</h6>
-            {/* </WithHoverWrapper>   */}
+            {/* </Focusable>   */}
           </TestContainer>
           </div>
 
@@ -158,11 +158,11 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
                         <WithAnimationWrapper>
                           <MapMarker {...place as MapMarkerProps} className='z-10' />
                         </WithAnimationWrapper>
-                      )({ id: index, testName: testName, compareFunc: (id: IsHoveringType, contextId: IsHoveringType) => (id <= contextId) });
+                      )({ id: index, testName: testName, compareFunc: (id: FocusType, contextId: FocusType) => (id <= contextId) });
                       
                       /* 결과 Path */
                       const MapPathWithActiveOnResponse = withActiveOnResponse(MapPath)
-                      ({ id: index, testName: testName, compareFunc: (id: IsHoveringType, contextId: IsHoveringType) => (id <= contextId) })
+                      ({ id: index, testName: testName, compareFunc: (id: FocusType, contextId: FocusType) => (id <= contextId) })
                       
                       return(
                         <GoogleMapComponentWrapper {...place.position} className='z-10'>                          
@@ -191,7 +191,7 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
                               end={{ x: position.x - mapDivRef.current.getBoundingClientRect().x, y: position.y - mapDivRef.current.getBoundingClientRect().y, }}
                             />
                           ))
-                        )({ id: index, testName: testName, compareFunc: (id: IsHoveringType, contextId: IsHoveringType) => (id <= contextId) });
+                        )({ id: index, testName: testName, compareFunc: (id: FocusType, contextId: FocusType) => (id <= contextId) });
 
                         return ( <MapPathWithShowOnResponse/>
                           positionList.map((position: Coords, subindex) => {
@@ -203,7 +203,7 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
                       //           start={{ x: startPosition.x - mapDivRef.current.getBoundingClientRect().x, y: startPosition.y - mapDivRef.current.getBoundingClientRect().y }}
                       //           end={{ x: position.x - mapDivRef.current.getBoundingClientRect().x, y: position.y - mapDivRef.current.getBoundingClientRect().y, }}
                       //         />
-                      //       )({ id: index, testName: testName, compareFunc: (id: IsHoveringType, contextId: IsHoveringType) => (id <= contextId) });
+                      //       )({ id: index, testName: testName, compareFunc: (id: FocusType, contextId: FocusType) => (id <= contextId) });
 
                       //       return (<MapPathWithShowOnResponse />);
                       //     })
@@ -221,7 +221,7 @@ function TestSchedulePage({testName, testResponse, setTestResponse, strings}: Te
               </div>
             {/* </MarkerPositionContextProvider> */}
           </div>
-        </IsHoveringContextProvider>
+        </FocusContextProvider>
         </div>
   );
 }

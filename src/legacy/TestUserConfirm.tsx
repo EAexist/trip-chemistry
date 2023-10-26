@@ -7,17 +7,14 @@ import { RootState } from '../common/store';
 /* Original Components */
 import Button from '../components/Button';
 import useServerApi from '../common/utils/useServerApi';
-// import { TestResponse, UserId, WithTestResponseProps } from '../../interface/setTestResponse;
-import { useState } from 'react';
-import ApiLoader, { loadStatus } from '../common/hocs/ApiLoader';
-import { withLoadStatusProps } from '../common/hocs/withLoadStatus';
 import axios from 'axios';
 import { WithTestResponseProps } from '../common/hocs/withTestResponse';
-import { UserId } from '../common/interface/interfaces';
+import { UserId } from '../common/types/interfaces';
 import { TestResponse } from '../common/reducer/testResponseReducer';
+import { LoadStatus, LoadStatusProps } from '../common/types/loadStatus';
 
 
-interface TestConfirmProps extends withLoadStatusProps, WithTestResponseProps{
+interface TestConfirmProps extends LoadStatusProps, WithTestResponseProps{
     
 };
 
@@ -39,7 +36,7 @@ function TestConfirm({status, setStatus = ()=>{}}: TestConfirmProps){
      */
     const handlePutResponse = (data: TestResponse) => {
         console.log('handlePutResponse')
-        setStatus(loadStatus.SUCCESS);
+        setStatus(LoadStatus.SUCCESS);
         let handlePutResponseTimer = setTimeout(()=>{
             console.log('handlePutResponse handlePutResponseTimer')
             navigate('/result'); 
@@ -49,7 +46,7 @@ function TestConfirm({status, setStatus = ()=>{}}: TestConfirmProps){
     /* Put 성공 실패시
      * apiResponseHandlerDelay 동안 실패 안내 표시. */
     const handlePutNoResponse = () => {
-        setStatus(loadStatus.FAIL);        
+        setStatus(LoadStatus.FAIL);        
     }
     
     /* API: 테스트 응답 제출
@@ -69,7 +66,7 @@ function TestConfirm({status, setStatus = ()=>{}}: TestConfirmProps){
     });
 
     const handleClickConfirm = () => {        
-        setStatus(loadStatus.PENDING);
+        setStatus(LoadStatus.PENDING);
         putResponse();
     }
 

@@ -1,7 +1,5 @@
-import { useState, createContext, useEffect, PropsWithChildren, ComponentType } from "react";
+import { useState, createContext, useEffect, PropsWithChildren, ComponentType, useContext, useCallback } from "react";
 import { usePageString } from "../../texts";
-import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
-import { loadStatus } from "../../common/hocs/ApiLoader";
 
 /* Test Page Components */
 import TestLeadershipPage from "./testPage/testLeadership/TestLeadershipPage";
@@ -15,6 +13,7 @@ import withTestResponse from "../../common/hocs/withTestResponse";
 // Swiper
 import { Navigation, Pagination, Mousewheel, HashNavigation, Parallax } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperType from "swiper";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -22,8 +21,14 @@ import 'swiper/css/scrollbar';
 
 /* Reducer */
 import { SubTestName, TestName } from "../../common/reducer/testResponseReducer";
+import { LoadStatus } from "../../common/types/loadStatus";
+import { TopNavContext, useSetElement } from "../TopNav";
+import { Icon } from "@mui/material";
+import ToggleButton from "../ToggleButton";
+import { FocusContextProvider, FocusDetail, Focusable } from "../../common/focus/FocusContext";
+import StepItem, { Connector } from "../StepItem";
 
-interface TestPageProps extends withLoadStatusProps{
+interface TestPageProps {
     defaultActiveSectionIndex?: number;
 };
 
@@ -43,77 +48,112 @@ function WithAnimationWrapperate({keyProp, className, children}: PropsWithChildr
     )
 }
 
-const testElements: {testName: TestName, subTestName?: SubTestName, Element: ComponentType<any>}[] = [
-    {
-        testName: 'leadership',
-        Element: TestLeadershipPage,
-    },
-    {
-        testName: 'schedule',
-        Element: TestSchedulePage,
-    },
-    {
-        testName: 'budget',
-        subTestName: 'food',
-        Element: TestBudgetPage,
-    },
-    // {
-    //     testName: 'budget',
-    //     subTestName:'accomodate',
-    //     Element: TestBudget,
-    // },   
-    // {
-    //     testName: 'budget',
-    //     subTestName:'accomodateSpecial',
-    //     Element: TestBudget,
-    // },   
-    // {
-    //     testName: 'budget',
-    //     subTestName:'food',
-    //     Element: TestBudget,
-    // },
-    // {
-    //     testName: 'budget',
-    //     subTestName:'foodSpecial',
-    //     Element: TestBudget,
-    // },   
-    {
-        testName: 'city',
-        subTestName: 'metropolis',
-        Element: TestCityPage,
-    },   
-    {
-        testName: 'city',
-        subTestName: 'history',
-        Element: TestCityPage,
-    },   
-    {
-        testName: 'city',
-        subTestName: 'nature',
-        Element: TestCityPage,
-    },   
+const sectionElements : {[key: string] : {testName?: TestName, subTestName?: SubTestName, line: boolean, Element: ComponentType<any>}} = {
+    leadership:
+        {
+            testName: 'leadership',
+            Element: TestLeadershipPage,
+            line: true,
+        },
+    schedule:
+        {
+            testName: 'schedule',
+            Element: TestSchedulePage,
+            line: true,
+        },
+    bugetFood:
+        {
+            testName: 'budget',
+            subTestName: 'food',
+            Element: TestBudgetPage,
+            line: true,
+        },
+    cityMetropolis:
+        {
+            testName: 'city',
+            subTestName: 'metropolis',
+            Element: TestCityPage,
+            line: false,
+        },  
+    cityHistory: 
+        {
+            testName: 'city',
+            subTestName: 'history',
+            Element: TestCityPage,
+            line: false,
+        },   
+    cityNature:
+        {
+            testName: 'city',
+            subTestName: 'nature',
+            Element: TestCityPage,
+            line: true,
+        },   
+    confirm:
+        {            
+            Element: TestConfirm,
+            line: false,
+        }
     // {
     //     testName: 'activity',
     //     Element: TestWithSubTestPage,
     // },   
-];
+};
 
-function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
+function TestPage({}:TestPageProps){
 
-    // Index(0~) of active section (the section user is currently viewing). 
-    const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+
+    /* 텍스트 */
+    const strings = usePageString('test');
+    const sections = Object.keys(strings);
+
+    /* 네비게이션 */    
+    
+    const [ activeSectionIndex, setActiveSectionIndex ] = useState(0);
+    const [ hoveringSectionIndex, setHoveringSectionIndex ] = useState(0);
+    const [ swiper, setSwiper ] = useState<SwiperType>();
+
+    const slideTime : number = 1000;
+    const handleClickStepButton = useCallback((index: number) => {
+        setActiveSectionIndex(index);
+    }, [ setActiveSectionIndex ]);
+
+    useEffect(() => {
+        swiper?.slideTo(activeSectionIndex, slideTime);
+    }, [ activeSectionIndex, swiper ]);
+
+    useSetElement({
+        element : 
+            /* TopNav 의 Step 컴포넌트 */                
+            <div className = 'flex flex-row items-center -translate-y-1'>
+            <FocusContextProvider>       
+                {Object.entries(sectionElements).map(([key, { line, testName, subTestName }], index: number)=>{
+
+                    const testStrings = testName? (subTestName? strings[testName].subTests[subTestName] : strings[testName]) : strings[key];
+                    return (
+                        <>
+                        <StepItem
+                            isActive ={index===activeSectionIndex}
+                            index={index}
+                            icon={testStrings.icon}
+                            label={testStrings.label}
+                            handleClick={()=>handleClickStepButton(index)}                        
+                        />
+                        {line && <Connector width='w-12'/>} 
+                        </>
+                    );
+                })}
+                </FocusContextProvider>
+            </div>,
+        dep: [ activeSectionIndex, handleClickStepButton, strings ]        
+    });
 
     useEffect(()=>{
         const path = window.location.pathname.split('/').at(-1);
         const pathNameIndex = sections.indexOf(path? path : '')
-        setActiveSectionIndex( pathNameIndex < 0 ? 0 : pathNameIndex );
-        setStatus && setStatus(loadStatus.REST);
     }, [])
 
-    const strings = usePageString('test');
-    const sections = Object.keys(strings);
-
-    // Current state of each steps' completeness.
+    /* @TODO: Current state of each steps' completeness. */
     const [steps, setSteps] = useState(sections?.map((label, index)=>{
         return(
             {
@@ -125,13 +165,13 @@ function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
     
     const maxActiveSectionIndex = sections.length-1
 
+    /* Swiper */
     const spaceBetweenTests = 20;
+
     return(
-        status === loadStatus.REST ?
             /* https://sezzled.tistory.com/262 */
             <Swiper
                 // install Swiper modules
-                // modules={[Navigation, Pagination, Scrollbar, A11y]}
                 modules={[Mousewheel, Navigation, Pagination, HashNavigation, Parallax]}
                 direction={"vertical"}                
                 spaceBetween={spaceBetweenTests}
@@ -141,49 +181,37 @@ function TestPage({status, setStatus, defaultActiveSectionIndex}:TestPageProps){
                 // navigation={true}
                 pagination={{ clickable: true }}
                 // scrollbar={{ draggable: true }}
-                onSwiper={(swiper) => {swiper.mousewheel.enable(); console.log(swiper);}}
-                onSlideChange={() => console.log('slide change')}
+
+                /* Swiper Element 의 reference를 swiper state에 저장 */
+                onSwiper={(swiper) => { 
+                    setSwiper(swiper); 
+                    swiper.mousewheel.enable(); console.log(swiper);
+                }}
                 // allowTouchMove={false} 
+
                 /* @TODO Hash Navigation is Not Working */
                 hashNavigation={true}
+
                 speed={500}
                 parallax={true}
                 noSwiping={true}
                 noSwipingClass='swiper-no-swiping'
                 className='h-screen w-screen'
             >
-                {testElements.map(({testName, subTestName, Element})=>{
-                    const TestComponent = withTestResponse(Element)(testName as TestName, subTestName ? (subTestName as SubTestName): undefined);
+                {Object.entries(sectionElements).map(([key, {testName, subTestName, Element}])=>{
+                    const TestComponent = testName ?
+                        withTestResponse(Element)(testName as TestName, subTestName ? (subTestName as SubTestName): undefined)
+                        : Element;
                     return(                        
-                    <SwiperSlide data-hash={`${testName}${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>
+                    <SwiperSlide data-hash={`${testName ? testName : key} ${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>
                         <TestComponent/>
-                        {/* https://swiperjs.com/react#swiperslide-render-function */}   
-                        {/* {({ isActive }) => (
-                            isActive && <TestComponent/>
-                        )}            */}
                     </SwiperSlide>
                     )
-                })}
-                <SwiperSlide data-hash={`confirm`} className='swiper-no-swiping w-full h-full'>
-                    {/* https://swiperjs.com/react#swiperslide-render-function */}   
-                    <TestConfirm/>
-                    {/* {({ isActive }) => (
-                        isActive && <TestConfirm/>
-                    )}            */}
-                </SwiperSlide>                
+                })}              
             </Swiper> 
-        : <></>
     );
 }
 
-function TestPageWithLoadStatus(props:TestPageProps){
-    const [status, setStatus] = useState(loadStatus.PENDING);
 
-    console.log(`TestPageWithLoadStatus- status=${status}`)
-    return(
-        withLoadStatus(TestPage)(Loader, status===loadStatus.REST, status, setStatus)(props)        
-    )
-}
-
-export default TestPageWithLoadStatus;
+export default TestPage;
 export { ActiveSectionContext };

@@ -82,7 +82,7 @@ function LazyImage ({ src, alt, className, children }: PropsWithChildren<LazyIma
 
   return (
     <>
-      <div className='absolute w-full h-full' ref={placeholderRef}>{!isLoaded && children}</div>      
+      <div className={`absolute w-full h-full ${className}`} ref={placeholderRef}>{!isLoaded && children}</div>      
       <img
         src={view} // Gets src only when placeholder intersecting
         className={isLoaded ? className : 'hidden'}

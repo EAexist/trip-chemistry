@@ -34,7 +34,7 @@ const priceText = (value: number) => {
 function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
     
     /* 응답한 값 (예산 금액)을 레벨로 변환해 레벨에 대응하는 컨텐츠를 보여줌. */
-    const [bugetBound, setBudgetIndex] = useValueToBound(budgetLowerBounds);
+    const [bugetBound, setBudgetIndex] = useValueToBound({ boundList: budgetLowerBounds });
     setBudgetIndex(testResponse as number);
 
     /* 응답 여부 */
@@ -119,11 +119,11 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
                     `}
                 >                
                     <h5 className='absolute bottom-2 right-2 text-white'>{strings.examples[bugetBound].name}</h5> {/* 매장 이름 */}
-                    {/* <WithShowOnHoverWrapper index={true}> */}
+                    {/* <FocusDetail index={true}> */}
                     {/* <div className='absolute inset-0'> */}
                         {/* <h2 className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>ddd{strings.linkType}</h2> */}
                     {/* </div>               */}
-                    {/* </WithShowOnHoverWrapper> */}
+                    {/* </FocusDetail> */}
                 </div>
                 </WithAnimationWrapper>
             }

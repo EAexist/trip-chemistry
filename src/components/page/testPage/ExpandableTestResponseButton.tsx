@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from "react";
-import { IsHoveringContextProvider, IsHoveringType, WithHoverWrapper, withShowOnHover } from "../../../common/isHovering/IsHoveringContext";
+import { FocusContextProvider, FocusType, Focusable, withShowOnHover } from "../../../common/focus/FocusContext";
 import { MenuContainer } from "../../Menu";
 import ToggleButton from "../../ToggleButton";
 import { WithTestResponseProps } from "../../../common/hocs/withTestResponse";
@@ -12,7 +12,7 @@ interface TestResponseMenuProps extends WithTestResponseProps{
 
 function ExpandableTestResponseButton({testName, testResponse, setTestResponse, isActive, onClick, children}: PropsWithChildren<TestResponseMenuProps>){
 
-    const [isHovering, setIsHovering] = useState<IsHoveringType>(false);
+    const [focus, setFocus] = useState<FocusType>(false);
     const answers = usePageString('test')[testName].answers;
     // const emojis = useString('emojis');
     // console.log(JSON.stringify(strings));
@@ -20,7 +20,7 @@ function ExpandableTestResponseButton({testName, testResponse, setTestResponse, 
     return(
         <ToggleButton isActive={isActive} onClick={onClick} variant="round" className="flex flex-col items-center">
             <h5>{children}</h5> {/* 버튼 라벨 */}
-            <IsHoveringContextProvider value={{isHovering: isHovering, setIsHovering: setIsHovering}}> {/* 선택 버튼 컨테이너 (5개) */}
+            <FocusContextProvider value={{focus: focus, setFocus: setFocus}}> {/* 선택 버튼 컨테이너 (5개) */}
                 <MenuContainer direction='horizontal'>
                     {answers.map(({ label, quote, value, emoji }: { label: string, quote: string, value: number, emoji: string }, index: number) => {
 
@@ -36,7 +36,7 @@ function ExpandableTestResponseButton({testName, testResponse, setTestResponse, 
                             ))({id: index, force: isUsedAsResponse || undefined})
 
                             return(
-                                <WithHoverWrapper id={index} listenOnly='enter'>
+                                <Focusable id={index} listenOnly='enter'>
                                     <p>
                                         <ToggleButton isActive={isActive && isUsedAsResponse} onClick={() => setTestResponse(value)} className='min-w-24'>   
                                             <div className="flex flex-row space-x-4 px-1 min-w-6">
@@ -53,13 +53,13 @@ function ExpandableTestResponseButton({testName, testResponse, setTestResponse, 
                                             </div>   
                                         </ToggleButton>
                                     </p>             
-                                </WithHoverWrapper>
+                                </Focusable>
                             );
                         }
                         else return(<></>);
                     })}
                 </MenuContainer>
-            </IsHoveringContextProvider>
+            </FocusContextProvider>
         </ToggleButton>  
     )
 }

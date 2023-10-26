@@ -1,123 +1,53 @@
-import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
-import { PropsWithChildren, createContext, useContext, useState, ReactNode } from 'react';
+import { withHoverProps } from "../common/focus/FocusContext";
+import { PropsWithChildren, useState } from "react";
+import Card from "./Card";
+import { Box, Skeleton, Zoom } from "@mui/material";
+import LazyImage from "./LazyImage";
 
-interface selectedItemContextProps {
-  selectedItemId: number,
-  setSelectedItemId: (id: number)=>void, 
-  isHoveringContainer: boolean, 
-  // setisHoveringContainer: (isHovering: boolean) => void,
+interface CardProps {
+    image: string; 
+    alt: string;
+    label?: string;
 };
 
-const SelectedItemContext = createContext<selectedItemContextProps>({
-  selectedItemId: 0, 
-  setSelectedItemId: ()=>{},
-  isHoveringContainer: false,
-  // setisHoveringContainer: ()=>{},
-});
+/* 이미지와 텍스트를 포함한 카드. 마우스를 올리면 확대되며 추가적인 디테일(children componenet) 를 보여줌.*/
+function ImageCard({ image, alt, label="", children }: PropsWithChildren<CardProps>){
 
-interface CardCarouselContainerProps{
-  selectedItemId: number, 
-  setSelectedItemId: (id: number) => void,
-  direction?: 'row' | 'col'
+    const [ focus, setIsFocused ] = useState<boolean>(false);
+    // const delay = 0;
+
+    // const handleMouseEnter = () => {let timer = setTimeout(()=>{setIsFocused(true);}, delay)}
+    const handleMouseEnter = () => {setIsFocused(true);}
+    const handleMouseLeave = () => {setIsFocused(false);}
+
+    return(
+        <div className='relative w-64 h-40 flex items-center justify-center'>
+            <div
+                className={`absolute  
+                    transition-size duration-500 ease-out
+                    ${focus ? 'w-72 h-64 z-10' : 'w-64 h-40 z-0'} max-md:hover:h-72`
+                }
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
+                <Card className='w-full h-fit flex flex-col' 
+                >
+                    <div className='
+                        w-full h-40 relative
+                        max-md:w-full'
+                    >
+                        <LazyImage src={image} alt={alt} className='absolute object-cover w-full h-full'>
+                            <Skeleton variant="rectangular" width={'100%'} height={'100%'}/>
+                        </LazyImage>
+                        {/* <img className='absolute object-cover w-full h-full' src={image} alt={alt} loading='lazy'/> */}
+                        <h4 className='absolute bottom-2 left-2 font-bold text-white'>{label}</h4>
+                    </div>
+                    {focus &&
+                        <div>{children}</div>}
+                </Card>
+            </div>
+        </div>
+    );
 };
 
-function CardCarouselContainer({ selectedItemId, setSelectedItemId, direction = 'row', children }: PropsWithChildren<CardCarouselContainerProps>){
-
-  const [isHovering, setIsHovering] = useState(false);
-
-  return(
-    <SelectedItemContext.Provider value = {{
-      selectedItemId: selectedItemId,
-      setSelectedItemId: setSelectedItemId,
-      isHoveringContainer: isHovering
-    }}>
-    {/* <Stack spacing={2} direction={direction}> */}
-    <div 
-      className={`flex flex-${direction} items-stretch space-x-2
-        max-md:flex-col
-      `}
-      // max-md:flex max-md:flex-col max-md:space-y-2`} 
-      onMouseEnter={()=>setIsHovering(true)} 
-      onMouseLeave={()=>setIsHovering(false)}
-    >
-      {children}
-    </div>
-    {/* </Stack> */}
-    </SelectedItemContext.Provider>
-  )
-}
-
-interface CardCarouselItemProps{
-  id: number;
-  onHoverElement?: ReactNode;
-}
-
-function CardCarouselItem({ id, onHoverElement, children }: PropsWithChildren<CardCarouselItemProps>){
-    
-  const { selectedItemId, setSelectedItemId, isHoveringContainer } = useContext(SelectedItemContext); 
-  const isSelected = selectedItemId === id;
-  const [isHovering, setIsHovering] = useState(false)  
-  const handleClick = () => {
-    console.log('CardCarouselItem handleClick')
-    setSelectedItemId(id);
-  }
-
-  return(
-    <div 
-      className={`
-        flex basis-8/12 shrink-1 duration-300 opacity-50
-        ${isSelected && !isHoveringContainer && 'shrink-0 opacity-100'}         
-        hover:shrink-0 hover:opacity-100
-        `} 
-      onClick={handleClick}
-      onMouseEnter={()=>setIsHovering(true)} 
-      onMouseLeave={()=>setIsHovering(false)}
-    >
-      <Card className={`w-full h-full relative
-      ${isSelected && 'border-4 border-slate-500'}`}>
-        {children}
-        {( isSelected ?
-        (!isHoveringContainer || isHovering) 
-        : isHovering ) && onHoverElement}
-      </Card>
-    </div>    
-  );
-}
-
-interface ImageCardProps{
-  cardHeaderAvatarText: string;
-  cardHeaderTitle: string;
-  cardMediaProps: {
-    image: string
-    alt: string
-    sx?: {
-      height: number
-    }
-    // component = 'img'
-    // height: nubmer
-  };
-};
-
-function ImageCard({ cardHeaderAvatarText, cardHeaderTitle, cardMediaProps, }:ImageCardProps){    
-
-  return(
-    <div className = 'w-full'>
-      {/* <div className = 'relative h-128'> */}
-        <CardMedia className = 'sticky z-0 w-full' component = 'img' sx={{ height: "10%" }} {...cardMediaProps}/>
-    
-      {/* </div> */}
-      <CardHeader
-        avatar={
-          <Avatar>
-            {cardHeaderAvatarText}
-          </Avatar>
-        }
-        title={cardHeaderTitle}
-      />
-    </div>    
-  );
-}
-
-// "/static/images/test/leadership/lead.jpg"
 export default ImageCard;
-export { CardCarouselContainer, CardCarouselItem };

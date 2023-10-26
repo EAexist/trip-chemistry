@@ -1,5 +1,5 @@
 import { PropsWithChildren, useContext } from 'react';
-import { useIsHoveringContext, WithActiveOnResponseProps } from '../../../common/isHovering/IsHoveringContext';
+import { useFocusContext, WithActiveOnResponseProps } from '../../../common/focus/FocusContext';
 import { useTestResponse } from '../../../common/reducer/testResponseReducer';
 import { motion } from "framer-motion";
 import { BasisCurve } from "react-svg-curve";

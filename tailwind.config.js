@@ -8,8 +8,29 @@ module.exports = {
       },
       animation: {
         'expand': 'spin 3s linear infinite',
+        'focusCard': 'focusCard 0.5s ease-in-out 0s normal forwards',
+        'delay1': 'show 1s linear 1s',
       },
       keyframes: {
+        focusCard: {
+          '0%': {      
+            width:'16rem',
+            height:'10rem'
+          },
+          '100%':{      
+            width:'18rem',
+            height:'16rem'
+          },
+        },
+        show: {
+          '0%': {      
+            visibility: "hidden",
+          },
+          '100%':{      
+            visibility: "visible",
+          },
+        },
+
       },      
       backgroundImage: {
       },
@@ -32,6 +53,7 @@ module.exports = {
       },
       transitionProperty: {
         "size": "width, height",
+        "display": "display",
         // "height": "height",
       },
       transitionDuration: {

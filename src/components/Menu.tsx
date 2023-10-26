@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { IsHoveringType, WithHoverWrapper } from "../common/isHovering/IsHoveringContext";
+import { FocusType, Focusable } from "../common/focus/FocusContext";
 
 interface MenuContainerProps{
     direction?: 'vertical' | 'horizontal'
@@ -8,20 +8,20 @@ interface MenuContainerProps{
 function MenuContainer({direction = 'vertical', children}:PropsWithChildren<MenuContainerProps>){
 
     return(
-        <WithHoverWrapper listenOnly='leave'>
+        <Focusable listenOnly='leave'>
             <div className={`flex ${direction === 'vertical' ?
                 'flex-col items-start justify-center min-w-fit pr-20'
                 : 'flex-row'
             } `}>
                 {children}
             </div>
-        </WithHoverWrapper>        
+        </Focusable>        
     )
 }
 
 interface MenuItemProps{
-    index: IsHoveringType;
-    // handleClick: (index: IsHoveringType)=>void;
+    index: FocusType;
+    // handleClick: (index: FocusType)=>void;
     variant?: "h3" | "p"
     className?: string,
 };
@@ -29,9 +29,9 @@ interface MenuItemProps{
 function MenuItem({ index, children }: PropsWithChildren<MenuItemProps>){
       
     return(
-        <WithHoverWrapper id={index} listenOnly='enter'>
+        <Focusable id={index} listenOnly='enter'>
             {children}
-        </WithHoverWrapper>        
+        </Focusable>        
     )
 }
 

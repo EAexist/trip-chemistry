@@ -1,6 +1,6 @@
 import GoogleMapReact from 'google-map-react';
 import { PropsWithChildren, useContext, useEffect, useRef } from 'react';
-import { useIsHoveringContext } from '../../../common/isHovering/IsHoveringContext';
+import { useFocusContext } from '../../../common/focus/FocusContext';
 import { useTestResponse } from '../../../common/reducer/testResponseReducer';
 import { Icon } from '@mui/material';
 
@@ -27,16 +27,16 @@ interface AnswerItemWrapperProps {
 }
 
 const ShowTestResponseDetailWrapper = ({ index, children } : PropsWithChildren<AnswerItemWrapperProps>) => {
-  const {isHovering} = useIsHoveringContext();
+  const {focus} = useFocusContext();
   const testResponse = useTestResponse('schedule');
 
   return(
       <>
         {
           (
-            isHovering === false ?
+            focus === false ?
               testResponse >= index /* 아무 옵션도 hover하지 않고 있으면 응답(마지막으로 클릭한 옵션)에 대응하는 마커만 보여줌 */
-              : (isHovering as number >= index) /* 옵션 중 하나를 hover할 경우 해당하는 마커를 보여줌 */
+              : (focus as number >= index) /* 옵션 중 하나를 hover할 경우 해당하는 마커를 보여줌 */
           )
           && {children}
         }

@@ -18,7 +18,7 @@ function TestLeadershipPage({testName, testResponse, setTestResponse, strings}: 
         {strings.answers.map((answer: {title:string,  detail:string, imageTitle:string}, index: number) => {
 
           return(
-            <FocusableCarouselItem id = {index}>
+            <FocusableCarouselItem id = {index} className='rounded'>
               <Card className='w-full h-full
                 flex flex-col justify-end
                 max-md:flex-row-reverse

@@ -2,19 +2,16 @@ import { useCallback, useState } from 'react';
 import Slider from '../../../Slider';
 import useValueToBound from '../../../../common/hooks/useValueToBound';
 import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
-import useGetImgSrc, { formatSvg, formatWebp } from '../../../../common/utils/getImgSrc';
-import getImgSrc from '../../../../common/utils/getImgSrc';
-import Trail from '../../../spring/Trail';
-import Card from '../../../Card';
+import getImgSrc, { formatSvg, formatWebp } from '../../../../common/utils/getImgSrc';
 import { WithAnimationWrapper } from '../../../../common/hocs/withAnimation';
-import { CardActions, CardContent, CardMedia, Divider } from '@mui/material';
+import { Divider, Icon } from '@mui/material';
 import { ArrowRight } from '@mui/icons-material';
-import TestTitle from '../../../TestTitle';
-import TestSubtitle from '../../../TestSubtitle';
-import FocusableImageCard from '../../../FocusableImageCard';
+import { Card, CardDetail, CardImage } from '../../../Card';
 import { usePageString, useString } from '../../../../texts';
 import TestContainer from '../../../TestContainer';
 import Logo from '../../../Logo';
+import FocusContainer from '../../../FocusContainer';
+import { FocusSummary } from '../../../../common/focus/FocusContext';
 
 interface TestBudgetPageProps extends WithTestResponseProps{
 };
@@ -26,7 +23,7 @@ const sliderProps = {
 };
 
 const budgetLowerBounds : number[] = [
-    5000,
+    0,
     15000,
     25000,
     50000,
@@ -41,10 +38,11 @@ const priceText = (value: number) => {
 function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPageProps){
     
     const pageStrings = usePageString('test').budget;
-    const linkTypeStrings = useString('linkTypes');
+    const commonStrings = useString('common');
+    const linkTypeStrings = useString('linkType');
 
     /* 응답한 값 (예산 금액)을 인덱스(레벨)로 변환해 인덱스에 대응하는 컨텐츠를 보여줌. */
-    const [bugetBound, setBudgetIndex] = useValueToBound(budgetLowerBounds);
+    const [bugetBound, setBudgetIndex] = useValueToBound({ boundList: budgetLowerBounds });
     if (testResponse !== undefined){
         setBudgetIndex(testResponse);
     }
@@ -99,30 +97,53 @@ function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPage
                 {/* 응답에 따른 예시 이미지카드 Carousel */}
                 {/* <WithAnimationWrapper>     */}
                 <div className='flex flex-row items-center space-x-2'>
-                    {(bugetBound !== undefined) && strings.examples[bugetBound] && Object.entries(strings.examples[bugetBound])?.map(([key, item]: [key: string, item: any]) => (item && /* 응답에 따른 예시 상품 (e.g. 레스토랑 메뉴 / 숙소 객실 또는 뷰) 정보 카드 컴포넌트 */
+                    {(bugetBound !== undefined) && strings.examples[bugetBound] && Object.entries(strings.examples[bugetBound])?.map(([key, item]: [key: string, item: any]) => {
+                        
+                        console.log(`TestBudgetPage: city=${item.city}`)
+                        const city = commonStrings.city[item.city]
+                        const nation = commonStrings.nation[city.nation]
+                        
+                        return (item && /* 응답에 따른 예시 상품 (e.g. 레스토랑 메뉴 / 숙소 객실 또는 뷰) 정보 카드 컴포넌트 */
 
-                        <FocusableImageCard
-                            image={getImgSrc(imagePathBase, `${item.restaurant}`, formatWebp)}
-                            alt={item.name}
-                            label={item.name}
+                        /* 음식 정보 카드 컴포넌트 */
+                        <FocusContainer
+                            classNameWithSize='w-64 h-40'
+                            animation='focusCard'
                         >
-                            <div className='flex flex-col px-4 space-y-2 py-2'>
-                                <div className='flex flex-row space-x-2 items-center'> {/* 상품 정보: 상품 이름, 위치한 도시, 국가, 국기 */}
-                                    <h5>{item.restaurantName}</h5>
-                                    <Divider orientation="vertical" />
-                                    <h6>{item.city}</h6>
-                                    <img className='h-4' src={getImgSrc('/nation', item.nation, formatSvg)} alt={`flag-${item.nation}`} loading='lazy'></img>
-                                </div>
-                                <a href={item.link} target="_blank" rel="noopener noreferrer"> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) @TODO: 카드 자체 클릭으로 변경 가능*/}
-                                    <div className='flex flex-row items-center space-x-1'>                                      
-                                        <Logo id = {item.linkType} className='h-5'/>
-                                        <h6>{linkTypeStrings[item.linkType].name}{pageStrings.linkText}</h6>
-                                        <ArrowRight fontSize='inherit' />
+                        <Card className='w-full h-fit flex flex-col'>
+                            <CardImage
+                                image={getImgSrc(imagePathBase, `${item.restaurant}`, formatWebp)}
+                                alt={item.name}
+                            >                             
+                                <div className='flex flex-row absolute bottom-0 p-2 w-full justify-between'>                                    
+                                    <h5 className='font-bold text-white'>{item.name}</h5>
+                                    <FocusSummary><Icon className='text-white'>play_circle</Icon></FocusSummary> 
+                                </div>   
+                            </CardImage>
+                            <CardDetail>
+                                <div className='flex flex-col px-4 space-y-2 py-4'>                                    
+                                    <div className='flex flex-row space-x-2 items-center'> {/* 상품 정보: 상품 이름, 위치한 도시, 국가, 국기 */}
+                                        <h5>{item.restaurantName}</h5>
+                                        <Divider orientation="vertical" />
+                                        <h6>{city.name}</h6>
+                                        <h6> | </h6>
+                                        <h6>{nation.name}</h6>
+                                        {nation.flag && <span className={`fi fi-${city.nation}`}></span>} {/* 국기 */}
                                     </div>
-                                </a>
-                            </div>
-                        </FocusableImageCard>
-                    ))}
+                                    <a href={item.link} target="_blank" rel="noopener noreferrer"> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) @TODO: 카드 자체 클릭으로 변경 가능*/}
+                                        <div className='flex flex-row items-center space-x-1'>
+                                            <Logo id={item.linkType} className='h-5' />
+                                            <h6>{commonStrings.linkType[city.linkType].name}{pageStrings.linkText}</h6>
+                                            <ArrowRight fontSize='inherit' />
+                                        </div>
+                                    </a>
+                                </div>
+                            </CardDetail>
+                        </Card>
+                        </FocusContainer>
+                        );
+                    } 
+                    )}
                 </div>
                 {/* </WithAnimationWrapper> */}
                 </div>

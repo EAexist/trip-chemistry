@@ -1,6 +1,132 @@
 const TEXTS = {
     "_lang": "ko-kr",
     "public": {
+        "common":{
+            linkText: "에서 보기",
+            emoji:{
+                great: "😍",
+                good: "😃",
+                soso: "🤔",
+                bad: "😤",
+                troll: "😡",
+            },
+            nation:{
+                "jp": {
+                    name: "일본",
+                    flag: true
+                },
+                "hk": {
+                    name: "홍콩",
+                    flag: true
+                },
+                "kr": {
+                    name: "한국",
+                    flag: true
+                },
+                "sea": {
+                    name: "동남아시아",
+                    flag: false
+                },
+            },
+            linkType:{
+                "travel-japan": {
+                    name: "Travel Japan",
+                },
+                "tabelog": {
+                    name: "타베로그",
+                },
+                "tripadvisor": {
+                    name: "Tripadvisor",
+                },
+                "website": {
+                    name: "웹사이트",
+                },
+                "discovering-hongkong": {
+                    name: "홍콩관광청",
+                },
+            },
+            city:{
+                jp:
+                    {
+                        name: "일본 전역",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/",
+                        linkType: "travel-japan",
+                    },
+                tokyo:
+                    {
+                        name: "도쿄",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kanto/tokyo/",
+                        linkType: "travel-japan",
+                    },
+                osaka:
+                    {
+                        name: "오사카",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kansai/osaka/",
+                        linkType: "travel-japan",
+                    },
+                yokohama: 
+                    {
+                        name: "요코하마",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/yokohama-and-around/",
+                        linkType: "travel-japan",
+                    },
+                    // 삿포로
+                kyoto: 
+                    {
+                        name: "교토",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kansai/kyoto/",
+                        linkType: "travel-japan",
+                    },
+                nara: 
+                    {
+                        name: "나라",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kansai/nara/",
+                        linkType: "travel-japan",
+                    },
+                kamakura: 
+                    {
+                        name: "가마쿠라",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/kamakura-and-around/",
+                        linkType: "travel-japan",
+                    },
+                    // 가와고에 가나자와
+                shiretoko: 
+                    {
+                        name: "시레토코",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/spot/2143/",
+                        linkType: "travel-japan",
+                    },
+                yakushima: 
+                    {
+                        name: "야쿠시마",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/destinations/kyushu/kagoshima/yakushima/",
+                        linkType: "travel-japan",
+                    }, 
+                biei: 
+                    {
+                        name: "비에이",
+                        nation: "jp",
+                        link: "https://www.japan.travel/ko/spot/1890/",
+                        linkType: "travel-japan",
+                    },
+                hongkong: 
+                    {
+                        name: "홍콩",
+                        nation: "hk",
+                        link: "https://www.discoverhongkong.com/eng/index.html",
+                        linkType: "discovering-hongkong",
+                    },
+            },
+        },
         "emojis":{
             great: "😍",
             good: "😃",
@@ -9,11 +135,12 @@ const TEXTS = {
             troll: "😡",
         },
         "nations":{
-            "JP": "일본",
-            "HK": "홍콩",
+            "jp": "일본",
+            "hk": "홍콩",
             "KR": "한국",
+            "SEA": "동남아시아",
         },
-        "linkTypes":{
+        "linkType":{
             "travel-japan": {
                 name: "Travel Japan",
             },
@@ -30,79 +157,11 @@ const TEXTS = {
                 name: "홍콩관광청",
             },
         },
-        "places":{
-            tokyo:
-                {
-                    name: "도쿄",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kanto/tokyo/",
-                    linkType: "travel-japan",
-                },
-            osaka:
-                {
-                    name: "오사카",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kansai/osaka/",
-                    linkType: "travel-japan",
-                },
-            yokohama: 
-                {
-                    name: "요코하마",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/yokohama-and-around/",
-                    linkType: "travel-japan",
-                },
-                // 삿포로
-            kyoto: 
-                {
-                    name: "교토",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kansai/kyoto/",
-                    linkType: "travel-japan",
-                },
-            nara: 
-                {
-                    name: "나라",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kansai/nara/",
-                    linkType: "travel-japan",
-                },
-            kamakura: 
-                {
-                    name: "가마쿠라",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kanto/kanagawa/kamakura-and-around/",
-                    linkType: "travel-japan",
-                },
-                // 가와고에 가나자와
-            shiretoko: 
-                {
-                    name: "시레토코",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/spot/2143/",
-                    linkType: "travel-japan",
-                },
-            yakushima: 
-                {
-                    name: "야쿠시마",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/destinations/kyushu/kagoshima/yakushima/",
-                    linkType: "travel-japan",
-                }, 
-            biei: 
-                {
-                    name: "비에이",
-                    nation: "JP",
-                    link: "https://www.japan.travel/ko/spot/1890/",
-                    linkType: "travel-japan",
-                },
-            hongkong: 
-                {
-                    name: "홍콩",
-                    nation: "HK",
-                    link: "https://www.discoverhongkong.com/eng/index.html",
-                    linkType: "discovering-hongkong",
-                },
+        "topNav": {
+            "home": "여행 케미 테스트",
+            "test": "테스트",
+            "result": "내 결과",
+            "chemistry": "케미 보기",
         },
         "pages": {
             "home": {
@@ -114,6 +173,7 @@ const TEXTS = {
             },
             "test": {
                 "leadership": {
+                    "icon": "restaurant",
                     "title": "여행 계획은 누가 리드해?",
                     "subtitle": "리더",
                     "label": "리더",
@@ -137,6 +197,7 @@ const TEXTS = {
 
                 },
                 "schedule": {
+                    "icon": "restaurant",
                     "title": "일정은 얼마나 알차면 좋을까?",
                     "subtitle": "일정",
                     "label": "널널함",
@@ -268,7 +329,8 @@ const TEXTS = {
                     "defaultPriceText": "슬라이더를 움직여봐!",
                     "subTests": {
                         "food": {
-                            "label": "예산",
+                            "label": "먹을것",
+                            "icon": "restaurant",
                             "title": "한끼에 얼마나 쓰면 좋을까?",
                             "subtitle": "예산 - 식사",
                             "examples": {
@@ -276,30 +338,30 @@ const TEXTS = {
                                     "kyudong":
                                         {
                                             "name": "규동",
-                                            "city": "일본",
+                                            "city": "jp",
                                             "restaurant": "yoshinoya",
                                             "restaurantName": "요시노야",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "website",
                                             "link": "https://www.yoshinoya.com/",
                                         },
                                     "wantang":
                                         {
                                             "name": "완탕면",
-                                            "city": "홍콩",
+                                            "city": "hongkong",
                                             "restaurant": "tsim-chai-kee",
                                             "restaurantName": "침차이키",
-                                            "nation": "HK",
+                                            "nation": "hk",
                                             "linkType": "tripadvisor",
                                             "link": "https://www.tripadvisor.co.kr/Restaurant_Review-g294217-d1094369-Reviews-Tsim_Chai_Kee_Noodle_Shop-Hong_Kong.html",
                                         },                         
                                     "churos":
                                         {
                                             "name": "츄러스",
-                                            "city": "홍콩",
+                                            "city": "hongkong",
                                             "restaurant": "twist&buckle",
                                             "restaurantName": "Twist & Buckle",
-                                            "nation": "HK",
+                                            "nation": "hk",
                                             "linkType": "website",
                                             "link": "https://www.twistandbuckle.com/",
                                         },
@@ -309,30 +371,30 @@ const TEXTS = {
                                     "ramen":
                                         {
                                             "name": "라멘",
-                                            "city": "오사카",
+                                            "city": "osaka",
                                             "restaurant": "iida-shouten-ramen",
                                             "restaurantName": "라멘 이이다쇼텐",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "tabelog",
                                             "link": "https://tabelog.com/en/kanagawa/A1410/A141002/14038776/",
                                         },   
                                     "udon":
                                         {
                                             "name": "우동",
-                                            "city": "도쿄",
+                                            "city": "tokyo",
                                             "restaurant": "udon-maruka",
                                             "restaurantName": "우동 마루카",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "tabelog",
                                             "link": "https://tabelog.com/kr/osaka/A2707/A270704/27011240/",
                                         },         
                                     "dumpling":
                                         {
                                             "name": "딤섬",
-                                            "city": "홍콩",
+                                            "city": "hongkong",
                                             "restaurant": "timhowan",
                                             "restaurantName": "팀호완",
-                                            "nation": "HK",
+                                            "nation": "hk",
                                             "linkType": "website",
                                             "link": "https://www.timhowan.com/",
                                         },                      
@@ -344,17 +406,17 @@ const TEXTS = {
                                             "city": "삿포로",
                                             "restaurant": "nemuro-hanamaru",
                                             "restaurantName": "네무로 하나마루",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "tabelog",
                                             "link": "https://tabelog.com/kr/hokkaido/A0101/A010101/1001102/",
                                         },      
                                     "afternoon-tea":
                                         {
                                             "name": "애프터눈 티",
-                                            "city": "홍콩",
+                                            "city": "hongkong",
                                             "restaurant": "peninsula-hk",
                                             "restaurantName": "페닌슐라 호텔 홍콩",
-                                            "nation": "HK",
+                                            "nation": "hk",
                                             "linkType": "website",
                                             "link": "https://www.peninsula.com/en/hong-kong/hotel-fine-dining/the-lobby-afternoon-tea",
                                         },   
@@ -363,30 +425,30 @@ const TEXTS = {
                                     "hitsumabushi":
                                         {
                                             "name": "장어덮밥",
-                                            "city": "도쿄",
+                                            "city": "tokyo",
                                             "restaurant": "tomoei",
                                             "restaurantName": "토모에이",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "tabelog",
                                             "link": "https://tabelog.com/en/kanagawa/A1410/A141001/14001626/",
                                         },    
                                     "yakitori":
                                         {
                                             "name": "야키토리",
-                                            "city": "도쿄",
+                                            "city": "tokyo",
                                             "restaurant": "torishiki",
                                             "restaurantName": "토리시키",
-                                            "nation": "JP",
+                                            "nation": "jp",
                                             "linkType": "tabelog",
                                             "link": "https://tabelog.com/kr/tokyo/A1316/A131601/13041029/",
                                         },  
                                     "chili-crab":
                                         {
                                             "name": "칠리크랩",
-                                            "city": "홍콩",
+                                            "city": "hongkong",
                                             "restaurant": "underbridge-spicy-crab",
                                             "restaurantName": "언더브릿지 스파이시 크랩",
-                                            "nation": "HK",
+                                            "nation": "hk",
                                             "linkType": "tripadvisor",
                                             "link": "https://www.tripadvisor.com/Restaurant_Review-g294217-d1089734-Reviews-Under_the_Bridge_Spicy_Crab-Hong_Kong.html",
                                         },   
@@ -395,11 +457,11 @@ const TEXTS = {
                                     "mandarin-grill":                        
                                     {
                                         "name": "퓨전 파인다이닝",
-                                        "city": "홍콩",
+                                        "city": "hongkong",
                                         "restaurant": "mandarin-grill",
                                         "restaurantName": "만다린 그릴",
                                         "price": 100000,
-                                        "nation": "JP",
+                                        "nation": "jp",
                                         "linkType": "website",
                                         "link": "https://www.mandarinoriental.com/en/hong-kong/victoria-harbour/dine/mandarin-grill-and-bar",
                                     },                                  
@@ -419,7 +481,7 @@ const TEXTS = {
                         //                 "room": "룸이름",
                         //                 "price": 200000,
                         //                 "priceText": "20만원~ (1인)",
-                        //                 "nation": "JP",
+                        //                 "nation": "jp",
                         //                 "link": "https://www.suimeikan.co.jp/ko/",
                         //             },
                         //         ],
@@ -431,7 +493,7 @@ const TEXTS = {
                         //                 "room": "룸이름",
                         //                 "price": 300000,
                         //                 "priceText": "60만원~ (2인)",
-                        //                 "nation": "JP",
+                        //                 "nation": "jp",
                         //                 "link": "https://www.ginrinsou.com/ko/"
                         //             },
                         //         ],
@@ -477,7 +539,9 @@ const TEXTS = {
                     ],
                     "subTests": {
                         "metropolis": {
+                            "label": "현대적인 대도시",
                             "title": "현대적인 대도시",
+                            "icon": "restaurant",
                             "id": "metropolis",
                             "examples": [
                                 "tokyo",
@@ -488,7 +552,9 @@ const TEXTS = {
                             // 삿포로
                         },
                         "history": {
+                            "label": "유서 깊은 대도시",
                             "title": "유서 깊은 대도시",
+                            "icon": "restaurant",
                             "id": "history",
                             "examples": [
                                 "kyoto",
@@ -498,8 +564,9 @@ const TEXTS = {
                             // 가와고에 가나자와
                         },
                         "nature": {
+                            "label": "자연경관이 아름다운 곳",
                             "title": "자연경관이 아름다운 곳",
-                            "label": "nature" ,
+                            "icon": "restaurant",
                             "examples": [
                                 "shiretoko",
                                 "yakushima",
@@ -585,31 +652,43 @@ const TEXTS = {
                     }
                 },
                 "confirm": {
-                    "label": "특별한 예산",
+                    "label": "결과 확인",
                     "title": "다시 답변하고 싶은 질문은 없는지 확인해봐"
 
                 }
             },
             "result": {
                 "steps": [
-                    "내 여행 MBTI",
-                    "추천 여행지",
-                    "여행 케미 확인하기"
+                    {
+                        label: "내 여행 MBTI",
+                        icon: "conditions",
+                    },
+                    {
+                        label: "추천 여행지",
+                        icon: "beach_access",
+                    },
+                    {
+                        label: "여행 케미 확인하기",
+                        icon: "travel",
+                    },
                 ],
                 "typeIntro": "내 여행 MBTI는",
                 // "characterName" :  "부지런한 벌꿀형",
                 // "characterPrefix" : "쉴 틈이 없어요",
                 // "characterBody" : "부지런한 꿀벌형은 여행 준비, 교통편과 숙소 예매부터 철두철미하게 게획해요. 몸이 힘들더라도 여행지에서 해볼 수 있는 것들을 최대한 해보는 알찬 여행을 좋아한답니다.",
                 // "tripTagList" : [ "자연경관", "하이킹", "꼼꼼한 계획", "알찬 일정"],
-                "placeIntro": "나에게 잘 맞는 여행지는",
-                // "placeListTitle" : "아름다운 자연경관, 산책과 하이킹 명소",
-                "placeListIntro": "추천 여행지",
+                "citySuffix": "당신을 위한 여행지",
+                // "cityListTitle" : "아름다운 자연경관, 산책과 하이킹 명소",
+                "cityListIntro": "추천 여행지",
+                "nationFilterTitle" : "지역",
+                "unsupportedNationTooltip" : "이 지역의 도시들은 추가될 예정이에요.",
+                "me": "(Me!)",
                 "startChemistryIntro": "이제 친구랑 같이 떠나볼까?",
                 "startChemistryTitle": "여행 케미 확인하기",
                 "startChemistryButton": "여행 케미 확인하기",
                 "startChemistryButtonTooltip": "\"친구 추가하기\" 버튼을 눌러 친구를 한 명 이상 추가해주세요.",
                 "addFriendButton": "친구 추가하기",
-                "addFriendDialog": {
+                "addFriend": {
                     "addByName": "닉네임으로 친구 추가하기",
                     "friendNameFormLabel": "닉네임을 입력하세요 (e.g. 우동#1234)",
                     "giveMyName": "친구에게 내 닉네임 알려주기",
@@ -619,7 +698,7 @@ const TEXTS = {
                     "confirm": "확인"
                 },
                 "prevButton": "테스트 다시하기",
-                "placeCards": [
+                "cityCards": [
                     {
                         "title": "후쿠오카",
                         "body": "유제품, 과일, 각종 신선한 식재료와 음식이 넘쳐나고 자연경관이 멋진 하이킹 명소!",

@@ -3,7 +3,7 @@ import { useContext, useState, Key } from 'react';
 import { Stepper, Step, StepLabel } from "@mui/material";
 
 import ConditionalWrapper from '../common/utils/ConditionalWrapper';
-import { IsHoveringContextProvider, withHover, withShowOnHover, WithHoverWrapper, WithShowOnHoverWrapper } from '../common/isHovering/IsHoveringContext'
+import { FocusContextProvider, withHover, withShowOnHover, Focusable, FocusDetail } from '../common/focus/FocusContext'
 
 interface StepperProps{
     steps: step[]; 
@@ -32,11 +32,11 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
         handleClickStepLabel(index)
       }}
     >
-      <WithShowOnHoverWrapper id={index}>
+      <FocusDetail id={index}>
         <div className={`text-xs`}>
           {label}
         </div>
-      </WithShowOnHoverWrapper>
+      </FocusDetail>
     </StepLabel>           
   ))
 
@@ -47,7 +47,7 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
             {/* <button onClick = {()=>setActiveSectionIndex(index)}> */}
             {/* <ConditionalWrapper 
               isWrapped = {enableHover} 
-              wrapper = {IsHoveringContextProvider}
+              wrapper = {FocusContextProvider}
             > */}
             {
               // withHover(()=> /* withHover(HOC): StepLabel 호버 가능하도록 함. */
@@ -69,19 +69,19 @@ function NavStepper({ steps, activeSectionIndex, handleClickStepLabel, enableHov
               // ))({})              
             }
 
-            <WithHoverWrapper id={index}>   
+            <Focusable id={index}>   
               <StepLabel
                 className='cursor-pointer h-2'
                 onClick = {()=>{
                   handleClickStepLabel(index)}}
               >
-                <WithShowOnHoverWrapper id={index}>
+                <FocusDetail id={index}>
                   <div className={`text-xs`}>
                     {label}
                   </div>
-                </WithShowOnHoverWrapper>
+                </FocusDetail>
               </StepLabel>       
-            </WithHoverWrapper>           
+            </Focusable>           
              {/* </ConditionalWrapper> */}
             {/* </button> */}
           </Step>

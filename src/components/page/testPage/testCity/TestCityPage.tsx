@@ -3,12 +3,15 @@ import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse'
 import { formatPng, formatSvg, formatWebp } from '../../../../common/utils/getImgSrc';
 import getImgSrc from '../../../../common/utils/getImgSrc';
 import { ArrowRight } from '@mui/icons-material';
-import FocusableImageCard from '../../../FocusableImageCard';
+import { Card, CardDetail, CardImage } from '../../../Card';
 import { usePageString, useString } from '../../../../texts';
 import TestContainer from '../../../TestContainer';
 import ToggleButton from '../../../ToggleButton';
 import { Icon } from '@mui/material';
 import Logo from '../../../Logo';
+import { common } from '@mui/material/colors';
+import { FocusDetail, FocusSummary } from '../../../../common/focus/FocusContext';
+import FocusContainer from '../../../FocusContainer';
 
 interface TestCityPageProps extends WithTestResponseProps{
     // budg: SubTestName
@@ -21,15 +24,13 @@ const priceText = (value: number) => {
 function TestCityPage({subTestName, testResponse, setTestResponse, strings}: TestCityPageProps){
     
     const pageStrings = usePageString('test').city;
-    const placeStrings = useString('places');
-    const nationStrings = useString('nations');
-    const linkTypeStrings = useString('linkTypes');
+    const commonStrings = useString('common');
 
     /* 응답 여부 */
     const [isAnswered, setIsAnswered] = useState(false);
     const [hoveredResponse, setHoveredResponse] = useState<number>(-1);
 
-    const imagePathBase = '/place';
+    const imagePathBase = '/city';
 
     return(       
         /* 페이지 */
@@ -93,32 +94,46 @@ function TestCityPage({subTestName, testResponse, setTestResponse, strings}: Tes
 
                 {/* 응답에 따른 예시 이미지카드 Carousel */}
                 <div className='flex flex-row items-center space-x-2'>
-                    {strings.examples?.map((placeId: keyof typeof placeStrings) => {
+                    {strings.examples?.map((cityId: keyof typeof commonStrings.city) => {
 
-                        const place = placeStrings[placeId]
+                        const city = commonStrings.city[cityId]
+                        const nation = commonStrings.nation[city.nation]
 
-                        return (place && 
-                            /* 응답에 따른 예시 도시 정보 카드 컴포넌트 */
-                            <FocusableImageCard
-                                image={getImgSrc(imagePathBase, `${String(placeId)}`, formatWebp)}
-                                alt={place.name}
-                                label={place.name}
+                        return (city && 
+
+                            /* 도시 정보 카드 컴포넌트 */
+                            <FocusContainer
+                                classNameWithSize='w-64 h-40'
+                                animation='focusCard'
                             >
-                                <div className='flex flex-col px-4 space-y-2 py-2'>
-                                    <div className='flex flex-row space-x-2 items-center'> {/* 상품 정보: 상품 이름, 위치한 도시, 국가 */}
-                                        <h5>{place.name}</h5>
-                                        <h6>{nationStrings[place.nation]}</h6>
-                                        <img className='h-4' src={getImgSrc('/nation', place.nation, formatSvg)} alt={`flag-${place.nation}`}/>
+                            <Card className='w-full h-fit flex flex-col'>
+                                <CardImage
+                                    image={getImgSrc(imagePathBase, `${String(cityId)}`, formatWebp)}
+                                    alt={city.name}
+                                >
+                                    <div className='flex flex-row absolute bottom-0 p-2 w-full justify-between'>
+                                        <div className='flex flex-row space-x-2 items-center'> {/* 상품 정보: 상품 이름, 위치한 도시, 국가, 국기 */}
+                                            <h5 className='font-bold text-white'>{city.name}</h5>
+                                            <h6 className=' text-white'> | </h6>
+                                            <h6 className='text-white'>{nation.name}</h6>
+                                            {nation.flag && <span className={`fi fi-${city.nation}`}></span>} {/* 국기 */}
+                                        </div>    
+                                        <FocusSummary><Icon className='text-white'>play_circle</Icon></FocusSummary>                                        
                                     </div>
-                                    <a href={place.link} target="_blank" rel="noopener noreferrer"> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) @TODO: 카드 자체 클릭으로 변경 가능*/}
-                                        <div className='flex flex-row items-center space-x-1'>
-                                            <Logo id = {place.linkType} className='h-5'/>
-                                            <h6>{linkTypeStrings[place.linkType].name}{pageStrings.linkText}</h6>
-                                            <ArrowRight fontSize='inherit'/>
-                                        </div>
-                                    </a>
-                                </div>
-                            </FocusableImageCard>
+                                </CardImage>
+                                <CardDetail>
+                                    <div className='flex flex-col px-4 space-y-2 py-4'>
+                                        <a href={city.link} target="_blank" rel="noopener noreferrer"> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) @TODO: 카드 자체 클릭으로 변경 가능*/}
+                                            <div className='flex flex-row items-center space-x-1'>
+                                                <Logo id={city.linkType} className='h-5' />
+                                                <h6>{commonStrings.linkType[city.linkType].name}{pageStrings.linkText}</h6>
+                                                <ArrowRight fontSize='inherit' />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </CardDetail>
+                                </Card>
+                            </FocusContainer>
                         )
                     })}
                 </div>

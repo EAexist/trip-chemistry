@@ -1,22 +1,30 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { TestResult, TripCharacter, UserId } from "../interface/interfaces";
+import { TestResult, TripCharacter, UserId } from "../types/interfaces";
 import { useServerAPI } from "../utils/useServerApi";
-import { loadStatus } from "../hocs/ApiLoader";
+import { useLoadStatus } from "../../common/hooks/useLoadStatus";
 import { useDispatch } from "react-redux";
-import { useCallback } from "react";
+import { ComponentType, useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
 import { TestResponse } from "./testResponseReducer";
+import { LoadStatus, LoadStatusProps } from "../types/loadStatus";
 
 interface UserListState { 
     userList: UserList; 
     chemistry: any;
-    loadStatus: loadStatus; 
+    // getResultCallerList: {[callerId: number]: LoadStatus};
+    // nextCallerId: number;
+    // loadingUserList: LoadingUserList
+    currentloadUser: UserId | undefined; 
+    LoadStatus: LoadStatus; 
 }; 
+
+const successToRestDelay = 3000;
 
 type UserList = {[userId: UserId]: UserData};
 
 interface UserData {
+    // LoadStatus: LoadStatus; 
     testResponse?: TestResponse;
     testResult?: TestResult;
 };
@@ -29,7 +37,10 @@ interface userListPayload{
 const initialState : UserListState = {
     userList:{},
     chemistry: undefined,
-    loadStatus:loadStatus.PENDING,
+    // getResultCallerList: [],
+    // nextCallerId: 0,
+    currentloadUser: undefined,
+    LoadStatus:LoadStatus.PENDING,
 };
 
 const asyncGetResultById = createAsyncThunk("user/id/result", 
@@ -62,13 +73,16 @@ const userListSlice = createSlice({
         //     if (action.payload.value) 
         //     state[action.payload.userId] = action.payload.value;
         // },
-        setStatus: (state, action: PayloadAction<loadStatus>) => {
-            state.loadStatus = action.payload;
+        setStatus: (state, action: PayloadAction<LoadStatus>) => {
+            state.LoadStatus = action.payload;
         },
-        add: (state, action: PayloadAction<UserId>) => {
-            if(! Object.keys(state.userList).includes(action.payload)){
-                state.userList = {...state.userList, [action.payload]:{}};
-            }
+        // add: (state, action: PayloadAction<UserId>) => {
+        //     if(! Object.keys(state.userList).includes(action.payload)){
+        //         state.userList = {...state.userList, [action.payload]:{}};
+        //     }
+        // },
+        setCurrentloadUser: (state, action: PayloadAction<UserId>) => {
+            state.currentloadUser = action.payload;
         },
         delete: (state, action: PayloadAction<UserId>) => {
             delete state.userList[action.payload];
@@ -77,24 +91,30 @@ const userListSlice = createSlice({
     extraReducers:(builder) => {
         builder.addCase(asyncGetResultById.fulfilled, (state, action: PayloadAction<{userId: UserId, testResult: TestResult}>) => {
             console.log(`asyncGetResultById.fulfilled: users=${Object.keys(state.userList)}`)
-            state.userList[action.payload.userId].testResult = {
-                tripTagList: action.payload.testResult.tripTagList || [], 
-                tripCharacter: action.payload.testResult.tripCharacter || {} as TripCharacter
-            } as TestResult;
+
+            /* Add to userlist */
+            if(! Object.keys(state.userList).includes(action.payload.userId)){
+                state.userList = {...state.userList, [action.payload.userId]:{
+                    testResult: {
+                        tripTagList: action.payload.testResult.tripTagList || [], 
+                        tripCharacter: action.payload.testResult.tripCharacter || {} as TripCharacter
+                    } as TestResult
+                }};
 
             console.log(`asyncGetResultById.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)} 
             \nstate.userList[${action.payload.userId}]=${JSON.stringify(state.userList[action.payload.userId])}`);
-
-            state.loadStatus = loadStatus.REST;
+            }     
+            state.LoadStatus = LoadStatus.SUCCESS;
         });
-        builder.addCase(asyncGetResultById.pending, (state) => {
+        builder.addCase(asyncGetResultById.pending, (state, action) => {
             console.log(`asyncGetResultById.pending`);
-            state.loadStatus = loadStatus.PENDING;
+            /* https://github.com/reduxjs/redux-toolkit/issues/776 */
+            state.LoadStatus = LoadStatus.PENDING;
         });
-        builder.addCase(asyncGetResultById.rejected, (state) => {
+        builder.addCase(asyncGetResultById.rejected, (state, action) => {
             console.log(`asyncGetResultById.rejected`);
-            state.loadStatus = loadStatus.FAIL;
+            state.LoadStatus = LoadStatus.FAIL;
         });
     },
 })
@@ -103,25 +123,60 @@ const useUserList = () => {
     return(useSelector((state:RootState)=>state.userList.userList));
 }
 
+
+const useFindUser = () => {
+    const userList = useSelector((state:RootState)=>state.userList.userList)
+
+    return useCallback((userId: UserId) => (
+        Object.keys(userList).includes(userId) 
+    )        
+    , [userList]);    
+}
+
 const useGetResultById = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
     return useCallback((userId: UserId) => {
-        dispatch(userListSlice.actions.add(userId));
+        console.log("useGetResultById");
+        
+        dispatch(userListSlice.actions.setCurrentloadUser(userId));
+        dispatch(userListSlice.actions.setStatus(LoadStatus.PENDING));
         dispatch(asyncGetResultById(userId));
     }
     , [dispatch]);
 }
-
-const useUserListLoadStatus = () => {
+interface useUserListLoadStatusProps{
+    userId?: UserId;
+    delay?: number;
+}
+const useUserListLoadStatus = ({ userId, delay }: useUserListLoadStatusProps) => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.userList.loadStatus);
+    const currentloadUser = useSelector((state:RootState)=>state.userList.currentloadUser);
+    const currentLoadStatus = useSelector((state:RootState)=>state.userList.LoadStatus);
+    const status = userId && (userId !== currentloadUser) ?
+        LoadStatus.REST
+        : currentLoadStatus;
+    const setStatus = useCallback((status: LoadStatus) =>
+        dispatch(userListSlice.actions.setStatus(status))
+    , [dispatch])
+    // const successToRestSecond = useLoadStatus({ status, setStatus, delay });
     return ([
         status,
-        useCallback((status: loadStatus) =>
-            dispatch(userListSlice.actions.setStatus(status))
-        , [dispatch])
+        setStatus,
+        // successToRestSecond
     ] as const);
 }
+
+const withUserListLoadStatus = <T extends LoadStatusProps>(WrappedComponent: ComponentType<T>) =>
+    (userName?: UserId) =>
+    (props: Omit<T, keyof LoadStatusProps>) => {        
+    const [status, setStatus] = useUserListLoadStatus({ userId: userName });
+    return(
+        <WrappedComponent {...{status:status, setStatus:setStatus}} {...props as T}/>
+    ); 
+}
+
+export default userListSlice.reducer;
+export { useUserList, useGetResultById, useUserListLoadStatus, withUserListLoadStatus, useFindUser };
 
 /* Deprecated */
 // function userListReducer(state=initialState, action: userListAction) {
@@ -141,6 +196,3 @@ const useUserListLoadStatus = () => {
 //             return state;
 //     }
 // }
-
-export default userListSlice.reducer;
-export { useUserList, useGetResultById, useUserListLoadStatus, }

@@ -1,21 +1,21 @@
 import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
-import { IsHoveringContextProvider, IsHoveringType, useIsHoveringContext, withHover,  withShowOnHover } from '../common/isHovering/IsHoveringContext';
+import { FocusContextProvider, FocusType, useFocusContext, withHover,  withShowOnHover } from '../common/focus/FocusContext';
 import { WithAnimationProps, WithAnimationWrapper } from '../common/hocs/withAnimation';
 import { TestName, useTestResponse } from '../common/reducer/testResponseReducer';
 
 interface selectedItemContextProps {
   selectedItemId: number,
   setSelectedItemId: (id: number)=>void, 
-  // isHoveringContainer: boolean,
-  // hoveringItemId: IsHoveringType, 
-  // setHoveringItemId: (isHovering: IsHoveringType) => void,
+  // focusContainer: boolean,
+  // hoveringItemId: FocusType, 
+  // setHoveringItemId: (focus: FocusType) => void,
 };
 
 const SelectedItemContext = createContext<selectedItemContextProps>({
   selectedItemId: 0, 
   setSelectedItemId: ()=>{}, 
-  // isHoveringContainer: false,
+  // focusContainer: false,
   // hoveringItemId: false,
   // setHoveringItemId: ()=>{},
 });
@@ -31,17 +31,17 @@ interface FocusableCarouselContainerProps{
 };
 function FocusableCarouselContainer({ selectedItemId, setSelectedItemId, direction = 'row', children }: PropsWithChildren<FocusableCarouselContainerProps>){
 
-  const [isHovering, setIsHovering] = useState<IsHoveringType>(false);
+  const [focus, setFocus] = useState<FocusType>(false);
 
   return(
     <SelectedItemContext.Provider value = {{
       selectedItemId: selectedItemId,
       setSelectedItemId: setSelectedItemId, 
-      // isHoveringContainer: isHoveringContainer,
+      // focusContainer: focusContainer,
       // hoveringItemId: false,
       // setHoveringItemId: ()=>{},
     }}>        
-    <IsHoveringContextProvider value={{isHovering: isHovering, setIsHovering: setIsHovering}}>
+    <FocusContextProvider value={{focus: focus, setFocus: setFocus}}>
       <div 
         className={`h-full flex flex-${direction} space-x-2
           max-md:flex-col max-md:space-x-0 max-md:space-y-2
@@ -49,7 +49,7 @@ function FocusableCarouselContainer({ selectedItemId, setSelectedItemId, directi
       >
           {children}
       </div>
-    </IsHoveringContextProvider>
+    </FocusContextProvider>
     </SelectedItemContext.Provider>
   )
 }
@@ -57,27 +57,27 @@ function FocusableCarouselContainer({ selectedItemId, setSelectedItemId, directi
 /* FocusableCarouselItem: 캐러샐의 각 아이템 컴포넌트의 wrapper */
 interface FocusableCarouselItemProps{
   id: number; /* Carousel 에서 아이템을 특정하는 id */
+  className?: string;
 };
-function FocusableCarouselItem({ id, children }: PropsWithChildren<FocusableCarouselItemProps>){
+function FocusableCarouselItem({ id, className, children }: PropsWithChildren<FocusableCarouselItemProps>){
     
   const { selectedItemId, setSelectedItemId } = useContext(SelectedItemContext); 
-  const { isHovering, setIsHovering } = useIsHoveringContext();   
+  const { focus, setFocus } = useFocusContext();   
   const isSelected = selectedItemId === id;
   const handleClick = () => {
     setSelectedItemId(id);
-    setIsHovering(false);
+    setFocus(false);
   }
 
   return(
     withHover(({onMouseEnter, onMouseLeave}) => ( /* 마우스 호버 Listener */
       <div
-        className={`
-        duration-300 hover:shrink-0 hover:opacity-100
-        basis-7/12
-        max-md:basis-6/12
-        ${isSelected && 'border-4 border-slate-500'} 
-        ${isSelected && (isHovering === false) ? 'shrink-0 opacity-100' : 'shrink-1 opacity-50'}        
-        `}
+        className={`basis-7/12
+          duration-300 hover:shrink-0 hover:opacity-100        
+          max-md:basis-6/12
+          ${isSelected && 'border-4 border-slate-500'} 
+          ${isSelected && (focus === false) ? 'shrink-0 opacity-100' : 'shrink-1 opacity-50'}        
+          ${className}`}
         onClick={handleClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
@@ -95,13 +95,13 @@ interface FocusableCarouselDetailProps{
 };
 function FocusableCarouselDetail({ id, withAnimationProps, children }: PropsWithChildren<FocusableCarouselDetailProps>){
   const { selectedItemId } = useContext(SelectedItemContext); 
-  const { isHovering } = useIsHoveringContext();   
+  const { focus } = useFocusContext();   
   const isSelected = selectedItemId === id;
 
   return(
     // <>
     //   {
-        isSelected && (isHovering === false) ?
+        isSelected && (focus === false) ?
         children
         : withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
             <WithAnimationWrapper {...withAnimationProps}>{children}</WithAnimationWrapper>
@@ -113,16 +113,16 @@ function FocusableCarouselDetail({ id, withAnimationProps, children }: PropsWith
 interface TestResponseDetailProps{
   id: number; /* Carousel 에서 아이템을 특정하는 id */
   testName: TestName;
-  compareFunc?: (id:IsHoveringType, contextId:IsHoveringType)=>boolean;
+  compareFunc?: (id:FocusType, contextId:FocusType)=>boolean;
   withAnimationProps?: WithAnimationProps; /* hover로 디테일이 렌더링 될 때 애니메이션을 실행하기 위한 WithAnimationWrapper 의 props */
 };
-function TestResponseDetailWrapper({ id, testName, withAnimationProps, compareFunc = (id:IsHoveringType, contextId:IsHoveringType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
-  // const { isHovering } = useIsHoveringContext();   
+function TestResponseDetailWrapper({ id, testName, withAnimationProps, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
+  // const { focus } = useFocusContext();   
   // const testResponse = useTestResponse(testName);
-  // const isActive = compareFunc(id, testResponse as IsHoveringType);
+  // const isActive = compareFunc(id, testResponse as FocusType);
 
   return(
-      // isActive && (isHovering === -1) ?
+      // isActive && (focus === -1) ?
       //   children
       //   : 
           withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
@@ -131,13 +131,13 @@ function TestResponseDetailWrapper({ id, testName, withAnimationProps, compareFu
   )
 }
 
-// const withTestResponseDetail({ id, testName, withAnimationProps, compareFunc = (id:IsHoveringType, contextId:IsHoveringType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
-//   const { isHovering } = useIsHoveringContext();   
+// const withTestResponseDetail({ id, testName, withAnimationProps, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), children }: PropsWithChildren<TestResponseDetailProps>){
+//   const { focus } = useFocusContext();   
 //   const testResponse = useTestResponse(testName);
-//   const isActive = compareFunc(id, testResponse as IsHoveringType);
+//   const isActive = compareFunc(id, testResponse as FocusType);
 
 //   return(
-//       isActive && (isHovering === -1) ?
+//       isActive && (focus === -1) ?
 //         children
 //         : withShowOnHover(() => ( /* 마우스를 올렸을 때 보이는 Element */
 //             children

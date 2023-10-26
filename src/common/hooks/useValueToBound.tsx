@@ -1,13 +1,15 @@
 import { useCallback, useState } from "react";
 
-type useValueToBoundProps = number[]
+type useValueToBoundProps = {
+    boundList: number[],
+    returnIndex?: boolean;
+}
 
-function useValueToBound(props: useValueToBoundProps) {
+function useValueToBound({ boundList, returnIndex = false }: useValueToBoundProps) {
 
-    const leveledStructure = props;
     const [index, setIndex] = useState<number | undefined>();
 
-    const newIndex = useCallback((value:number)=>{
+    const setIndexByValue = useCallback((value:number)=>{
         var offset = 0;
 
         if(index === undefined){
@@ -15,16 +17,16 @@ function useValueToBound(props: useValueToBoundProps) {
         }
 
         if(index !== undefined){
-            if(value < leveledStructure[index]){
+            if(value < boundList[index]){
                 while(((index+offset) >= 0 
-                    && value < leveledStructure[index+offset])
+                    && value < boundList[index+offset])
                 ){
                     offset--;
                 }
             }
             else{
-                while((index+offset+1 < leveledStructure.length) 
-                    && (value >= leveledStructure[index+offset+1])
+                while((index+offset+1 < boundList.length) 
+                    && (value >= boundList[index+offset+1])
                 ){
                     offset++;
                 }
@@ -33,13 +35,12 @@ function useValueToBound(props: useValueToBoundProps) {
                 setIndex((prev) => ((prev === undefined)? undefined : prev+offset));
             }
         }
-    }, [leveledStructure, index])
+        console.log(`value=${value}, index=${index}`);
+    }, [boundList, index])
 
     return([
-        index === undefined? undefined : leveledStructure[index],
-        useCallback((value:number)=>{
-            newIndex(value); 
-        }, [newIndex])
+        index === undefined? undefined : returnIndex? index : boundList[index],
+        setIndexByValue
     ] as const)
 };
 

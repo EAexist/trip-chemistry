@@ -1,14 +1,12 @@
-import { useState, createContext } from "react";
 import { Link } from 'react-router-dom';
 
 import Button from '../Button'
 
 import { usePageString } from "../../texts";
+import { useSetElement } from '../TopNav';
 
 interface HomePageProps{
-    // section : 
 };
-
 
 function HomePage({}:HomePageProps){
     const page = 'home'
@@ -21,6 +19,7 @@ function HomePage({}:HomePageProps){
     const handleClickStart = () => {
         
     }
+    useSetElement({});
 
     return(
         <div>

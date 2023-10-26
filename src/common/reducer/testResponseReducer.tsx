@@ -4,12 +4,12 @@ import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { useServerAPI } from "../utils/useServerApi";
-import { UserId } from "../interface/interfaces";
-import { loadStatus } from "../hocs/ApiLoader";
+import { UserId } from "../types/interfaces";
 import { HttpStatusCode } from "axios";
+import { LoadStatus } from "../types/loadStatus";
 
 interface TestResponseState extends TestResponse{
-    loadStatus: loadStatus; 
+    LoadStatus: LoadStatus; 
 };
 
 interface TestResponse{
@@ -65,7 +65,7 @@ const initialState : TestResponseState = {
         mesuem: undefined,
         themePark: undefined,
     },
-    loadStatus:loadStatus.PENDING,
+    LoadStatus:LoadStatus.PENDING,
 };
 
 interface asyncPutResponseByIdProps{
@@ -129,8 +129,8 @@ const testResponseSlice = createSlice({
                 }
             };
         },
-        setStatus: (state, action: PayloadAction<loadStatus>) => {
-            state.loadStatus = action.payload;
+        setStatus: (state, action: PayloadAction<LoadStatus>) => {
+            state.LoadStatus = action.payload;
         },
     },
     extraReducers:(builder) => {
@@ -138,15 +138,15 @@ const testResponseSlice = createSlice({
             
             console.log(`asyncPutResponseById.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
-            state.loadStatus = loadStatus.REST;
+            state.LoadStatus = LoadStatus.REST;
         });
         builder.addCase(asyncPutResponseById.pending, (state) => {
             console.log(`asyncPutResponseById.pending`);
-            state.loadStatus = loadStatus.PENDING;
+            state.LoadStatus = LoadStatus.PENDING;
         });
         builder.addCase(asyncPutResponseById.rejected, (state) => {
             console.log(`asyncPutResponseById.rejected`);
-            state.loadStatus = loadStatus.FAIL;
+            state.LoadStatus = LoadStatus.FAIL;
         });
     },
 });
@@ -164,17 +164,17 @@ const useSetTestResponse = () => {
 
 const usePutResponseById = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const {loadStatus, ...testResponse} = useSelector((state:RootState)=>state.testResponse)
+    const {LoadStatus, ...testResponse} = useSelector((state:RootState)=>state.testResponse)
     return useCallback((userId: UserId) => 
         dispatch(asyncPutResponseById({userId: userId, response: testResponse}))
     , [dispatch, testResponse]);
 }
 const useTestResponseStatus = () => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.userList.loadStatus);
+    const status = useSelector((state:RootState)=>state.userList.LoadStatus);
     return ([
         status,
-        useCallback((status: loadStatus) =>
+        useCallback((status: LoadStatus) =>
             dispatch(testResponseSlice.actions.setStatus(status))
         , [dispatch])
     ] as const);

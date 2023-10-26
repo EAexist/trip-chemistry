@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { TestResult, UserId } from "../interface/interfaces";
+import { TestResult, UserId } from "../types/interfaces";
 import { useServerAPI } from "../utils/useServerApi";
-import { loadStatus } from "../hocs/ApiLoader";
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
 import { useUserList } from "./userListReducer";
 import { TestResponse } from "./testResponseReducer";
+import { LoadStatus } from "../types/loadStatus";
 
 
 interface ChemistryState { 
@@ -16,9 +16,9 @@ interface ChemistryState {
         testResult: TestResult
     }};
     chemistry: any
-    loadStatus: loadStatus; 
+    LoadStatus: LoadStatus; 
 }; 
-interface Place{
+interface Place {
     id: string;
     name: string;
     body: string;
@@ -31,7 +31,7 @@ interface Place{
 // };
 const getUserIdString = (userIdList: UserId[]) => (userIdList.sort().join(','));
 
-const initialState: ChemistryState = {userData:{}, chemistry:{}, loadStatus:loadStatus.PENDING};
+const initialState: ChemistryState = {userData:{}, chemistry:{}, LoadStatus:LoadStatus.PENDING};
 
 const fetchChemistryByIdList = createAsyncThunk("user/chemistry/idList", 
     async (userIdList: UserId[], thunkAPI) => {
@@ -68,8 +68,8 @@ const chemistrySlice = createSlice({
                 state.userData[userId].testResult = testResult;    
             }) 
         },
-        setStatus: (state, action: PayloadAction<loadStatus>) => {
-            state.loadStatus = action.payload;
+        setStatus: (state, action: PayloadAction<LoadStatus>) => {
+            state.LoadStatus = action.payload;
         },
     },
     extraReducers:(builder) => {
@@ -88,15 +88,15 @@ const chemistrySlice = createSlice({
             console.log(`fetchChemistryByIdList.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
 
-            state.loadStatus = loadStatus.REST;
+            state.LoadStatus = LoadStatus.REST;
         });
         builder.addCase(fetchChemistryByIdList.pending, (state) => {
             console.log(`fetchChemistryByIdList.pending`);
-            state.loadStatus = loadStatus.PENDING;
+            state.LoadStatus = LoadStatus.PENDING;
         });
         builder.addCase(fetchChemistryByIdList.rejected, (state) => {
             console.log(`fetchChemistryByIdList.rejected`);
-            state.loadStatus = loadStatus.FAIL;
+            state.LoadStatus = LoadStatus.FAIL;
         });
     },
 })
@@ -125,10 +125,10 @@ const useFetchChemistryByIdList = () => {
 
 const useChemistryLoadStatus = () => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.chemistry.loadStatus);
+    const status = useSelector((state:RootState)=>state.chemistry.LoadStatus);
     return ([
         status,
-        useCallback((status: loadStatus) =>
+        useCallback((status: LoadStatus) =>
             dispatch(chemistrySlice.actions.setStatus(status))
         , [dispatch])
     ] as const);

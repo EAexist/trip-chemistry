@@ -1,22 +1,18 @@
-import { useState, useEffect, createContext } from "react";
+import { useState } from "react";
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
-
-// import { Card, CardContent, CardMedia, Chip } from '@mui/material'
-import { ButtonBase, Skeleton, Tooltip } from '@mui/material';
 
 import { KeyboardArrowLeft, KeyboardArrowRight, AddCircleOutline } from "@mui/icons-material";
 
-import Card, { ClickableCard, CardProps } from "../Card";
 import { usePageString } from "../../texts";
 import Button from "../Button";
 import NavStepper from "../NavStepper";
-import User, { userId } from "../../common/interface/User";
+import User, { userId } from "../../common/types/User";
 import useServerApi from "../../common/utils/useServerApi";
-import withLoadStatus, { Loader, withLoadStatusProps } from "../../common/hocs/withLoadStatus";
-import { loadStatus } from "../../common/hocs/ApiLoader";
+import withLoadStatus, { Loader } from "../../legacy/withLoadStatus";
 import { useUserListLoadStatus } from "../../common/reducer/userListReducer";
+import { LoadStatus } from "../../common/types/loadStatus";
 
-interface ChemistryPageProps extends withLoadStatusProps{
+interface ChemistryPageProps {
 };
 
 interface place{
@@ -28,7 +24,7 @@ interface place{
 const userName = "꿀벌1234";
 
 /* 케미 테스트 결과를 확인한느 페이지 */
-function ChemistryPage({ status, setStatus }:ChemistryPageProps){
+function ChemistryPage({ }:ChemistryPageProps){
 
     const strings = usePageString('result');
     const getFriendApiPath = 'user';
@@ -42,13 +38,13 @@ function ChemistryPage({ status, setStatus }:ChemistryPageProps){
 
     /* 사용자 모두의 응답, 사용자 모두의 테스트 결과, 사용자 조합의 케미스트리 결과 Fetch. 최초 렌더링 시 1번만 호출. */
     // useEffect(() => {
-    //     setStatus && setStatus(loadStatus.PENDING);
+    //     setStatus && setStatus(LoadStatus.PENDING);
     //     fetchChemistryByIdList(userIdList);
     //     // getResult(); ! Deprecated: 위 Redux리덕스 연동 방식으로 변경 !
     // }, [setStatus, fetchResultById])
 
     // useEffect(()=> {
-    //     setStatus?.(loadStatus.PENDING);
+    //     setStatus?.(LoadStatus.PENDING);
     //     setSearchParams({'users' : userIdList.join(',')});
     // }, [userIdList, setSearchParams]);
 
@@ -89,7 +85,6 @@ function ChemistryPage({ status, setStatus }:ChemistryPageProps){
     }
     
     return(
-        status === loadStatus.REST ?
         <div className='page'>
             {/* TopNaV 네비게이션 */}
             <div className = 'flex flex-row flex-auto justify-between'>
@@ -132,16 +127,15 @@ function ChemistryPage({ status, setStatus }:ChemistryPageProps){
                     <h2>{strings.budgetTitle}</h2>           
                 </div>                
             </div>
-        </div> :
-        <></>
+        </div> 
     );
 }
 
 function ChemistryPageWithLoadStatus(props: ChemistryPageProps){
-    const [status, setStatus] = useUserListLoadStatus();
+    const [status, setStatus] = useUserListLoadStatus({});
 
     return(
-        withLoadStatus(ChemistryPage)(Loader, status===loadStatus.REST, status, setStatus)(props)        
+        withLoadStatus(ChemistryPage)(Loader, status===LoadStatus.REST, status, setStatus)(props)        
     )
 }
 

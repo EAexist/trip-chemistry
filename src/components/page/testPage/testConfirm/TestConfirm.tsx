@@ -7,15 +7,12 @@ import { RootState } from '../../../../common/store';
 /* Original Components */
 import Button from '../../../Button';
 import useServerApi from '../../../../common/utils/useServerApi';
-import { loadStatus } from '../../../../common/hocs/ApiLoader';
-import { withLoadStatusProps } from '../../../../common/hocs/withLoadStatus';
-import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
 import { TestResponse, usePutResponseById, useTestResponseStatus } from '../../../../common/reducer/testResponseReducer';
-import { UserId } from '../../../../common/interface/interfaces';
+import { UserId } from '../../../../common/types/interfaces';
 import TestContainer from '../../../TestContainer';
 import { usePageString } from '../../../../texts';
 
-interface TestConfirmProps extends withLoadStatusProps{
+interface TestConfirmProps {
     
 };
 
@@ -23,7 +20,7 @@ interface TestConfirmProps extends withLoadStatusProps{
 const userName : UserId  = "디클1234";
 const id : UserId = "디클1234";
 
-function TestConfirm({setStatus = ()=>{}, }: TestConfirmProps){
+function TestConfirm({}: TestConfirmProps){
 
     const strings = usePageString('test').confirm;
     const [status,] = useTestResponseStatus();
@@ -40,7 +37,7 @@ function TestConfirm({setStatus = ()=>{}, }: TestConfirmProps){
      */
     const handlePutResponse = (data: TestResponse) => {
         console.log('handlePutResponse')
-        setStatus(loadStatus.SUCCESS);
+        // setStatus(LoadStatus.SUCCESS);
         let handlePutResponseTimer = setTimeout(()=>{
             console.log('handlePutResponse handlePutResponseTimer')
             navigate('/result'); 
@@ -50,7 +47,7 @@ function TestConfirm({setStatus = ()=>{}, }: TestConfirmProps){
     /* Put 성공 실패시
      * apiResponseHandlerDelay 동안 실패 안내 표시. */
     const handlePutNoResponse = () => {
-        setStatus(loadStatus.FAIL);        
+        // setStatus(LoadStatus.FAIL);        
     }
     
     /* API: 테스트 응답 제출
@@ -78,12 +75,12 @@ function TestConfirm({setStatus = ()=>{}, }: TestConfirmProps){
 
     return(
         <div 
-        className='w-full h-full px-16'
-      > 
-        <TestContainer title = {strings.title}>    
-            <Button onClick={handleClickConfirm}>결과 확인하러 가기</Button>
-        </TestContainer>
-    </div>
+            className='w-full h-full px-16'
+        > 
+            <TestContainer title = {strings.title}>    
+                <Button onClick={handleClickConfirm}>결과 확인하러 가기</Button>
+            </TestContainer>
+        </div>
     );
 }
 export default TestConfirm;
