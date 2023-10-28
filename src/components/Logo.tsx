@@ -1,5 +1,5 @@
 import { Icon } from "@mui/material";
-import getImgSrc, { formatPng, formatWebp } from "../common/utils/getImgSrc";
+import getImgSrc, { FORMATPNG, FORMATWEBP } from "../common/utils/getImgSrc";
 
 
 const LOGOS : {
@@ -46,10 +46,10 @@ function Logo({ id, className='h-3' }: LogoProps) {
             logo.iconName && <Icon className={className}>{logo.iconName}</Icon>
             : (
                 logo.type === "png" ?
-                <img className={className} src={getImgSrc('/logos', `logo-${id}`, formatPng)} alt={logo.name}></img>
+                <img className={className} src={getImgSrc('/logos', `logo-${id}`, FORMATPNG)} alt={logo.name}></img>
                 : 
                 logo.type === "webp" ?
-                <img className={className} src={getImgSrc('/logos', `logo-${id}`, formatWebp)} alt={logo.name}></img>
+                <img className={className} src={getImgSrc('/logos', `logo-${id}`, FORMATWEBP)} alt={logo.name}></img>
                 : <></>
             ) 
     )

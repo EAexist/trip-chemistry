@@ -3,7 +3,7 @@ import IndexNavigationButtonWrapper from "../components/IndexNavigationButtonWra
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useContext } from "react";
 import { ActiveSectionContext } from "../components/page/TestPage";
-import NavStepper from "../components/NavStepper";
+import IconStepper from "../components/IconStepper";
 import { usePageString } from "../texts";
 
 interface TopNavTestProps{
@@ -19,12 +19,13 @@ function TopNavTest({}:TopNavTestProps){
         return(
             {
                 label: label, 
+                icon: "",
                 completed: false
             }
         ); 
     });
 
-    const { activeSectionIndex, setActiveSectionIndex } = useContext(ActiveSectionContext); 
+    const { activeStep, setActiveSectionIndex } = useContext(ActiveSectionContext); 
 
     const handleClickStepLabel = (index: number) => {
         setActiveSectionIndex(index); 
@@ -34,11 +35,11 @@ function TopNavTest({}:TopNavTestProps){
         <div className='flex flex-row flex-auto justify-between'>
             <IndexNavigationButtonWrapper offset={-1}><Button><KeyboardArrowLeft />이전 질문</Button></IndexNavigationButtonWrapper>
             <div className='basis-6/12'>
-                <NavStepper
+                <IconStepper
                     steps={steps}
-                    activeSectionIndex={activeSectionIndex}
-                    handleClickStepLabel={handleClickStepLabel}
-                    enableHover={true} />
+                    activeStep={activeStep}
+                    handleClickStepButton={handleClickStepLabel}
+                />
             </div>
             <IndexNavigationButtonWrapper offset={1}><Button>다음 질문<KeyboardArrowRight/></Button></IndexNavigationButtonWrapper>
         </div>

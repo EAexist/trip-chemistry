@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './components/page/HomePage';
 import TestPage from './components/page/TestPage';
 import ResultPage from './components/page/resultPage/ResultPage';
-import ChemistryPage from './components/page/ChemistryPage';
+import ChemistryPage from './components/page/chemistryPage/ChemistryPage';
 
 interface pages {
     [key: string] : {
@@ -54,10 +54,6 @@ const BASEPAGES = {
             Element: ChemistryPage,
             label: "여행 케미"
         },
-    // {
-    //     path: 'chemistry/*',
-    //     Element: ChemistryPage,
-    // },   
 };
 
 function BasePageRoutes () {

@@ -2,7 +2,7 @@
 // import {ExclusiveAccordionsContextProvider} from '../ExclusiveAccordionsContext';
 // import { useState } from 'react';
 // import { SubTestName, TestName, WithTestResponseProps } from '../../interface/interfaces';
-// import Slider from '../Slider';
+// import { MaterialSlider } from '../Slider';
 // import { useSetBudgetResponse, useBudgetResponse } from '../../reducer/testResponseReducer';
 // import { useSelector } from 'react-redux';
 // import { url } from 'inspector';
@@ -64,7 +64,7 @@
 //         <div className='w-screen h-screen'>
 //             <div className='flex flex-col items-center'>
 //             <h2>{valueText(budgetValue)}</h2>         
-//                 <Slider
+//                 <MaterialSlider
 //                     aria-label='budget'
 //                     getAriaValueText={valueText}
 //                     valueLabelDisplay='on'                

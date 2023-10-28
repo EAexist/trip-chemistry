@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
-import Slider from '../../../Slider';
+import { MaterialSlider } from '../../../Slider';
 import useValueToBound from '../../../../common/hooks/useValueToBound';
 import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
-import getImgSrc, { formatSvg, formatWebp } from '../../../../common/utils/getImgSrc';
+import getImgSrc, { FORMATSVG, FORMATWEBP } from '../../../../common/utils/getImgSrc';
 import { WithAnimationWrapper } from '../../../../common/hocs/withAnimation';
 import { Divider, Icon } from '@mui/material';
 import { ArrowRight } from '@mui/icons-material';
 import { Card, CardDetail, CardImage } from '../../../Card';
 import { usePageString, useString } from '../../../../texts';
-import TestContainer from '../../../TestContainer';
+import TestContainer from '../../../typography/TestContainer';
 import Logo from '../../../Logo';
 import FocusContainer from '../../../FocusContainer';
 import { FocusSummary } from '../../../../common/focus/FocusContext';
@@ -16,30 +16,20 @@ import { FocusSummary } from '../../../../common/focus/FocusContext';
 interface TestBudgetPageProps extends WithTestResponseProps{
 };
 
-const sliderProps = {
-    min: 5000,
-    max: 70000,
-    step: 5000,
-};
-
-const budgetLowerBounds : number[] = [
-    0,
-    15000,
-    25000,
-    50000,
-]
-
-const priceText = (value: number) => {
-    return `${value < 10000 ? 
-        value.toString() 
-        :`${value/10000}만`}원 ${(value === sliderProps.max)?'이상' : ''}`
-}
-
 function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPageProps){
     
     const pageStrings = usePageString('test').budget;
     const commonStrings = useString('common');
     const linkTypeStrings = useString('linkType');
+
+    const sliderProps = strings.sliderProps;
+    const budgetLowerBounds : number[] = strings.budgetLowerBounds;
+        
+    const priceText = (value: number) => {
+        return `${value < 10000 ? 
+            value.toString() 
+            :`${value/10000}만`}원 ${(value === sliderProps.max)?'이상' : ''}`
+    }
 
     /* 응답한 값 (예산 금액)을 인덱스(레벨)로 변환해 인덱스에 대응하는 컨텐츠를 보여줌. */
     const [bugetBound, setBudgetIndex] = useValueToBound({ boundList: budgetLowerBounds });
@@ -52,7 +42,7 @@ function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPage
     const imagePathBase = '/test/budget/food';
     
     /* Deprecated: 레스토랑 사진 디스플레이 를 위한 스타일 오브젝트 (*css background-image 사용)*/
-    // const bugetBoundImageStyle = {backgroundImage: `url("${getImgSrc('/test/budget/food', `${bugetBound}-1`, formatWebp)}")`};
+    // const bugetBoundImageStyle = {backgroundImage: `url("${getImgSrc('/test/budget/food', `${bugetBound}-1`, FORMATWEBP)}")`};
 
     /* 예산 슬라이더 핸들러 */
     const handleChangeSlider = useCallback((event: Event, newValue: number | number[]) => {  
@@ -82,7 +72,7 @@ function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPage
                         }
                     </div>
                     {/* 슬라이더 */}
-                    <Slider
+                    <MaterialSlider
                         size="small"
                         aria-label="Small"
                         valueLabelDisplay="auto"
@@ -112,7 +102,7 @@ function TestBudgetPage({testResponse, setTestResponse, strings}: TestBudgetPage
                         >
                         <Card className='w-full h-fit flex flex-col'>
                             <CardImage
-                                image={getImgSrc(imagePathBase, `${item.restaurant}`, formatWebp)}
+                                image={getImgSrc(imagePathBase, `${item.restaurant}`, FORMATWEBP)}
                                 alt={item.name}
                             >                             
                                 <div className='flex flex-row absolute bottom-0 p-2 w-full justify-between'>                                    

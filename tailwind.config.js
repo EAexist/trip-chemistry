@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       width:{
         // '11/12screen': '91.666667vw',
+        '160': '40rem',
+        '192': '48rem',
       },
       animation: {
         'expand': 'spin 3s linear infinite',

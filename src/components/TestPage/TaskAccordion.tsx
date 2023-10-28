@@ -38,7 +38,7 @@ interface sliderProps {
     max: number; 
 }
 
-{/* <Slider
+{/* <MaterialSlider
     aria-label='budget'
     defaultValue={sliderProps.min}
     getAriaValueText={valueText}

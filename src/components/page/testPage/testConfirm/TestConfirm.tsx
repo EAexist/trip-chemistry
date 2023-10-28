@@ -9,7 +9,7 @@ import Button from '../../../Button';
 import useServerApi from '../../../../common/utils/useServerApi';
 import { TestResponse, usePutResponseById, useTestResponseStatus } from '../../../../common/reducer/testResponseReducer';
 import { UserId } from '../../../../common/types/interfaces';
-import TestContainer from '../../../TestContainer';
+import TestContainer from '../../../typography/TestContainer';
 import { usePageString } from '../../../../texts';
 
 interface TestConfirmProps {

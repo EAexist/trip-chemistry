@@ -82,7 +82,7 @@ import TestBudgetAverage from "./TestBudgetAverage";
 //                 responseSummary = {valueText(responseValue)}             
 //             >
 //                 {children}
-//                 <Slider
+//                 <MaterialSlider
 //                     aria-label='budget'
 //                     defaultValue={responseValue ? responseValue : sliderProps.min}
 //                     getAriaValueText={valueText}

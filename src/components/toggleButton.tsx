@@ -2,9 +2,11 @@ import { PropsWithChildren, useState } from "react";
 import Button, { ButtonProps } from "./Button";
 import { ShowContextProvider } from "../legacy/ShowContext";
 
+type ButtonVariant = 'default' | 'round' | 'round-filled' | 'icon' | 'material';
+
 interface ToggleButtonProps extends ButtonProps{
     isActive: boolean;
-    variant?: 'default' | 'round' | 'round-filled' | 'icon' | 'material';
+    variant?: ButtonVariant;
 };
 
 function ToggleButton({isActive, variant='default', children, disabled=false, className, ...props}:PropsWithChildren<ToggleButtonProps>){

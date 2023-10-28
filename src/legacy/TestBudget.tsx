@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import Slider from '../components/Slider';
+import { MaterialSlider } from '../components/Slider';
 import useValueToBound from '../common/hooks/useValueToBound';
 import { WithTestResponseProps } from '../common/hocs/withTestResponse';
-import useGetImgSrc, { formatSvg, formatWebp } from '../common/utils/getImgSrc';
+import useGetImgSrc, { FORMATSVG, FORMATWEBP } from '../common/utils/getImgSrc';
 import getImgSrc from '../common/utils/getImgSrc';
 import Trail from '../components/spring/Trail';
 import Card from '../components/Card';
 import { WithAnimationWrapper } from '../common/hocs/withAnimation';
 import { CardActions, CardContent, CardMedia, Divider } from '@mui/material';
 import { ArrowRight } from '@mui/icons-material';
-import TestContainer from '../components/TestContainer';
+import TestContainer from '../components/typography/TestContainer';
 
 interface TestBudgetProps extends WithTestResponseProps{
 };
@@ -41,7 +41,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
     const [isAnswered, setIsAnswered] = useState(false);
     
     /* 레스토랑 사진 디스플레이 를 위한 스타일 오브젝트 (*css background-image 사용)*/
-    const bugetBoundImageStyle = {backgroundImage: `url("${getImgSrc('/test/budget/food', `${bugetBound}-1`, formatWebp)}")`};
+    const bugetBoundImageStyle = {backgroundImage: `url("${getImgSrc('/test/budget/food', `${bugetBound}-1`, FORMATWEBP)}")`};
 
     /* 예산 슬라이더 핸들러 */
     const handleChangeSlider = (event: Event, newValue: number | number[]) => {  
@@ -58,7 +58,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
                     <div className='h-24 flex items-center'> {/* 응답 값 디스플레이: 예산 e.g. 4만원 */}
                         {testResponse ? <h2>{priceText(testResponse)}</h2> : <h4>{strings.defaultPriceText}</h4>}
                     </div>
-                    <Slider /* 응답 UI: 슬라이더 */
+                    <MaterialSlider /* 응답 UI: 슬라이더 */
                         size="small"
                         aria-label="Small"
                         value={testResponse}
@@ -78,7 +78,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
                                     max-md:w-52 max-md:h-72'>
                                     <CardMedia /* 메뉴 이미지 */
                                         component='img'
-                                        image={getImgSrc('/test/budget/food', `${bugetBound}-menu`, formatWebp)}
+                                        image={getImgSrc('/test/budget/food', `${bugetBound}-menu`, FORMATWEBP)}
                                         title={strings.examples[bugetBound].name}
                                     />
                                     <CardContent className='flex flex-col h-fit m-0 p-0'>
@@ -90,7 +90,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
                                             <p>{strings.examples[bugetBound].name}</p>
                                             <Divider orientation="vertical" />
                                             <p>{strings.examples[bugetBound].city}</p>
-                                            <img className='h-4' src={getImgSrc('/nation', strings.examples[bugetBound].nation, formatSvg)} alt={`flag-${strings.examples[bugetBound].nation}`}></img>
+                                            <img className='h-4' src={getImgSrc('/nation', strings.examples[bugetBound].nation, FORMATSVG)} alt={`flag-${strings.examples[bugetBound].nation}`}></img>
 
                                         </div>
                                     </CardContent>

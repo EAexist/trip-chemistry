@@ -21,12 +21,11 @@ function AddFriend({}: AddFriendProps){
     const page = 'result'
     const strings = Object(usePageString(page).addFriend);
 
-    const [idToSearch, setIdToSearch] = useState(''); /* AutoComplete에 사용자가 입력한 값 */
+    const [ idToSearch, setIdToSearch ] = useState(''); /* AutoComplete에 사용자가 입력한 값 */
 
-    const [ status, setStatus, ] = useUserListLoadStatus({delay: 3000});
+    const [ status, setStatus ] = useUserListLoadStatus({});
     const findUser = useFindUser();
     const successToRestSecond = useLoadStatus({ status, setStatus, delay: 3000});
-    // const [ successToRestSecond ] = useLoadStatus({ status: status, setStatus: setStatus, delay: 3000 });
     const fetchResultById = useGetResultById();
     
     const [ showRedundancyWarning, setShowRedundancyWarning ] = useState<boolean>(false);
@@ -130,7 +129,7 @@ function AddFriendDialog({ ...dialogProps }: AddFriendProps){
     const getFriendApiPath = "/user";
     const page = 'result'
     const strings = Object(usePageString(page).addFriendDialog);
-    const [userListLoadStatus, setUserListLoadStatus] = useUserListLoadStatus({delay: 3000});
+    const [ userListLoadStatus, setUserListLoadStatus ] = useUserListLoadStatus({});
     // const [userListLoadStatus, setUserListLoadStatus] = useState<LoadStatus>(LoadStatus.REST);
     // const [userListLoadStatus, setUserListLoadStatus] = useState<LoadStatus>(LoadStatus.REST);
     const fetchResultById = useGetResultById();

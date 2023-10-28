@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { useServerAPI } from "../utils/useServerApi";
@@ -9,12 +9,12 @@ import { HttpStatusCode } from "axios";
 import { LoadStatus } from "../types/loadStatus";
 
 interface TestResponseState extends TestResponse{
-    LoadStatus: LoadStatus; 
+    loadStatus: LoadStatus; 
 };
 
 interface TestResponse{
-    leadership: number|undefined;       
-    schedule: number|undefined;   
+    leadership: number | undefined;       
+    schedule: number | undefined;   
     budget: {
         food: number | undefined;
     }
@@ -38,34 +38,37 @@ type SubTestName = keyof TestResponse['budget'] | keyof TestResponse['city']
 
 type TestName = keyof TestResponse;
 
-interface TestResponsePayload{
+interface TestIndex{
     testName: TestName;
     subTestName?: SubTestName;
+}
+
+interface TestResponsePayload extends TestIndex{
     value: TestResponse[TestName];
 };
 
 const initialState : TestResponseState = {
-    leadership : undefined,
-    schedule : undefined,
+    leadership : 2,
+    schedule : 2,
     budget : {
-        food: undefined, /* 식사 평균 */
-        // foodSpecial: undefined, /* 특별한 식사 */
-        // accomodate: undefined, /* 숙소 평균 */
-        // accomodateSpecial: undefined, /* 특별한 숙소 */
+        food: 2, /* 식사 평균 */
+        // foodSpecial: 2, /* 특별한 식사 */
+        // accomodate: 2, /* 숙소 평균 */
+        // accomodateSpecial: 2, /* 특별한 숙소 */
     },
     city: {
-        metropolis: undefined,
-        history: undefined,
-        nature: undefined,
+        metropolis: 2,
+        history: 2,
+        nature: 2,
     },
     activity:{
-        food: undefined,
-        walk: undefined,
-        shopping: undefined,
-        mesuem: undefined,
-        themePark: undefined,
+        food: 2,
+        walk: 2,
+        shopping: 2,
+        mesuem: 2,
+        themePark: 2,
     },
-    LoadStatus:LoadStatus.PENDING,
+    loadStatus: LoadStatus.PENDING,
 };
 
 interface asyncPutResponseByIdProps{
@@ -76,17 +79,6 @@ const asyncPutResponseById = createAsyncThunk("user/id/response",
     async ({userId, response}: asyncPutResponseByIdProps, thunkAPI) => {
         try{
             
-            // const data = await useServerAPI({
-            //     path:`user/${userId}/response`,
-            //     fetchProps:{
-            //         method: "PUT", 
-            //         headers: {
-            //             "Content-Type": "application/json"
-            //         },
-            //         body: JSON.stringify(response)
-            //     }
-            // })
-
             const path = `user/${userId}/response`;
             const fetchProps = {
                 method: "PUT", 
@@ -130,7 +122,7 @@ const testResponseSlice = createSlice({
             };
         },
         setStatus: (state, action: PayloadAction<LoadStatus>) => {
-            state.LoadStatus = action.payload;
+            state.loadStatus = action.payload;
         },
     },
     extraReducers:(builder) => {
@@ -138,15 +130,15 @@ const testResponseSlice = createSlice({
             
             console.log(`asyncPutResponseById.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
-            state.LoadStatus = LoadStatus.REST;
+            state.loadStatus = LoadStatus.REST;
         });
         builder.addCase(asyncPutResponseById.pending, (state) => {
             console.log(`asyncPutResponseById.pending`);
-            state.LoadStatus = LoadStatus.PENDING;
+            state.loadStatus = LoadStatus.PENDING;
         });
         builder.addCase(asyncPutResponseById.rejected, (state) => {
             console.log(`asyncPutResponseById.rejected`);
-            state.LoadStatus = LoadStatus.FAIL;
+            state.loadStatus = LoadStatus.FAIL;
         });
     },
 });
@@ -164,14 +156,15 @@ const useSetTestResponse = () => {
 
 const usePutResponseById = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const {LoadStatus, ...testResponse} = useSelector((state:RootState)=>state.testResponse)
+    const { loadStatus, ...testResponse } = useSelector((state:RootState)=>state.testResponse)
     return useCallback((userId: UserId) => 
         dispatch(asyncPutResponseById({userId: userId, response: testResponse}))
     , [dispatch, testResponse]);
 }
+
 const useTestResponseStatus = () => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.userList.LoadStatus);
+    const status = useSelector((state:RootState)=>state.testResponse.loadStatus);
     return ([
         status,
         useCallback((status: LoadStatus) =>
@@ -239,4 +232,4 @@ const useTestResponseStatus = () => {
 
 export default testResponseSlice.reducer;
 export { useTestResponse, useSetTestResponse, usePutResponseById, useTestResponseStatus }
-export type { TestResponsePayload, TestResponse, TestName, SubTestName }
+export type { TestResponsePayload, TestResponse, TestName, SubTestName, TestIndex }

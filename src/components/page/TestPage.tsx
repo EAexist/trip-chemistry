@@ -33,8 +33,8 @@ interface TestPageProps {
 };
 
 interface ActiveSectionContextProps{
-    activeSectionIndex: number;
-    setActiveSectionIndex: (activeSectionIndex: number) => void;
+    activeStep: number;
+    setActiveSectionIndex: (activeStep: number) => void;
     incrementActiveSectionIndex?: (offset:number) => void;
     maxActiveSectionIndex?: number;
 };
@@ -109,7 +109,7 @@ function TestPage({}:TestPageProps){
 
     /* 네비게이션 */    
     
-    const [ activeSectionIndex, setActiveSectionIndex ] = useState(0);
+    const [ activeStep, setActiveSectionIndex ] = useState(0);
     const [ hoveringSectionIndex, setHoveringSectionIndex ] = useState(0);
     const [ swiper, setSwiper ] = useState<SwiperType>();
 
@@ -119,8 +119,8 @@ function TestPage({}:TestPageProps){
     }, [ setActiveSectionIndex ]);
 
     useEffect(() => {
-        swiper?.slideTo(activeSectionIndex, slideTime);
-    }, [ activeSectionIndex, swiper ]);
+        swiper?.slideTo(activeStep, slideTime);
+    }, [ activeStep, swiper ]);
 
     useSetElement({
         element : 
@@ -133,7 +133,7 @@ function TestPage({}:TestPageProps){
                     return (
                         <>
                         <StepItem
-                            isActive ={index===activeSectionIndex}
+                            isActive ={index===activeStep}
                             index={index}
                             icon={testStrings.icon}
                             label={testStrings.label}
@@ -145,7 +145,7 @@ function TestPage({}:TestPageProps){
                 })}
                 </FocusContextProvider>
             </div>,
-        dep: [ activeSectionIndex, handleClickStepButton, strings ]        
+        dep: [ activeStep, handleClickStepButton, strings ]        
     });
 
     useEffect(()=>{
@@ -200,7 +200,7 @@ function TestPage({}:TestPageProps){
             >
                 {Object.entries(sectionElements).map(([key, {testName, subTestName, Element}])=>{
                     const TestComponent = testName ?
-                        withTestResponse(Element)(testName as TestName, subTestName ? (subTestName as SubTestName): undefined)
+                        withTestResponse(Element)({testName, subTestName})
                         : Element;
                     return(                        
                     <SwiperSlide data-hash={`${testName ? testName : key} ${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>

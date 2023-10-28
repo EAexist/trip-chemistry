@@ -8,9 +8,9 @@ const getImgSrc = (path: string, filename: string, format: string) => {
 
 
 const basePath = '/static/images';
-const formatWebp = 'webp';
-const formatSvg ='svg'
-const formatPng ='png'
+const FORMATWEBP = 'webp';
+const FORMATSVG ='svg'
+const FORMATPNG ='png'
 
 export default getImgSrc;
-export { basePath, formatSvg, formatWebp, formatPng };
+export { basePath, FORMATSVG, FORMATWEBP, FORMATPNG };

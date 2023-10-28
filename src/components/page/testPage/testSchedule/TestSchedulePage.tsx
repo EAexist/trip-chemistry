@@ -1,7 +1,7 @@
 import {useState, useRef, RefObject, useCallback, useEffect, } from 'react';
 import { FocusContextProvider, FocusType, Focusable, withShowOnResponse, useShowOnResponse, withActiveOnResponse } from '../../../../common/focus/FocusContext';
 
-import TestContainer from '../../../TestContainer';
+import TestContainer from '../../../typography/TestContainer';
 import { Coords } from '../../../googleMap/common/types';
 import withTestResponse, { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
 import ToggleButton from '../../../ToggleButton';

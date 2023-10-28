@@ -2,8 +2,8 @@ import { FocusableCarouselContainer, FocusableCarouselDetail, FocusableCarouselI
 import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
 import { Avatar, useMediaQuery } from '@mui/material';
 import Card from '../../../Card';
-import TestContainer from '../../../TestContainer';
-import getImgSrc, { formatPng } from '../../../../common/utils/getImgSrc';
+import TestContainer from '../../../typography/TestContainer';
+import getImgSrc, { FORMATPNG } from '../../../../common/utils/getImgSrc';
 
 function TestLeadershipPage({testName, testResponse, setTestResponse, strings}: WithTestResponseProps){
   
@@ -28,7 +28,7 @@ function TestLeadershipPage({testName, testResponse, setTestResponse, strings}: 
                   h-full relative
                   max-md:w-full' 
                 >
-                  <img className='absolute object-cover w-full h-full' src={getImgSrc('/test/leadership', answer.imageTitle, formatPng)} alt={answer.imageTitle} loading='lazy'></img>
+                  <img className='absolute object-cover w-full h-full' src={getImgSrc('/test/leadership', answer.imageTitle, FORMATPNG)} alt={answer.imageTitle} loading='lazy'></img>
                   <FocusableCarouselDetail id={index} withAnimationProps = {{animationName: "opacity-0 animate-reveal-up max-md:animate-reveal-left"}}>
                     <h3 className='absolute bottom-0'>{answer.detail}</h3>
                   </FocusableCarouselDetail>

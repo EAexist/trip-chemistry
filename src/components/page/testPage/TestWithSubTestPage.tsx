@@ -1,7 +1,7 @@
 import {useState, createContext } from 'react';
 import withTestResponse, { WithTestResponseProps} from '../../../common/hocs/withTestResponse';
 import { SubTestName, } from '../../../common/reducer/testResponseReducer';
-import TestContainer from '../../TestContainer';
+import TestContainer from '../../typography/TestContainer';
 
 /* Swiper */
 import { Parallax, EffectCards, Autoplay } from 'swiper/modules';
@@ -10,7 +10,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-import getImgSrc, { formatWebp } from '../../../common/utils/getImgSrc';
+import getImgSrc, { FORMATWEBP } from '../../../common/utils/getImgSrc';
 import { WithAnimationWrapper } from '../../../common/hocs/withAnimation';
 import ExpandableTestResponseButton from './ExpandableTestResponseButton';
 
@@ -35,11 +35,11 @@ function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
           max-md:flex-row max-md:whitespace-nowrap max-md:flex-wrap max-md:space-y-1'
         > {/* 질문 목록 */}
           {
-            Object.entries(strings.subTests).map(([id, subTest]: [id: string, subTest: any]) => {
-              console.log(`TestWithSubTestPage testName=${testName}, id=${id}`);
-              const ExpandableResponseButtonWithResponse = withTestResponse(ExpandableTestResponseButton)(testName, id as SubTestName);
+            (Object.entries(strings.subTests) as [k: SubTestName, subTest: any][]).map(([subTestName, subTest]) => {
+              console.log(`TestWithSubTestPage testName=${testName}, subTestName=${subTestName}`);
+              const ExpandableResponseButtonWithResponse = withTestResponse(ExpandableTestResponseButton)({ testName, subTestName });
               return (
-                <ExpandableResponseButtonWithResponse isActive={id === activeSubTest} onClick={() => setActiveSubTest(id as SubTestName)}>
+                <ExpandableResponseButtonWithResponse isActive={subTestName === activeSubTest} onClick={() => setActiveSubTest(subTestName)}>
                   {`#${subTest.title}`}
                 </ExpandableResponseButtonWithResponse>
               );
@@ -81,7 +81,7 @@ function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
                   loop={true}
                 >
                   {subTestStrings.examples.map((example: string) => {
-                    const exampleImageStyle = { backgroundImage: `url("${getImgSrc('/place', `${example}`, formatWebp)}")` };
+                    const exampleImageStyle = { backgroundImage: `url("${getImgSrc('/place', `${example}`, FORMATWEBP)}")` };
 
                     return (
                       <SwiperSlide className='w-full h-full flex flex-col items-center'>

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { WithTestResponseProps } from '../../../../common/hocs/withTestResponse';
-import { formatPng, formatSvg, formatWebp } from '../../../../common/utils/getImgSrc';
+import { FORMATPNG, FORMATSVG, FORMATWEBP } from '../../../../common/utils/getImgSrc';
 import getImgSrc from '../../../../common/utils/getImgSrc';
 import { ArrowRight } from '@mui/icons-material';
 import { Card, CardDetail, CardImage } from '../../../Card';
 import { usePageString, useString } from '../../../../texts';
-import TestContainer from '../../../TestContainer';
+import TestContainer from '../../../typography/TestContainer';
 import ToggleButton from '../../../ToggleButton';
 import { Icon } from '@mui/material';
 import Logo from '../../../Logo';
@@ -108,7 +108,7 @@ function TestCityPage({subTestName, testResponse, setTestResponse, strings}: Tes
                             >
                             <Card className='w-full h-fit flex flex-col'>
                                 <CardImage
-                                    image={getImgSrc(imagePathBase, `${String(cityId)}`, formatWebp)}
+                                    image={getImgSrc(imagePathBase, `${String(cityId)}`, FORMATWEBP)}
                                     alt={city.name}
                                 >
                                     <div className='flex flex-row absolute bottom-0 p-2 w-full justify-between'>

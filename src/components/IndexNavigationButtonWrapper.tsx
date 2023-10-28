@@ -9,11 +9,11 @@ interface IndexNavigationButtonWrapperProps{
 
 function IndexNavigationButtonWrapper({ offset, children } : IndexNavigationButtonWrapperProps){
 
-    const { activeSectionIndex, incrementActiveSectionIndex = ()=>{}, maxActiveSectionIndex = 0 } = useContext(ActiveSectionContext); 
+    const { activeStep, incrementActiveSectionIndex = ()=>{}, maxActiveSectionIndex = 0 } = useContext(ActiveSectionContext); 
     const handleClickNavigationButton = () => incrementActiveSectionIndex(offset);
 
     return(
-        <div className={`${((offset > 0 && (activeSectionIndex < maxActiveSectionIndex)) || (offset < 0 && (activeSectionIndex > 0))) ?
+        <div className={`${((offset > 0 && (activeStep < maxActiveSectionIndex)) || (offset < 0 && (activeStep > 0))) ?
         'visible' : 'invisible'}`}>
             {cloneElement(children, { onClick: handleClickNavigationButton })}
         </div>
