@@ -4,8 +4,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 /* Page Components */
 import HomePage from './components/page/HomePage';
 import TestPage from './components/page/TestPage';
-import ResultPage from './components/page/resultPage/ResultPage';
-import ChemistryPage from './components/page/chemistryPage/ChemistryPage';
+import ResultPage from './components/page/ResultPage';
+import ChemistryPage from './components/page/ChemistryPage';
 
 interface pages {
     [key: string] : {
@@ -17,12 +17,9 @@ interface pages {
 
 const mapPagesToRoutes = (pages: pages) => {
     return(
-        Object.entries(pages)?.map(([key, { path, Element }]) => {
+        Object.entries(pages)?.map(([ key, { path, Element } ]) => {
             return (
-                <Route
-                    path={path}
-                    element={<Element/>}
-                />
+                <Route key={key} path={path} element={<Element/>}/>
             )
         })
     );
@@ -111,7 +108,7 @@ export { BASEPAGES, mapPagesToRoutes, BasePageRoutes }
 //     },   
 //     {
 //         path: 'confirm',
-//         Element: TestConfirm,
+//         Element: TestConfirmPage,
 //     },   
 // ];
 
@@ -124,7 +121,7 @@ export { BASEPAGES, mapPagesToRoutes, BasePageRoutes }
 //         {mapPagesToRoutes(testRouteProps?.map(({path, Element})=>({path: path,
 //             Element: withTestResponse(Element)(path as TestName, path.includes('budget'))    
 //         })))}
-//         <Route path='confirm' element={<TestConfirm/>}></Route>
+//         <Route path='confirm' element={<TestConfirmPage/>}></Route>
 //     </Routes>;
    
 // }));

@@ -8,13 +8,23 @@ import { UserId } from "../types/interfaces";
 import { HttpStatusCode } from "axios";
 import { LoadStatus } from "../types/loadStatus";
 
-interface TestResponseState extends TestResponse{
-    loadStatus: LoadStatus; 
-};
+// interface TestResponseState extends TestResponse{
+//     loadStatus: LoadStatus; 
+// };
 
-interface TestResponse{
-    leadership: number | undefined;       
-    schedule: number | undefined;   
+interface TestResponse{ 
+    [key: string] : {
+        [key: string]: number | undefined
+    }
+}
+
+interface TestResponse__{
+    leadership: {
+        leadership: number | undefined
+    };       
+    schedule: {
+        schedule: number | undefined;
+    };   
     budget: {
         food: number | undefined;
     }
@@ -32,51 +42,73 @@ interface TestResponse{
     };
 };
 
-type subTestResponse = {[key: string]: number | undefined};
 
-type SubTestName = keyof TestResponse['budget'] | keyof TestResponse['city']
+// type subTestResponse = TestResponse[TestName];
 
-type TestName = keyof TestResponse;
+// type TestName = 'leadership' | 'schedule' | 'budget' | 'city' | 'activity'
+//  keyof TestResponse;
 
-interface TestIndex{
-    testName: TestName;
-    subTestName?: SubTestName;
-}
+type Key<T> = T extends any ? keyof T : never;
+// type SubTestName = Key<subTestResponse>;
 
-interface TestResponsePayload extends TestIndex{
-    value: TestResponse[TestName];
-};
+// type SubTestName<T extends TestName> = keyof TestResponse[T];
+
+type InterfaceWithLoadStatus<T> = { data: T,  loadStatus : LoadStatus };
+
+type TestResponseState = InterfaceWithLoadStatus<TestResponse>;
 
 const initialState : TestResponseState = {
-    leadership : 2,
-    schedule : 2,
-    budget : {
-        food: 2, /* 식사 평균 */
-        // foodSpecial: 2, /* 특별한 식사 */
-        // accomodate: 2, /* 숙소 평균 */
-        // accomodateSpecial: 2, /* 특별한 숙소 */
-    },
-    city: {
-        metropolis: 2,
-        history: 2,
-        nature: 2,
-    },
-    activity:{
-        food: 2,
-        walk: 2,
-        shopping: 2,
-        mesuem: 2,
-        themePark: 2,
+    data: {
+        leadership : {
+            leadership: 2
+        },
+        schedule : {
+            schedule: 2
+        },
+        budget : {
+            food: 25000, /* 식사 평균 */
+            // foodSpecial: 2, /* 특별한 식사 */
+            // accomodate: 2, /* 숙소 평균 */
+            // accomodateSpecial: 2, /* 특별한 숙소 */
+        },
+        city: {
+            metropolis: 2,
+            history: 2,
+            nature: 2,
+        },
+        activity:{
+            food: 2,
+            walk: 2,
+            shopping: 2,
+            mesuem: 2,
+            themePark: 2,
+        },
     },
     loadStatus: LoadStatus.PENDING,
 };
 
-interface asyncPutResponseByIdProps{
+type TestName = keyof typeof initialState.data;
+
+type SubTestName = keyof typeof initialState.data[TestName];
+
+interface TestIndex{
+    testName: TestName;
+    subTestName: SubTestName;
+}
+
+interface TestResponsePayload extends TestIndex{
+    value: typeof initialState.data[TestName][SubTestName];
+};
+
+// type SubTestName = keyof (typeof initialState.testResponse)
+
+interface asyncPutResponseProps{
     userId: UserId;
     response: TestResponse;
 };
-const asyncPutResponseById = createAsyncThunk("user/id/response", 
-    async ({userId, response}: asyncPutResponseByIdProps, thunkAPI) => {
+const asyncPutResponse = createAsyncThunk("testResponse/putResponse", 
+    async ({userId, response}: asyncPutResponseProps, thunkAPI) => {
+        console.log(`asyncPutResponse: response=${JSON.stringify(response)}`);
         try{
             
             const path = `user/${userId}/response`;
@@ -95,7 +127,7 @@ const asyncPutResponseById = createAsyncThunk("user/id/response",
                     else return response.status;
                 })
 
-            console.log(`asyncPutResponseById: data=${JSON.stringify(data)}`);
+            console.log(`asyncPutResponse: data=${JSON.stringify(data)}`);
             return data;
         }
         catch (e: any) {
@@ -111,40 +143,47 @@ const testResponseSlice = createSlice({
     {
         setTestResponse : (state, action: PayloadAction<TestResponsePayload>) => {
             console.log(`testResponseSlice: setTestResponse: state=${JSON.stringify(state)} payload=${JSON.stringify(action.payload)}` );
-            return {...state,
-                [action.payload.testName] : 
-                action.payload.subTestName === undefined ? 
-                action.payload.value
-                :{
-                    ...state[action.payload.testName] as object,
-                    [action.payload.subTestName as SubTestName]: action.payload.value
-                }
-            };
+            state.data[action.payload.testName][action.payload.subTestName] = action.payload.value;
+            // return(
+            //     {
+            //         ...state,
+            //         testResponse: {
+            //             ...state.testResponse,
+            //             [action.payload.testName]:
+            //                 action.payload.subTestName === undefined ?
+            //                     action.payload.value
+            //                     : {
+            //                         ...state.testResponse[action.payload.testName] as object,
+            //                         [action.payload.subTestName]: action.payload.value
+            //                     }
+            //         }
+            //     }
+            // ) 
         },
         setStatus: (state, action: PayloadAction<LoadStatus>) => {
             state.loadStatus = action.payload;
         },
     },
     extraReducers:(builder) => {
-        builder.addCase(asyncPutResponseById.fulfilled, (state, action: PayloadAction<HttpStatusCode>) => {
-            
-            console.log(`asyncPutResponseById.fulfilled - 
+        builder.addCase(asyncPutResponse.fulfilled, (state, action: PayloadAction<HttpStatusCode>) => {            
+            console.log(`asyncPutResponse.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
             state.loadStatus = LoadStatus.REST;
         });
-        builder.addCase(asyncPutResponseById.pending, (state) => {
-            console.log(`asyncPutResponseById.pending`);
+        builder.addCase(asyncPutResponse.pending, (state) => {
+            console.log(`asyncPutResponse.pending`);
             state.loadStatus = LoadStatus.PENDING;
         });
-        builder.addCase(asyncPutResponseById.rejected, (state) => {
-            console.log(`asyncPutResponseById.rejected`);
+        builder.addCase(asyncPutResponse.rejected, (state) => {
+            console.log(`asyncPutResponse.rejected`);
             state.loadStatus = LoadStatus.FAIL;
         });
     },
 });
 
-const useTestResponse = (testName: TestName, SubTestName?: SubTestName) => (
-    useSelector((state:RootState)=>((SubTestName? (state.testResponse[testName] as subTestResponse)[SubTestName] : state.testResponse[testName]))) as number
+const useTestResponse = (testIndex: TestIndex) => (
+    // useSelector(( state:RootState )=>((SubTestName? (state.testResponse[testName] as subTestResponse)[SubTestName] : state.testResponse[testName]))) as number
+    useSelector(( state:RootState )=>(state.testResponse.data[testIndex.testName][testIndex.subTestName]) as number)
 );
 
 const useSetTestResponse = () => {
@@ -154,17 +193,17 @@ const useSetTestResponse = () => {
     , [dispatch]);
 };
 
-const usePutResponseById = () => {
+const usePutResponse = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const { loadStatus, ...testResponse } = useSelector((state:RootState)=>state.testResponse)
+    const { loadStatus, data } = useSelector(( state:RootState )=>state.testResponse)
     return useCallback((userId: UserId) => 
-        dispatch(asyncPutResponseById({userId: userId, response: testResponse}))
-    , [dispatch, testResponse]);
+        dispatch(asyncPutResponse({userId: userId, response: data}))
+    , [dispatch, data]);
 }
 
 const useTestResponseStatus = () => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.testResponse.loadStatus);
+    const status = useSelector(( state:RootState )=>state.testResponse.loadStatus);
     return ([
         status,
         useCallback((status: LoadStatus) =>
@@ -231,5 +270,5 @@ const useTestResponseStatus = () => {
 // }
 
 export default testResponseSlice.reducer;
-export { useTestResponse, useSetTestResponse, usePutResponseById, useTestResponseStatus }
-export type { TestResponsePayload, TestResponse, TestName, SubTestName, TestIndex }
+export { useTestResponse, useSetTestResponse, usePutResponse, useTestResponseStatus }
+export type { TestResponsePayload, TestResponse, TestName, SubTestName, TestIndex, InterfaceWithLoadStatus }

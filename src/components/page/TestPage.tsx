@@ -2,15 +2,14 @@ import { useState, createContext, useEffect, PropsWithChildren, ComponentType, u
 import { usePageString } from "../../texts";
 
 /* Test Page Components */
-import TestLeadershipPage from "./testPage/testLeadership/TestLeadershipPage";
-import TestSchedulePage from "./testPage/testSchedule/TestSchedulePage";
-import TestBudgetPage from "./testPage/testBudget/TestBudgetPage";
-import TestCityPage from "./testPage/testCity/TestCityPage";
-import TestConfirm from "./testPage/testConfirm/TestConfirm";
-import TestWithSubTestPage from "./testPage/TestWithSubTestPage";
-import withTestResponse from "../../common/hocs/withTestResponse";
+import TestLeadershipPage from "./testPage/TestLeadershipPage";
+import TestSchedulePage from "./testPage/TestSchedulePage";
+import TestBudgetPage from "./testPage/TestBudgetPage";
+import TestCityPage from "./testPage/TestCityPage";
+import TestConfirmPage from "./testPage/TestConfirmPage";
+import withTestResponse from "../../common/hoc/withTestResponse";
 
-// Swiper
+/* Swiper */
 import { Navigation, Pagination, Mousewheel, HashNavigation, Parallax } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperType from "swiper";
@@ -20,13 +19,10 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 /* Reducer */
-import { SubTestName, TestName } from "../../common/reducer/testResponseReducer";
-import { LoadStatus } from "../../common/types/loadStatus";
-import { TopNavContext, useSetElement } from "../TopNav";
-import { Icon } from "@mui/material";
-import ToggleButton from "../ToggleButton";
-import { FocusContextProvider, FocusDetail, Focusable } from "../../common/focus/FocusContext";
-import StepItem, { Connector } from "../StepItem";
+import { SubTestName, TestIndex, TestName } from "../../common/reducer/testResponseReducer";
+import IconStepper from "../IconStepper";
+import { useSetTopNav } from "../TopNav";
+import LeftNav from "../LeftNav";
 
 interface TestPageProps {
     defaultActiveSectionIndex?: number;
@@ -34,65 +30,71 @@ interface TestPageProps {
 
 interface ActiveSectionContextProps{
     activeStep: number;
-    setActiveSectionIndex: (activeStep: number) => void;
+    setActiveStep: (activeStep: number) => void;
     incrementActiveSectionIndex?: (offset:number) => void;
     maxActiveSectionIndex?: number;
 };
 const ActiveSectionContext = createContext<ActiveSectionContextProps>({} as ActiveSectionContextProps);
 
-function WithAnimationWrapperate({keyProp, className, children}: PropsWithChildren<{keyProp: any, className: string}>){
-    return(
-        <div key = {keyProp} className={className}>
-            {children}
-        </div>
-    )
-}
-
-const sectionElements : {[key: string] : {testName?: TestName, subTestName?: SubTestName, line: boolean, Element: ComponentType<any>}} = {
+const sectionElements : {[key: string] : {testIndex?: TestIndex, postConnector?: boolean, Element: ComponentType<any>}} = {
     leadership:
         {
-            testName: 'leadership',
+            testIndex: {
+                testName: 'leadership',
+                subTestName: 'leadership',
+            },
             Element: TestLeadershipPage,
-            line: true,
+            postConnector: true,
         },
     schedule:
         {
-            testName: 'schedule',
+            testIndex: {
+                testName: 'schedule',
+                subTestName: 'schedule',
+            },
             Element: TestSchedulePage,
-            line: true,
+            postConnector: true,
         },
     bugetFood:
         {
-            testName: 'budget',
-            subTestName: 'food',
+            testIndex: {
+                testName: 'budget',
+                subTestName: 'food',
+            },
             Element: TestBudgetPage,
-            line: true,
+            postConnector: true,
         },
     cityMetropolis:
         {
-            testName: 'city',
-            subTestName: 'metropolis',
+            testIndex: {
+                testName: 'city',
+                subTestName: 'metropolis',
+            },
             Element: TestCityPage,
-            line: false,
+            postConnector: false,
         },  
     cityHistory: 
         {
-            testName: 'city',
-            subTestName: 'history',
+            testIndex: {
+                testName: 'city',
+                subTestName: 'history',
+            },
             Element: TestCityPage,
-            line: false,
+            postConnector: false,
         },   
     cityNature:
         {
-            testName: 'city',
-            subTestName: 'nature',
+            testIndex: {
+                testName: 'city',
+                subTestName: 'nature',
+            },
             Element: TestCityPage,
-            line: true,
+            postConnector: true,
         },   
     confirm:
         {            
-            Element: TestConfirm,
-            line: false,
+            Element: TestConfirmPage,
+            postConnector: false,
         }
     // {
     //     testName: 'activity',
@@ -109,43 +111,24 @@ function TestPage({}:TestPageProps){
 
     /* 네비게이션 */    
     
-    const [ activeStep, setActiveSectionIndex ] = useState(0);
-    const [ hoveringSectionIndex, setHoveringSectionIndex ] = useState(0);
+    const [ activeStep, setActiveStep ] = useState(0);
     const [ swiper, setSwiper ] = useState<SwiperType>();
 
     const slideTime : number = 1000;
-    const handleClickStepButton = useCallback((index: number) => {
-        setActiveSectionIndex(index);
-    }, [ setActiveSectionIndex ]);
+
+    /* LeftNav */
+    const handleClickStepButton = useCallback(( index: number ) => {
+        setActiveStep(index);
+    }, [ setActiveStep ]);
 
     useEffect(() => {
         swiper?.slideTo(activeStep, slideTime);
     }, [ activeStep, swiper ]);
 
-    useSetElement({
-        element : 
-            /* TopNav 의 Step 컴포넌트 */                
-            <div className = 'flex flex-row items-center -translate-y-1'>
-            <FocusContextProvider>       
-                {Object.entries(sectionElements).map(([key, { line, testName, subTestName }], index: number)=>{
 
-                    const testStrings = testName? (subTestName? strings[testName].subTests[subTestName] : strings[testName]) : strings[key];
-                    return (
-                        <>
-                        <StepItem
-                            isActive ={index===activeStep}
-                            index={index}
-                            icon={testStrings.icon}
-                            label={testStrings.label}
-                            handleClick={()=>handleClickStepButton(index)}                        
-                        />
-                        {line && <Connector width='w-12'/>} 
-                        </>
-                    );
-                })}
-                </FocusContextProvider>
-            </div>,
-        dep: [ activeStep, handleClickStepButton, strings ]        
+    const steps = (Object.entries(sectionElements)).map(([ id, { testIndex, postConnector } ]) => {
+        const testStrings = testIndex? strings[ testIndex.testName ].subTests[ testIndex.subTestName ] : strings[ id ];
+        return({ id, label: testStrings.label, icon: testStrings.icon, postConnector: postConnector });
     });
 
     useEffect(()=>{
@@ -154,64 +137,84 @@ function TestPage({}:TestPageProps){
     }, [])
 
     /* @TODO: Current state of each steps' completeness. */
-    const [steps, setSteps] = useState(sections?.map((label, index)=>{
-        return(
-            {
-                label: label, 
-                completed: false
-            }
-        ); 
-    }));
-    
-    const maxActiveSectionIndex = sections.length-1
+    // const [steps, setSteps] = useState(sections?.map((label, index)=>{
+    //     return(
+    //         {
+    //             label: label, 
+    //             completed: false
+    //         }
+    //     ); 
+    // }));
 
     /* Swiper */
     const spaceBetweenTests = 20;
 
     return(
-            /* https://sezzled.tistory.com/262 */
-            <Swiper
-                // install Swiper modules
-                modules={[Mousewheel, Navigation, Pagination, HashNavigation, Parallax]}
-                direction={"vertical"}                
-                spaceBetween={spaceBetweenTests}
-                slidesPerView={1}
-                mousewheel={{ thresholdDelta:100, forceToAxis:true }}
-                // preventInteractionOnTransition={true} /* Prevent Scrolling on Transition */ 
-                // navigation={true}
-                pagination={{ clickable: true }}
-                // scrollbar={{ draggable: true }}
+        <div className='full min-h-0 relative'>
+            <LeftNav steps={ steps } handleClickStepButton={ handleClickStepButton } activeStep={activeStep}/>
+        {/* https://sezzled.tistory.com/262 */}
+        <Swiper
+            // install Swiper modules
+            modules={[Mousewheel, Navigation, Pagination, HashNavigation, Parallax]}
+            direction={"vertical"}                
+            spaceBetween={spaceBetweenTests}
+            slidesPerView={1}
+            mousewheel={{ thresholdDelta:100, forceToAxis:true }}
+            // preventInteractionOnTransition={true} /* Prevent Scrolling on Transition */ 
+            // navigation={true}
+            pagination={{ clickable: true }}
+            // scrollbar={{ draggable: true }}
 
-                /* Swiper Element 의 reference를 swiper state에 저장 */
-                onSwiper={(swiper) => { 
-                    setSwiper(swiper); 
-                    swiper.mousewheel.enable(); console.log(swiper);
-                }}
-                // allowTouchMove={false} 
+            /* Swiper Element 의 reference를 swiper state에 저장 */
+            onSwiper={(swiper) => { 
+                setSwiper(swiper); 
+                swiper.mousewheel.enable(); console.log(swiper);
+            }}
+            onActiveIndexChange={(swiper) => { 
+                setActiveStep(swiper.activeIndex); 
+            }}
+            // allowTouchMove={false} 
 
-                /* @TODO Hash Navigation is Not Working */
-                hashNavigation={true}
+            /* @TODO Hash Navigation is Not Working */
+            hashNavigation={true}
 
-                speed={500}
-                parallax={true}
-                noSwiping={true}
-                noSwipingClass='swiper-no-swiping'
-                className='h-screen w-screen'
-            >
-                {Object.entries(sectionElements).map(([key, {testName, subTestName, Element}])=>{
-                    const TestComponent = testName ?
-                        withTestResponse(Element)({testName, subTestName})
-                        : Element;
-                    return(                        
-                    <SwiperSlide data-hash={`${testName ? testName : key} ${subTestName ? `-${subTestName}` : ''}`} className='swiper-no-swiping w-full h-full'>
-                        <TestComponent/>
-                    </SwiperSlide>
-                    )
-                })}              
-            </Swiper> 
+            speed={500}
+            parallax={true}
+            noSwiping={true}
+            noSwipingClass='swiper-no-swiping'
+            className=''
+        >
+            {Object.entries(sectionElements).map(([key, {testIndex, Element}])=>{
+                const TestComponent = testIndex ?
+                    withTestResponse(Element)(testIndex)
+                    : Element;
+                return(                        
+                <SwiperSlide data-hash={`${testIndex ? `${testIndex.testName}-${testIndex.subTestName}` : key}`} className='full'>
+                    <TestComponent/>
+                </SwiperSlide>
+                )
+            })}              
+        </Swiper> 
+        </div>
     );
 }
 
 
 export default TestPage;
 export { ActiveSectionContext };
+
+/* Deprecated */
+// useSetTopNav({
+//     element : 
+//         <IconStepper
+//             steps={(Object.entries(sectionElements)).map(([key, {testName, subTestName, postConnector}]) => {
+//                 const testStrings = testName? (subTestName? strings[testName].subTests[subTestName] : strings[testName]) : strings[key];
+//                 return({label: testStrings.label, icon: testStrings.icon, postConnector: postConnector});
+//             })}
+//             // activeStep={activeStep}
+//             activeStep={activeStep}
+//             handleClickStepButton={handleClickStepButton}
+//             connectorSize="sm"
+//         />,
+//     dep: [ activeStep, handleClickStepButton, strings, swiper ]        
+// });

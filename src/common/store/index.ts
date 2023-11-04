@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import testResponseReducer from "../reducer/testResponseReducer";
-import userListReducer from "../reducer/userListReducer";
+import userDataReducer from "../reducer/userListReducer";
 import cityGroupReducer from "../reducer/cityGroupReducer";
 import chemistryReducer from "../reducer/chemistryReducer";
 
 export const store = configureStore({
     reducer: {
         testResponse: testResponseReducer,
-        userList: userListReducer,
+        userData: userDataReducer,
         cityGroup: cityGroupReducer,
         chemistry: chemistryReducer,
     },

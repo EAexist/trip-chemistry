@@ -6,7 +6,7 @@ interface ChipProps{
 
 function Chip({label, children}:PropsWithChildren<ChipProps>){
     return(
-        <p><MuiChip label={label}/></p>
+        <h6><MuiChip label={label}/></h6>
     );
 };
 

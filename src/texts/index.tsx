@@ -28,7 +28,10 @@ function usePageString(page: Page) {
     return Object(useContext(baseTextContext).public.pages[page]);
 }
 
-interface useTestStringProps extends TestIndex{};
+interface useTestStringProps {
+    testName: TestName;
+    subTestName?: SubTestName;
+};
 function useTestString({ testName, subTestName }: useTestStringProps) {
 
     const baseStrings = usePageString('test')[testName as TestName];

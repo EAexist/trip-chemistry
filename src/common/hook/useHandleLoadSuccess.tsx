@@ -1,14 +1,10 @@
-import { ComponentType, PropsWithChildren, ReactNode, createContext, useEffect, useState } from "react";
-import Button from "../../components/Button";
-import { CircularProgress } from "@mui/material";
-import { Done, QuestionMark } from "@mui/icons-material"
-import { withUserListLoadStatus } from "../reducer/userListReducer";
+import { useEffect, useState } from "react";
 import { LoadStatus, LoadStatusProps } from "../types/loadStatus";
 
 interface UseLoadStatusProps extends LoadStatusProps{
     delay?: number;
 };
-export const useLoadStatus = ({ status, setStatus, delay = 0 }: UseLoadStatusProps) => {
+export const useHandleLoadSuccess = ({ status, setStatus, delay = 0 }: UseLoadStatusProps) => {
 
     const [ successToRestSecond, setSuccessToRestSecond ] = useState<number>(0);
 
@@ -19,7 +15,7 @@ export const useLoadStatus = ({ status, setStatus, delay = 0 }: UseLoadStatusPro
             setSuccessToRestSecond(Math.floor(delay/1000));
             return () => {console.log(`usAPisucess: Unmounting`); clearTimeout(timeout);};
         }
-        console.log(`useLoadStatus: useEffect[status, setStatus, delay] status=${status} setStatus=${setStatus} delay=${delay}`);
+        console.log(`useHandleLoadSuccess: useEffect[status, setStatus, delay] status=${status} setStatus=${setStatus} delay=${delay}`);
 
     }, [status, setStatus, delay]);
 
@@ -31,11 +27,11 @@ export const useLoadStatus = ({ status, setStatus, delay = 0 }: UseLoadStatusPro
         if(successToRestSecond === 0) {
             clearInterval(interval);
         }
-        console.log(`useLoadStatus: useEffect[successToRestSecond] successToRestSecond=${successToRestSecond}`);
+        console.log(`useHandleLoadSuccess: useEffect[successToRestSecond] successToRestSecond=${successToRestSecond}`);
         return () => clearInterval(interval);   
     }, [ successToRestSecond ])
 
     return successToRestSecond;
 }
 
-export default useLoadStatus;
+export default useHandleLoadSuccess;

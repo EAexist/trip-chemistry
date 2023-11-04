@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../Button'
 
 import { usePageString } from "../../texts";
-import { useSetElement } from '../TopNav';
+import { useSetTopNav } from '../TopNav';
 
 interface HomePageProps{
 };
@@ -19,10 +19,11 @@ function HomePage({}:HomePageProps){
     const handleClickStart = () => {
         
     }
-    useSetElement({});
+    useSetTopNav({});
 
     return(
-        <div>
+        <div className='full page body'>
+            <div>
             <h2>{strings.appTitle}</h2>
             <div className = 'flex flex-row'>
                 <Button onClick={handleClickLogin}>{strings.loginButton}</Button>
@@ -30,9 +31,10 @@ function HomePage({}:HomePageProps){
                     <Button onClick={handleClickStart}>{strings.startButton}</Button>
                 </Link>
             </div>
-            <div>
+            <div className=''>
                 <h2>{strings.infoTitle}</h2>
                 <p>{strings.infoBody}</p>
+            </div>
             </div>
         </div>
     );

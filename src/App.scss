@@ -109,6 +109,9 @@
     border-color: red;
     border-width: 1px;
   }
+  h1, h2, h3, h4, h5, h6, p {
+    white-space: pre-line;
+  }
 
   /* heading & paragraph */
   h1 {
@@ -140,7 +143,6 @@
     font-weight: 300;
   }
 
-
   /* heading & paragraph: responsive */
   @media (max-width: 768px) {
     h1 {
@@ -160,6 +162,41 @@
       font-weight: 300;
     }
   }
+
+  @layer components {
+    /* @apply를 사용하여 기존 유틸리티 클래스를 사용자 지정 CSS에 인라인화합니다. */
+    
+    /* Common */
+    .full {
+      @apply flex flex-col w-full h-full;
+    }
+    .center{
+      @apply flex items-center justify-center;
+    }
+
+    /* Page */
+    .page {
+      @apply mt-12;
+    }
+    .body {
+      @apply [&>*>*]:mx-28;
+    }
+    .body-left{
+      @apply [&>*>*]:ml-28;
+    }
+
+    /* Slider */
+    .aboveSlider{
+      @apply absolute -translate-x-1/2 bottom-4;
+    }
+    .belowSlider{
+      @apply absolute -translate-x-1/2 top-4;
+    }
+
+
+
+  }
+
   body {
     // margin-top: 64px;
     // font-family: 'Apple SD Gothic Neo', sans-serif;

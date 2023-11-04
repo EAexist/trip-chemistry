@@ -1,17 +1,25 @@
 import { PropsWithChildren} from 'react';
-import { ButtonBase, Button as MuiButton } from "@mui/material";
+import { ButtonBase, Button as MuiButton, Paper } from "@mui/material";
+import { ButtonVariant } from './types';
 
 interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>{
-    isActive?: boolean,
-    state?: 'hovered' | 'active' | undefined
-    classNameHovered? : string,
-    classNameActive? : string,
+    isActive?: boolean;
+    state?: 'hovered' | 'active' | undefined;
+    classNameHovered? : string;
+    classNameActive? : string;
+    variant?: ButtonVariant;
 }
 
-function Button({children, className, ...buttonProps} : PropsWithChildren<ButtonProps>){
+function Button({children, className, variant, ...buttonProps} : PropsWithChildren<ButtonProps>){
     return(
-        <button className={`${className} ${buttonProps.disabled && 'opacity-50'}`} {...buttonProps}>
-            {children}
+        <button className={`flex  ${className} ${buttonProps.disabled && 'opacity-25'}`} {...buttonProps}>
+            {
+            variant === 'filled' ?
+                <Paper className={`flex`}>
+                    {children}
+                </Paper>
+                : children
+            }
         </button>
     )
 }

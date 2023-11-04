@@ -9,9 +9,10 @@ module.exports = {
         '192': '48rem',
       },
       animation: {
-        'expand': 'spin 3s linear infinite',
+        // 'expand': 'spin 3s linear infinite',
         'focusCard': 'focusCard 0.5s ease-in-out 0s normal forwards',
-        'delay1': 'show 1s linear 1s',
+        'delay1': 'show 1s ease-in-out 0s normal forwards',
+        'expand': 'expand 0.2s ease-in normal 0s forwards'
       },
       keyframes: {
         focusCard: {
@@ -32,6 +33,14 @@ module.exports = {
             visibility: "visible",
           },
         },
+        expand:{
+          '0%': {      
+            fontSize: '0.1rem',
+          },
+          '100%':{      
+            fontSize: '1rem',
+          },
+        }
 
       },      
       backgroundImage: {

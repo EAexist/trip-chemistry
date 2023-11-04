@@ -36,7 +36,7 @@ function ImageCard({ image, alt, label="", children }: PropsWithChildren<CardPro
                         w-full h-40 relative
                         max-md:w-full'
                     >
-                        <LazyImage src={image} alt={alt} className='absolute object-cover w-full h-full'>
+                        <LazyImage src={image} alt={alt} className='w-full h-full object-cover border-blue-500 border-4'>
                             <Skeleton variant="rectangular" width={'100%'} height={'100%'}/>
                         </LazyImage>
                         {/* <img className='absolute object-cover w-full h-full' src={image} alt={alt} loading='lazy'/> */}

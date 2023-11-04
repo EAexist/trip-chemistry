@@ -45,8 +45,8 @@ function Loader({ isLoaded, variant, text } : LoaderProps){
 }
 
 // const [setStatus] = useState<LoadStatus>(LoadStatus.REST);
-// const status = useSelector((state:RootState)=>state.userList.LoadStatus);
-// const fetchResultById = useGetResultById();
+// const status = useSelector(( state:RootState )=>state.userDataObject.LoadStatus);
+// const fetchResult = useGetResult();
 
 export default withLoadStatus;
 export { Loader };

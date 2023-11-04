@@ -4,32 +4,31 @@ import { store } from "./common/store";
 import { BASEPAGES, BasePageRoutes, mapPagesToRoutes } from './pages';
 
 import './App.scss';
-import TopNav, { TopNavContext, TopNavContextProvider } from './components/TopNav';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import TopNav, { TopNavContextProvider } from './components/TopNav';
 
 function App() {
  
-  const [ element, setElement ] = useState<React.ReactNode>();
+  useEffect(()=>{
+      console.log(`App`);
+  }, []);
 
   return (
     <Provider store={store}>
-      <div className='w-screen h-screen
-        max-md:px-4'
-      >
-        <BrowserRouter>
-          <TopNavContext.Provider
-            value={{ element: element, setElement: setElement }}
-          >
-            <div className='fixed bg-white z-50 w-full h-fit px-16 py-4 space-x-4 flex flex-row'>
-              <TopNav/>
-            </div>
+      <BrowserRouter>
+        <TopNavContextProvider>
+          <div className='w-screen h-screen flex flex-col
+            max-md:px-4'>
+            <TopNav/>
+            {/* <div className='full flex bg-blue-500'> */}
             <Routes>
-              <Route index element={<Navigate to={'./home'} replace />} />
+              <Route key={'index'} index element={<Navigate to={'./home'} replace />} />
               {mapPagesToRoutes(BASEPAGES)}
             </Routes>
-          </TopNavContext.Provider>
-        </BrowserRouter>
-      </div>
+            {/* </div> */}
+          </div>
+        </TopNavContextProvider>
+      </BrowserRouter>
     </Provider>    
   );
 }

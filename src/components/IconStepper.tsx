@@ -1,29 +1,34 @@
 import { FocusContextProvider } from '../common/focus/FocusContext'
 import StepItem, { Connector } from './StepItem';
 
+type Steps = { id: string, label: string, icon: string, postConnector?: boolean }[];
+
 interface IconStepperProps{
-  steps: {label: string, icon: string}[];
-  activeStep: number;
-  handleClickStepButton: (index:number) => void;
+  steps: Steps;
+  handleClickStepButton: ( index: number ) => void;
+  activeStep?: number;
+  direction? : 'horizontal' | 'vertical';
+  connectorSize?: 'sm' | 'md';
 };
 
-function IconStepper({ steps, activeStep, handleClickStepButton } : IconStepperProps){
+function IconStepper({ steps, handleClickStepButton, activeStep = 0, direction = 'horizontal', connectorSize = 'md' } : IconStepperProps){
 
   return(
-    <div className='flex flex-row items-center -translate-y-1'>
+    <div className={`flex ${direction === 'horizontal' ? 'flex-row items-center -translate-y-1' : 'flex-col items-center'}`}>
       <FocusContextProvider>
-        {steps.map(({ label, icon }: { label: string, icon: string }, index: number) => {
+        {steps.map(({ id, label, icon, postConnector = true }: { id: string, label: string, icon: string, postConnector?: boolean }, index: number) => {
           return (
-            <>
-              {index > 0 && <Connector width='w-20' />}
               <StepItem
-                isActive={index === activeStep}
-                index={index}
-                icon={icon}
-                label={label}
-                handleClick={() => handleClickStepButton(index)}
+                key={ id }
+                isActive={ index === activeStep }
+                index={ index }
+                icon={ icon }
+                label={ label }
+                handleClick={ () => handleClickStepButton( index ) }
+                direction={ direction }
+                postConnector={  index < steps.length-1 && postConnector  }
+                connectorSize={ connectorSize }
               />
-            </>
           );
         })}
       </FocusContextProvider>
@@ -32,3 +37,4 @@ function IconStepper({ steps, activeStep, handleClickStepButton } : IconStepperP
 };
 
 export default IconStepper;
+export type { Steps, IconStepperProps };

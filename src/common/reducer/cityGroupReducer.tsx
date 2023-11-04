@@ -6,7 +6,7 @@ import { ComponentType, useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
 import { LoadStatus, LoadStatusProps } from "../types/loadStatus";
-import useLoadStatus from "../hooks/useLoadStatus";
+import useLoadStatus from "../hook/useHandleLoadSuccess";
 
 
 interface cityGroupState {
@@ -37,7 +37,7 @@ type NationId = string;
 
 const initialState: cityGroupState = {cityGroupList: [], LoadStatus:LoadStatus.PENDING};
 
-const fetchCityGroupById = createAsyncThunk("user/id/cityGroup", 
+const fetchCityGroup = createAsyncThunk("cityGroup/getCityGroup", 
     async (userId: UserId, thunkAPI) => {
         try{
             const data = await useServerAPI({
@@ -50,7 +50,7 @@ const fetchCityGroupById = createAsyncThunk("user/id/cityGroup",
                     body: undefined,
                 }
             })
-            console.log(`fetchCityGroupById:${JSON.stringify(data)}`);
+            console.log(`fetchCityGroup:${JSON.stringify(data)}`);
             return data;
         }
         catch (e: any) {
@@ -82,7 +82,7 @@ const cityGroupSlice = createSlice({
         // },
     },
     extraReducers:(builder) => {
-        builder.addCase(fetchCityGroupById.fulfilled, (state, action: PayloadAction<Place[]>) => {
+        builder.addCase(fetchCityGroup.fulfilled, (state, action: PayloadAction<Place[]>) => {
 
             /* Convert nationFilter from string[] to {[key: string]: boolean} */
             const nationFilter = Object.fromEntries(
@@ -98,24 +98,24 @@ const cityGroupSlice = createSlice({
                 nationFilter: nationFilter
             });
 
-            console.log(`fetchCityGroupById.fulfilled - 
+            console.log(`fetchCityGroup.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
 
             state.LoadStatus = LoadStatus.SUCCESS;
         });
-        builder.addCase(fetchCityGroupById.pending, (state) => {
-            console.log(`fetchPlaceById.pending`);
+        builder.addCase(fetchCityGroup.pending, (state) => {
+            console.log(`fetchPlace.pending`);
             state.LoadStatus = LoadStatus.PENDING;
         });
-        builder.addCase(fetchCityGroupById.rejected, (state) => {
-            console.log(`fetchPlaceById.rejected`);
+        builder.addCase(fetchCityGroup.rejected, (state) => {
+            console.log(`fetchPlace.rejected`);
             state.LoadStatus = LoadStatus.FAIL;
         });
     },
 })
 
 const usePlaceGroup = (index: number) => {
-    const cityGroupList = useSelector((state:RootState)=>state.cityGroup.cityGroupList);
+    const cityGroupList = useSelector(( state:RootState )=>state.cityGroup.cityGroupList);
     
     return( cityGroupList.length > 0 ? [
         cityGroupList[0].name,
@@ -125,7 +125,7 @@ const usePlaceGroup = (index: number) => {
 
 const useNationFilter = (index: number) => {
     const dispatch = useDispatch();
-    const cityGroupList = useSelector((state:RootState)=>state.cityGroup.cityGroupList);
+    const cityGroupList = useSelector(( state:RootState )=>state.cityGroup.cityGroupList);
 
     return([
         cityGroupList.length > 0 ? cityGroupList[0].nationFilter : undefined,
@@ -139,10 +139,10 @@ const useNationFilter = (index: number) => {
     ] as const);
 }
 
-const useFetchPlaceGroupById = () => {
+const useFetchPlaceGroup = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
     return useCallback((userId: UserId) => 
-        dispatch(fetchCityGroupById(userId))
+        dispatch(fetchCityGroup(userId))
     , [dispatch]);
 }
 
@@ -151,7 +151,7 @@ interface usePlaceGroupLoadStatusProps{
 }
 const usePlaceGroupLoadStatus = ({ delay }: usePlaceGroupLoadStatusProps) => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.cityGroup.LoadStatus);
+    const status = useSelector(( state:RootState )=>state.cityGroup.LoadStatus);
     const setStatus = useCallback((status: LoadStatus) =>
         dispatch(cityGroupSlice.actions.setStatus(status))
     , [dispatch])
@@ -172,7 +172,7 @@ const withPlaceGroupLoadStatus = <T extends LoadStatusProps>(WrappedComponent: C
 }
 
 export default cityGroupSlice.reducer;
-export { usePlaceGroup, useFetchPlaceGroupById, useNationFilter, usePlaceGroupLoadStatus, 
+export { usePlaceGroup, useFetchPlaceGroup, useNationFilter, usePlaceGroupLoadStatus, 
     withPlaceGroupLoadStatus
 };
 export type { NationId };

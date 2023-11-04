@@ -1,8 +1,7 @@
 import { PropsWithChildren, useState } from "react";
 import Button, { ButtonProps } from "./Button";
 import { ShowContextProvider } from "../legacy/ShowContext";
-
-type ButtonVariant = 'default' | 'round' | 'round-filled' | 'icon' | 'material';
+import { ButtonVariant } from "./types";
 
 interface ToggleButtonProps extends ButtonProps{
     isActive: boolean;
@@ -47,16 +46,19 @@ function ToggleButton({isActive, variant='default', children, disabled=false, cl
             break;
         default:
             classNames={
-                default: 'origin-center transition duration-300 ease-out font-light',
+                default: '',
                 disabled: 'text-gray-300',
-                inActive: `opacity-50 hover:opacity-100 hover:font-bold`,
-                active: 'font-bold opacity-100',
+                inActive: `opacity-50 hover:opacity-100 hover:font-bold font-light`,
+                active: 'opacity-100 font-bold',
             }
             break;
     }
 
     return(
-        <Button className={`${className} ${classNames.default} ${disabled ? classNames.disabled : (isActive ? classNames.active : classNames.inActive)}`} disabled={disabled} {...props}>      
+        <Button 
+            className={`${className} ${classNames.default} ${disabled ? classNames.disabled : (isActive ? classNames.active : classNames.inActive)}`} 
+            disabled={disabled} {...props} 
+            variant={variant}>      
             <ShowContextProvider show={isActive}>
                 {children}
             </ShowContextProvider>

@@ -1,5 +1,4 @@
-import GoogleMapReact from 'google-map-react';
-import { PropsWithChildren, useContext, useEffect, useRef } from 'react';
+import { PropsWithChildren } from 'react';
 import { useFocusContext } from '../../../common/focus/FocusContext';
 import { useTestResponse } from '../../../common/reducer/testResponseReducer';
 import { Icon } from '@mui/material';
@@ -29,7 +28,7 @@ interface AnswerItemWrapperProps {
 
 const ShowTestResponseDetailWrapper = ({ index, children } : PropsWithChildren<AnswerItemWrapperProps>) => {
   const {focus} = useFocusContext();
-  const testResponse = useTestResponse('schedule');
+  const testResponse = useTestResponse({testName: 'schedule', subTestName: 'schedule'});
 
   return(
       <>

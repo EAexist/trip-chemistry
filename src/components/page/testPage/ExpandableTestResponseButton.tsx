@@ -2,7 +2,7 @@ import { PropsWithChildren, useState } from "react";
 import { FocusContextProvider, FocusType, Focusable, withShowOnHover } from "../../../common/focus/FocusContext";
 import { MenuContainer } from "../../Menu";
 import ToggleButton from "../../ToggleButton";
-import { WithTestResponseProps } from "../../../common/hocs/withTestResponse";
+import { WithTestResponseProps } from "../../../common/hoc/withTestResponse";
 import { usePageString } from "../../../texts";
 
 interface TestResponseMenuProps extends WithTestResponseProps{
@@ -10,10 +10,10 @@ interface TestResponseMenuProps extends WithTestResponseProps{
     onClick: ()=>void;
 };
 
-function ExpandableTestResponseButton({testName, testResponse, setTestResponse, isActive, onClick, children}: PropsWithChildren<TestResponseMenuProps>){
+function ExpandableTestResponseButton({testIndex, testResponse, setTestResponse, isActive, onClick, children}: PropsWithChildren<TestResponseMenuProps>){
 
     const [focus, setFocus] = useState<FocusType>(false);
-    const answers = usePageString('test')[testName].answers;
+    const answers = usePageString('test')[testIndex.testName].answers;
     // const emojis = useString('emojis');
     // console.log(JSON.stringify(strings));
 

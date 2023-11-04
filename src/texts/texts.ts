@@ -117,6 +117,13 @@ const TEXTS = {
                         nation: "jp",
                         link: "https://www.japan.travel/ko/spot/1890/",
                         linkType: "travel-japan",
+                    },               
+                sapporo: 
+                    {
+                        name: "삿포로",
+                        nation: "jp",
+                        // link: "https://www.discoverhongkong.com/eng/index.html",
+                        // linkType: "discovering-hongkong",
                     },
                 hongkong: 
                     {
@@ -172,47 +179,34 @@ const TEXTS = {
                 "infoBody": "친구끼리, 연인끼리, 여행을 가는데 싸울까봐 걱정 된다고?\n서로의 여행 MBTI를 확인하고 다른 부분을 맞춰봐!"
             },
             "test": {
-                "leadership": {
-                    "icon": "restaurant",
-                    "title": "여행 계획은 누가 리드해?",
-                    "subtitle": "리더",
-                    "label": "리더",
-                    "answers": [
-                        {
+                "leadership":{
+                    "answers": {
+                        0: {
                             "title": "내가 리드하기",
                             "detail": "나는 여행도 많이 다녀봤고 계획하는 걸 좋아하니까 내가 리드하는게 편해",
                             "imageTitle": "lead"
                         },
-                        {
+                        1: {
                             "title": "리더 없이 함께 준비하기",
                             "detail": "한 명이 리드하지 않아도 다 같이 이야기하면서 계획하는게 좋아",
                             "imageTitle": "co-work"
                         },
-                        {
+                        2: {
                             "title": "다른 사람이 리드해주기",
                             "detail": "불만 없이 열심히 의견 낼테니 누군가가 리드해주면 좋겠어",
                             "imageTitle": "placeholder"
                         }
-                    ]
-
+                    },
+                    "subTests": {
+                        "leadership": {
+                            "icon": "groups",
+                            "title": "여행 계획은 누가 리드해?",
+                            "subtitle": "리더",
+                            "label": "리더",
+                        },
+                    },
                 },
                 "schedule": {
-                    "budgetLowerBounds": [
-                        0,
-                        15000,
-                        25000,
-                        50000,
-                    ],
-                    "sliderProps": {
-                        "step": 0,
-                        "min": 0,
-                        "max": 4
-                    },
-                    "icon": "restaurant",
-                    "title": "일정은 얼마나 알차면 좋을까?",
-                    "subtitle": "일정",
-                    "label": "널널함",
-                    // "credit": "재하(https://blog.naver.com/jcjw1234)님의 여행 계획",
                     "answers": {
                         0: {
                             "label": "아주 널널하게",
@@ -230,104 +224,118 @@ const TEXTS = {
                             "label": "매우 알차게",
                         }
                     },
-                    "exampleTitle": "후쿠오카 🇯🇵 여행 지도",
-                    "startPosition": {            
-                        lat:33.596306,
-                        lng:130.4293798,
+                    "sliderProps": {
+                        "step": 1,
+                        "min": 0,
+                        "max": 4
                     },
-                    "examples": [
-                        [
-                            {                                
-                                position:{
-                                    lat:33.5897988,
-                                    lng:130.4085279,
-                                },
-                                label:'캐널시티',
-                                icon:'shopping_cart',                              
+                    "subTests":{
+                        "schedule":{
+                            "icon": "edit_calendar",
+                            "title": "일정은 얼마나 알차면 좋을까?",
+                            "subtitle": "일정",
+                            "label": "널널함",
+                            // "credit": "재하(https://blog.naver.com/jcjw1234)님의 여행 계획",
+                            "exampleTitle": "후쿠오카 🇯🇵 여행 지도",
+                            "startPosition": {            
+                                lat:33.596306,
+                                lng:130.4293798,
                             },
-                            {                              
-                                position:{
-                                    lat:33.5897904,
-                                    lng:130.3504891,
-                                },
-                                label:'후쿠오카시 박물관',
-                                icon:'museum',   
-                            },
-                        ],
-                        [       
-                            {           
-                                position:{
-                                    lat:33.5838392,
-                                    lng:130.4539866,
-                                },
-                                label:'덴푸라 히라오 본점',
-                                icon:'restaurant',                    
-                            },
-                            {                                
-                                position:{
-                                    lat:33.6147611,
-                                    lng:130.4216325,
-                                },
-                                label:'하코자키 궁',
-                                icon:'temple_buddhist',                                  
-                            },
-                        ],
-                        [
-                            {              
-                                position:{
-                                    lat:33.5893684,
-                                    lng:130.4172629,
-                                },
-                                label:'한큐백화점 하카타점',
-                                icon:'shopping_cart',                                      
-                            },    
-                            {                                
-                                position:{
-                                    lat:33.5934691,
-                                    lng:130.3465043,
-                                },
-                                label:'모모치해변',
-                                icon:'beach_access',                              
-                            },
-                        ],
-                        [
-                            {                                
-                                position:{
-                                    lat:33.5932449,
-                                    lng:130.4020225,
-                                },
-                                label:'이치란 본점',
-                                icon:'restaurant',                              
-                            },
-                            {                                
-                                position:{
-                                    lat:33.5650103,
-                                    lng:130.4388288,
-                                },
-                                label:'건담 파크 후쿠오카',
-                                icon:'tour',     
-                                                           
-                            },
-                        ],
-                        [                 
-                            {                                
-                                position:{
-                                    lat:33.5626837,
-                                    lng:130.3738197,
-                                },
-                                label:'유센테이',
-                                icon:'tour',                              
-                            },
-                            {      
-                                position:{
-                                    lat:33.6133009,
-                                    lng:130.4307441,
-                                },
-                                label:'하쿠하쿠',
-                                icon:'museum',                         
-                            },
-                        ]
-                    ]
+                            "examples": [
+                                [
+                                    {                                
+                                        position:{
+                                            lat:33.5897988,
+                                            lng:130.4085279,
+                                        },
+                                        label:'캐널시티',
+                                        icon:'shopping_cart',                              
+                                    },
+                                    {                              
+                                        position:{
+                                            lat:33.5897904,
+                                            lng:130.3504891,
+                                        },
+                                        label:'후쿠오카시 박물관',
+                                        icon:'museum',   
+                                    },
+                                ],
+                                [       
+                                    {           
+                                        position:{
+                                            lat:33.5838392,
+                                            lng:130.4539866,
+                                        },
+                                        label:'덴푸라 히라오 본점',
+                                        icon:'restaurant',                    
+                                    },
+                                    {                                
+                                        position:{
+                                            lat:33.6147611,
+                                            lng:130.4216325,
+                                        },
+                                        label:'하코자키 궁',
+                                        icon:'temple_buddhist',                                  
+                                    },
+                                ],
+                                [
+                                    {              
+                                        position:{
+                                            lat:33.5893684,
+                                            lng:130.4172629,
+                                        },
+                                        label:'한큐백화점 하카타점',
+                                        icon:'shopping_cart',                                      
+                                    },    
+                                    {                                
+                                        position:{
+                                            lat:33.5934691,
+                                            lng:130.3465043,
+                                        },
+                                        label:'모모치해변',
+                                        icon:'beach_access',                              
+                                    },
+                                ],
+                                [
+                                    {                                
+                                        position:{
+                                            lat:33.5932449,
+                                            lng:130.4020225,
+                                        },
+                                        label:'이치란 본점',
+                                        icon:'restaurant',                              
+                                    },
+                                    {                                
+                                        position:{
+                                            lat:33.5650103,
+                                            lng:130.4388288,
+                                        },
+                                        label:'건담 파크 후쿠오카',
+                                        icon:'tour',     
+                                                                   
+                                    },
+                                ],
+                                [                 
+                                    {                                
+                                        position:{
+                                            lat:33.5626837,
+                                            lng:130.3738197,
+                                        },
+                                        label:'유센테이',
+                                        icon:'tour',                              
+                                    },
+                                    {      
+                                        position:{
+                                            lat:33.6133009,
+                                            lng:130.4307441,
+                                        },
+                                        label:'하쿠하쿠',
+                                        icon:'museum',                         
+                                    },
+                                ]
+                            ]
+                        }
+                    }
                 },
                 "budget": {
                     "subtitle": "예산",
@@ -335,6 +343,12 @@ const TEXTS = {
                     "defaultPriceText": "슬라이더를 움직여봐!",
                     "subTests": {
                         "food": {
+                            "budgetLowerBounds": [
+                                5000,
+                                15000,
+                                25000,
+                                50000,
+                            ],
                             "sliderProps": {
                                 "step": 5000,
                                 "min": 5000,
@@ -414,7 +428,7 @@ const TEXTS = {
                                     "sushi":
                                         {
                                             "name": "초밥",
-                                            "city": "삿포로",
+                                            "city": "sapporo",
                                             "restaurant": "nemuro-hanamaru",
                                             "restaurantName": "네무로 하나마루",
                                             "nation": "jp",
@@ -516,6 +530,11 @@ const TEXTS = {
                     "title": "이런 곳은 어때?",
                     "subtitle": "여행지",
                     "linkText": "에서 보기",
+                    "sliderProps": {
+                        "step": 1,
+                        "min": 0,
+                        "max": 4
+                    },
                     "answers": {
                         0: {
                             "label": "-2",
@@ -547,7 +566,7 @@ const TEXTS = {
                         "metropolis": {
                             "label": "현대적인 대도시",
                             "title": "현대적인 대도시",
-                            "icon": "restaurant",
+                            "icon": "domain",
                             "id": "metropolis",
                             "examples": [
                                 "tokyo",
@@ -560,7 +579,7 @@ const TEXTS = {
                         "history": {
                             "label": "유서 깊은 대도시",
                             "title": "유서 깊은 대도시",
-                            "icon": "restaurant",
+                            "icon": "temple_buddhist",
                             "id": "history",
                             "examples": [
                                 "kyoto",
@@ -572,7 +591,7 @@ const TEXTS = {
                         "nature": {
                             "label": "자연경관이 아름다운 곳",
                             "title": "자연경관이 아름다운 곳",
-                            "icon": "restaurant",
+                            "icon": "forest",
                             "examples": [
                                 "shiretoko",
                                 "yakushima",
@@ -658,6 +677,7 @@ const TEXTS = {
                     }
                 },
                 "confirm": {
+                    "icon": "check",
                     "label": "결과 확인",
                     "title": "다시 답변하고 싶은 질문은 없는지 확인해봐"
 
@@ -665,16 +685,16 @@ const TEXTS = {
             },
             "result": {
                 "sections": {
-                    "character":
+                    "tripCharacter":
                     {
-                        label: "내 여행 MBTI",
-                        icon: "conditions",
+                        label: "내 여행\nMBTI",
+                        icon: "pets",
                         typeIntro: "내 여행 MBTI는",
                     },
                     "city":
                     {
-                        label: "추천 여행지",
-                        icon: "beach_access",
+                        label: "추천\n여행지",
+                        icon: "travel_explore",
                         citySuffix: "당신을 위한 여행지",
                         // "cityListTitle": "아름다운 자연경관, 산책과 하이킹 명소",
                         cityListIntro: "추천 여행지",
@@ -683,53 +703,58 @@ const TEXTS = {
                     },
                     "chemistry":
                     {
-                        label: "여행 케미 확인하기",
-                        icon: "travel",
-                        me: "(Me!)",
+                        label: "여행 케미\n확인하러\n가기",
+                        icon: "flight",
                         startChemistryIntro: "이제 친구랑 같이 떠나볼까?",
                         startChemistryTitle: "여행 케미 확인하기",
-                        startChemistryButton: "여행 케미 확인하기",
-                        startChemistryButtonTooltip: "\"친구 추가하기\" 버튼을 눌러 친구를 한 명 이상 추가해주세요.",
-                        addFriendButton: "친구 추가하기",
-                        addFriend: {
-                            addByName: "닉네임으로 친구 추가하기",
-                            friendNameFormLabel: "닉네임을 입력하세요 (e.g. 우동#1234)",
-                            giveMyName: "친구에게 내 닉네임 알려주기",
-                            userApiMissMessage: "친구를 찾지 못했어요.\nID를 다시 확인해주세요.",
-                            userApiFailMessage: "현재 서버에 접속할 수 없어요.\n잠시 후 다시 시도해주세요.",
-                            add: "추가하기",
-                            confirm: "확인"
-                        },
+                        navigateToChemistryButton: "여행 케미 확인하기",
                     },
                 },
             },
             "chemistry": {
                 "sections": {
-                    "character": {
+                    "addFriend": {
+                        label: "친구 추가",
+                        icon: "group_add",
+                        me: "(Me!)",
+                        addFriendButton: "친구 추가하기",
+                        addByName: "닉네임으로 친구 추가하기",
+                        friendNameFormLabel: "닉네임을 입력하세요 (e.g. 우동#1234)",
+                        giveMyName: "친구에게 내 닉네임 알려주기",
+                        userApiMissMessage: "친구를 찾지 못했어요.\nID를 다시 확인해주세요.",
+                        userApiFailMessage: "현재 서버에 접속할 수 없어요.\n잠시 후 다시 시도해주세요.",
+                        add: "추가하기",
+                        confirm: "확인",
+                        startChemistryButton: "케미 확인 시작하기!",
+                        startChemistryButtonTooltip: "\"친구 추가하기\" 버튼을 눌러 친구를 한 명 이상 추가해주세요.",
+                    },
+                    "tripCharacter": {
                         label: "여행 MBTI",
-                        icon: "beach_access",
-                        "characterTitle": "일행의 여행 MBTI 알아보기",
-                        "characterSubtitle": "일행의 여행 MBTI를 통해 서로가 원하는 여행 스타일을 이해해봐요",
+                        icon: "pets",
+                        "title": "일행의 여행 MBTI 알아보기",
+                        "subtitle": "일행의 여행 MBTI를 통해 서로가 원하는 여행 스타일을 이해해봐요",
                     },
                     "leadership": {
                         label: "리더",
-                        icon: "beach_access",
-                        "leadershipTitle": "이번 여행의 대장님은 누구?"
+                        icon: "groups",
+                        "title": "이번 여행의 대장님은 누구?",
+                        "leaderTitle": "듬직한 대장",
                     },
                     "schedule" : {
                         label: "일정",
-                        icon: "beach_access",
-                        "scheduleTitle": "일정은 얼마나 알차게 짤까?",
+                        icon: "edit_calendar",
+                        "title": "일정은 얼마나 알차게 짤까?",
                     },
                     "budget" : {
                         label: "예산",
-                        icon: "beach_access",
-                        "budgetTitle": "예산을 세워보자"
+                        icon: "attach_money",
+                        "title": "예산을 세워보자"
                     },
-                    "city:" : {
+                    "city" : {
                         label: "여행지",
-                        icon: "beach_access",    
-                    }
+                        icon: "travel_explore",    
+                        "title": "함께 어디로 떠나볼까"
+                    },
                 }
             }
         },

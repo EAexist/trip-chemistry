@@ -56,7 +56,7 @@ function LazyImageP ({ placeholderSrc, placeholderClassName, src, alt, className
   );
 };
 
-function LazyImage ({ src, alt, className, children }: PropsWithChildren<LazyImageProps>) {
+function LazyImage ({ src, alt, className = 'object-cover', children }: PropsWithChildren<LazyImageProps>) {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [view, setView] = useState("");
@@ -81,15 +81,15 @@ function LazyImage ({ src, alt, className, children }: PropsWithChildren<LazyIma
   }, [src]);
 
   return (
-    <>
-      <div className={`absolute w-full h-full ${className}`} ref={placeholderRef}>{!isLoaded && children}</div>      
+    <div className='full'>
+      <div className={`${className}`} ref={placeholderRef}>{!isLoaded && children}</div>      
       <img
         src={view} // Gets src only when placeholder intersecting
-        className={isLoaded ? className : 'hidden'}
+        className={isLoaded ? `${className}` : 'hidden'}
         alt={alt}
         onLoad={() => setIsLoaded(true)}
       />
-    </>
+    </div>
   );
 };
 

@@ -8,13 +8,13 @@ import { RootState } from '../common/store';
 import Button from '../components/Button';
 import useServerApi from '../common/utils/useServerApi';
 import axios from 'axios';
-import { WithTestResponseProps } from '../common/hocs/withTestResponse';
+import { WithTestResponseProps } from '../common/hoc/withTestResponse';
 import { UserId } from '../common/types/interfaces';
 import { TestResponse } from '../common/reducer/testResponseReducer';
 import { LoadStatus, LoadStatusProps } from '../common/types/loadStatus';
 
 
-interface TestConfirmProps extends LoadStatusProps, WithTestResponseProps{
+interface TestConfirmPageProps extends LoadStatusProps, WithTestResponseProps{
     
 };
 
@@ -22,9 +22,9 @@ interface TestConfirmProps extends LoadStatusProps, WithTestResponseProps{
 const userName : UserId  = "디클1234";
 const id : UserId = "디클1234";
 
-function TestConfirm({status, setStatus = ()=>{}}: TestConfirmProps){
+function TestConfirmPage({status, setStatus = ()=>{}}: TestConfirmPageProps){
 
-    const response = useSelector((state:RootState)=>state.testResponse);
+    const response = useSelector(( state:RootState )=>state.testResponse);
     const navigate = useNavigate();
 
     /* API 응답 후 다음 함수 실행시 까지 딜레이 */
@@ -76,4 +76,4 @@ function TestConfirm({status, setStatus = ()=>{}}: TestConfirmProps){
         </>
     );
 }
-export default TestConfirm;
+export default TestConfirmPage;

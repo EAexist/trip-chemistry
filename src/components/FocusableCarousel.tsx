@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardMedia, Avatar } from '@mui/material';
 import React, { PropsWithChildren, createContext, useContext, useState } from 'react';
 import { FocusContextProvider, FocusType, useFocusContext, withHover,  withShowOnHover } from '../common/focus/FocusContext';
-import { WithAnimationProps, WithAnimationWrapper } from '../common/hocs/withAnimation';
+import { WithAnimationProps, WithAnimationWrapper } from '../common/hoc/withAnimation';
 import { TestName, useTestResponse } from '../common/reducer/testResponseReducer';
 
 interface selectedItemContextProps {

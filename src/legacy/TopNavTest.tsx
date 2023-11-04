@@ -13,22 +13,22 @@ interface TopNavTestProps{
 function TopNavTest({}:TopNavTestProps){
 
     const strings = usePageString('test');
-    const sections = Object.keys(strings);
 
-    const steps = sections?.map((label, index)=>{
-        return(
+    const steps = Object.entries( strings ).map(( [ id, index ] )=>{
+        return( 
             {
-                label: label, 
+                id: id,
+                label: id, 
                 icon: "",
                 completed: false
             }
         ); 
     });
 
-    const { activeStep, setActiveSectionIndex } = useContext(ActiveSectionContext); 
+    const { activeStep, setActiveStep } = useContext(ActiveSectionContext); 
 
-    const handleClickStepLabel = (index: number) => {
-        setActiveSectionIndex(index); 
+    const handleClickStepLabel = ( index: number ) => {
+        // setActiveStep( id ); 
     }
 
     return(
@@ -36,9 +36,9 @@ function TopNavTest({}:TopNavTestProps){
             <IndexNavigationButtonWrapper offset={-1}><Button><KeyboardArrowLeft />이전 질문</Button></IndexNavigationButtonWrapper>
             <div className='basis-6/12'>
                 <IconStepper
-                    steps={steps}
-                    activeStep={activeStep}
-                    handleClickStepButton={handleClickStepLabel}
+                    steps={ steps }
+                    activeStep={ activeStep }
+                    handleClickStepButton={ handleClickStepLabel }
                 />
             </div>
             <IndexNavigationButtonWrapper offset={1}><Button>다음 질문<KeyboardArrowRight/></Button></IndexNavigationButtonWrapper>

@@ -28,7 +28,7 @@ interface AnswerItemWrapperProps {
 
 const ShowTestResponseDetailWrapper = ({ index, children } : PropsWithChildren<AnswerItemWrapperProps>) => {
   const {focus} = useFocusContext();
-  const testResponse = useTestResponse('schedule');
+  const testResponse = useTestResponse({ testName: 'schedule', subTestName: 'schedule' });
 
   return(
       <>

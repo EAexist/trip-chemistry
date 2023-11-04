@@ -1,6 +1,6 @@
 import { PropsWithChildren, createContext, useContext, isValidElement, cloneElement, Children, ComponentType, useCallback, useState } from 'react';
-import { TestName, useTestResponse } from '../reducer/testResponseReducer';
-import { WithAnimationProps } from '../hocs/withAnimation';
+import { SubTestName, TestIndex, TestName, useTestResponse } from '../reducer/testResponseReducer';
+import { WithAnimationProps } from '../hoc/withAnimation';
 
 type FocusType = number | string | boolean
 
@@ -45,10 +45,10 @@ function useShowOnHover() {
     , [focus]);
     return getIfShowOnHover; 
 }
-function useShowOnResponse(testName: TestName) {
+function useShowOnResponse(testIndex: TestIndex) {
     const { focus } = useFocusContext();   
     const getIfShowOnHover = useShowOnHover();
-    const testResponse = useTestResponse(testName);
+    const testResponse = useTestResponse(testIndex);
     const getIfShowOnResponse = useCallback((id: number, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId)) => {
         console.log(`getIfShowOnResponse: focus=${focus} compareFunc=${compareFunc(id, testResponse as FocusType)}`);
         return focus === -1 ? compareFunc(id, testResponse as FocusType) : getIfShowOnHover(id, compareFunc);
@@ -172,9 +172,9 @@ interface FocusSummaryProps{
     force?: boolean; 
     compareFunc?: (id:FocusType, contextId:FocusType)=>boolean;
 };
-function FocusSummary({id=true, force, defaultShow=false, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), children}: PropsWithChildren<FocusDetailProps>) {
+function FocusSummary({id=true, force, defaultShow=true, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), children}: PropsWithChildren<FocusDetailProps>) {
     const { focus } = useFocusContext();
-    console.log(`withShowOnHover: focus=${focus} defaultShow=${defaultShow}`);    
+    console.log(`FocusSummary: focus=${focus} defaultShow=${defaultShow}`);    
     return(
         (force 
             || (focus === -1 ?
@@ -189,17 +189,17 @@ function FocusSummary({id=true, force, defaultShow=false, compareFunc = (id:Focu
 interface withShowOnResponseProps{
 };
 interface withShowOnResponseHOCProps{
+    testIndex: TestIndex
     id: number; /* Carousel 에서 아이템을 특정하는 id */
-    testName: TestName;
     force?: boolean; 
     compareFunc?: (id:FocusType, contextId:FocusType)=>boolean;
     withAnimationProps?: WithAnimationProps; /* hover로 디테일이 렌더링 될 때 애니메이션을 실행하기 위한 WithAnimationWrapper 의 props */
 };
 const withShowOnResponse = <T extends withShowOnResponseProps>(WrappedComponent: ComponentType<T>) =>
-    ({id, testName, force, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId)}: withShowOnResponseHOCProps) => /* id: 인덱스, force: true 일 경우 로직을 비활성화하고 컴포넌트를 항상 보여줌.(디버깅) defaultShow: true 일 경우 마우스를 올리지 않았을 때에도 컴포넌트를 보여줌. */
+    ({id, force, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), withAnimationProps, testIndex}: withShowOnResponseHOCProps) => /* id: 인덱스, force: true 일 경우 로직을 비활성화하고 컴포넌트를 항상 보여줌.(디버깅) defaultShow: true 일 경우 마우스를 올리지 않았을 때에도 컴포넌트를 보여줌. */
     (props: T) => {
     const { focus } = useFocusContext();
-    const testResponse = useTestResponse(testName);
+    const testResponse = useTestResponse(testIndex);
     const isActive = compareFunc(id, testResponse as FocusType);
     
     console.log(`withShowOnResponse: id=${id} isActive=${isActive}`);    
@@ -217,10 +217,10 @@ interface WithActiveOnResponseProps{
     isActive: boolean;
 };
 const withActiveOnResponse = <T extends WithActiveOnResponseProps>(WrappedComponent: ComponentType<T>) =>
-    ({id, testName, force, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId)}: withShowOnResponseHOCProps) => /* id: 인덱스, force: true 일 경우 로직을 비활성화하고 컴포넌트를 항상 보여줌.(디버깅) defaultShow: true 일 경우 마우스를 올리지 않았을 때에도 컴포넌트를 보여줌. */
+    ({id, force, compareFunc = (id:FocusType, contextId:FocusType)=>(id === contextId), withAnimationProps, testIndex}: withShowOnResponseHOCProps) => /* id: 인덱스, force: true 일 경우 로직을 비활성화하고 컴포넌트를 항상 보여줌.(디버깅) defaultShow: true 일 경우 마우스를 올리지 않았을 때에도 컴포넌트를 보여줌. */
     (props: Omit<T, keyof WithActiveOnResponseProps>) => {
     const { focus } = useFocusContext();
-    const testResponse = useTestResponse(testName);
+    const testResponse = useTestResponse(testIndex);
     const isActive = force ||
     (focus === -1 ?
         compareFunc(id, testResponse as FocusType)
@@ -232,9 +232,13 @@ const withActiveOnResponse = <T extends WithActiveOnResponseProps>(WrappedCompon
 }
 
 export { FocusContextProvider, useFocusContext, 
-    withHover, withShowOnHover, withShowOnResponse,
-    Focusable, FocusDetail, FocusSummary,
-    FocusContext,
-    useShowOnResponse, withActiveOnResponse, withFocusContext }
+    withHover, withShowOnHover,
 
-export type { FocusType, FocusContextProps, withShowOnHoverProps, withHoverProps, withShowOnResponseHOCProps, WithActiveOnResponseProps };
+    Focusable, FocusDetail, FocusSummary,
+    FocusContext, withFocusContext,
+    useShowOnResponse,  
+    withShowOnResponse, withActiveOnResponse
+}
+
+export type { FocusType, FocusContextProps, withShowOnHoverProps, withHoverProps, withShowOnResponseHOCProps,
+    WithActiveOnResponseProps };

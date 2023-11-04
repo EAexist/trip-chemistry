@@ -1,7 +1,7 @@
 import {useState, createContext } from 'react';
-import withTestResponse, { WithTestResponseProps} from '../../../common/hocs/withTestResponse';
+import withTestResponse, { WithTestResponseProps} from '../../../common/hoc/withTestResponse';
 import { SubTestName, } from '../../../common/reducer/testResponseReducer';
-import TestContainer from '../../typography/TestContainer';
+import TestTitleContainer from '../../typography/TestTitleContainer';
 
 /* Swiper */
 import { Parallax, EffectCards, Autoplay } from 'swiper/modules';
@@ -11,12 +11,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
 import getImgSrc, { FORMATWEBP } from '../../../common/utils/getImgSrc';
-import { WithAnimationWrapper } from '../../../common/hocs/withAnimation';
+import { WithAnimationWrapper } from '../../../common/hoc/withAnimation';
 import ExpandableTestResponseButton from './ExpandableTestResponseButton';
 
 interface TestWithSubTestPageProps extends WithTestResponseProps{}; 
 
-function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
+function TestWithSubTestPage({testIndex, strings}: TestWithSubTestPageProps){
 
   const [activeSubTest, setActiveSubTest] = useState<SubTestName>(Object.keys(strings.subTests)[0] as SubTestName);
   const subTestStrings = activeSubTest && strings.subTests[activeSubTest]
@@ -30,14 +30,14 @@ function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
     <div className='flex flex-row w-full h-full
         max-md:flex-col'
       >  
-      <TestContainer title={strings.title} subtitle={strings.subtitle}> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */}   
+      <TestTitleContainer title={strings.title} subtitle={strings.subtitle}/> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */}   
         <div className='w-full h-full flex flex-col items-start space-y-8
           max-md:flex-row max-md:whitespace-nowrap max-md:flex-wrap max-md:space-y-1'
         > {/* 질문 목록 */}
           {
             (Object.entries(strings.subTests) as [k: SubTestName, subTest: any][]).map(([subTestName, subTest]) => {
-              console.log(`TestWithSubTestPage testName=${testName}, subTestName=${subTestName}`);
-              const ExpandableResponseButtonWithResponse = withTestResponse(ExpandableTestResponseButton)({ testName, subTestName });
+              // console.log(`TestWithSubTestPage testName=${testName}, subTestName=${subTestName}`);
+              const ExpandableResponseButtonWithResponse = withTestResponse(ExpandableTestResponseButton)(testIndex);
               return (
                 <ExpandableResponseButtonWithResponse isActive={subTestName === activeSubTest} onClick={() => setActiveSubTest(subTestName)}>
                   {`#${subTest.title}`}
@@ -46,12 +46,11 @@ function TestWithSubTestPage({testName, strings}: TestWithSubTestPageProps){
             })
           }
         </div>
-      </TestContainer>
 
       <div className='w-8/12 h-full p-9
         max-md: w-full
       '>{/* 결과 */}
-        <WithAnimationWrapper key={activeSubTest}>
+        <WithAnimationWrapper key={activeSubTest as string}>
           {/* <div className='w-24 h-24'>  */}
           <SwiperSlide className='flex flex-col justify-center items-center'>
             {/* https://swiperjs.com/react#swiperslide-render-function */}

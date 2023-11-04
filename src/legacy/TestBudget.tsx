@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { MaterialSlider } from '../components/Slider';
-import useValueToBound from '../common/hooks/useValueToBound';
-import { WithTestResponseProps } from '../common/hocs/withTestResponse';
+import useValueToBound from '../common/hook/useValueToBound';
+import { WithTestResponseProps } from '../common/hoc/withTestResponse';
 import useGetImgSrc, { FORMATSVG, FORMATWEBP } from '../common/utils/getImgSrc';
 import getImgSrc from '../common/utils/getImgSrc';
 import Trail from '../components/spring/Trail';
 import Card from '../components/Card';
-import { WithAnimationWrapper } from '../common/hocs/withAnimation';
+import { WithAnimationWrapper } from '../common/hoc/withAnimation';
 import { CardActions, CardContent, CardMedia, Divider } from '@mui/material';
 import { ArrowRight } from '@mui/icons-material';
-import TestContainer from '../components/typography/TestContainer';
+import TestTitleContainer from '../components/typography/TestTitleContainer';
 
 interface TestBudgetProps extends WithTestResponseProps{
 };
@@ -34,8 +34,7 @@ const priceText = (value: number) => {
 function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
     
     /* 응답한 값 (예산 금액)을 레벨로 변환해 레벨에 대응하는 컨텐츠를 보여줌. */
-    const [bugetBound, setBudgetIndex] = useValueToBound({ boundList: budgetLowerBounds });
-    setBudgetIndex(testResponse as number);
+    const [ bugetBound ] = useValueToBound({ boundList: budgetLowerBounds });
 
     /* 응답 여부 */
     const [isAnswered, setIsAnswered] = useState(false);
@@ -53,7 +52,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
     return(        
         <div className ='flex flex-row w-full h-full max-md:flex-col'> {/* 페이지 */}                     
 
-            <TestContainer title={strings.title} subtitle={strings.subtitle}> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */} 
+            <TestTitleContainer title={strings.title} subtitle={strings.subtitle}/> {/* 테스트 제목 및 내용 레이아웃 컴포넌트 */} 
                 <div className='flex flex-col items-center'>
                     <div className='h-24 flex items-center'> {/* 응답 값 디스플레이: 예산 e.g. 4만원 */}
                         {testResponse ? <h2>{priceText(testResponse)}</h2> : <h4>{strings.defaultPriceText}</h4>}
@@ -94,8 +93,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
 
                                         </div>
                                     </CardContent>
-                                    <CardActions> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) 
-                                    @TODO: 카드 자체 클릭으로 변경 가능*/}
+                                    <CardActions> {/* 디테일 보기 (e.g. 음식 -> 타베로그, 식당 자체 웹사이트 / 숙소 -> Hotels.com, 숙소 자체 웹사이트) */}
                                         <div className='flex flex-row items-center'>
                                             <p>{strings.linkType}</p>
                                             <ArrowRight fontSize='inherit' />
@@ -106,8 +104,7 @@ function TestBudget({testResponse, setTestResponse, strings}: TestBudgetProps){
                         </WithAnimationWrapper>
                     }
                     </div>
-                </div>
-            </TestContainer>         
+                </div> 
             {
                 (bugetBound !== undefined) &&
                 <WithAnimationWrapper key={bugetBound.toString()}>

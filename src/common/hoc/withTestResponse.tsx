@@ -1,41 +1,38 @@
 import { ComponentType } from "react";
-import { useSetTestResponse, useTestResponse, TestResponse, TestName, SubTestName } from "../reducer/testResponseReducer";
+import { useSetTestResponse, useTestResponse, TestResponse, TestName, SubTestName, TestIndex } from "../reducer/testResponseReducer";
 import { useTestString } from "../../texts";
 // import { BudgetResponse, SubTestName, TestResponse, TestName } from "../interface/interfaces";
 
 interface WithTestResponseProps{
-    testName: TestName;
-    subTestName: SubTestName;
+    testIndex: TestIndex;
     testResponse: number; 
-    setTestResponse: (value: TestResponse[TestName]) => void;    
+    setTestResponse: (value: TestResponse[TestName][SubTestName]) => void;    
+    testStrings: any;
     strings: any;
     // setBudgetResponse?: (SubTestName: SubTestName, value: BudgetResponse[SubTestName]) => void;    
 };
 
-interface WithTestResponseHOCProps{
-    testName: TestName;
-    subTestName?: SubTestName;
-}
+interface WithTestResponseHOCProps extends TestIndex{
+};
 
 /* HOC withTestResponse
     컴포넌트에 테스트 섹션 정보와 해당 정보에 대응하는 testResponse 리듀서 state 와 setter 함수를 연결.   */
 const withTestResponse = <P extends WithTestResponseProps>(WrappedComponent: ComponentType<P>) => 
-    ({testName, subTestName}: WithTestResponseHOCProps) => 
+    (testIndex: WithTestResponseHOCProps) => 
     (props: Omit<P, keyof WithTestResponseProps>) => {
     
-    const testResponse = useTestResponse(testName, subTestName);
+    const testResponse = useTestResponse(testIndex);
     const setTestResponse = useSetTestResponse();
-    const strings = useTestString({testName, subTestName});
+    const testStrings = useTestString({ testName: testIndex.testName });
+    const strings = useTestString(testIndex);
     
     return (
         <WrappedComponent 
         {...{
-            testName: testName,
-            subTestName: subTestName,
+            testIndex,
             testResponse: testResponse,
             setTestResponse: (value: number) => {console.log(`withTestResponse-value=${value}`); setTestResponse({
-                testName: testName,
-                subTestName: subTestName,
+                ...testIndex,
                 value: value,
             })},
             // setBudgetResponse: (value: number, SubTestName: SubTestName) => setTestResponse({
@@ -43,7 +40,8 @@ const withTestResponse = <P extends WithTestResponseProps>(WrappedComponent: Com
             //     subTestName: SubTestName,
             //     value: value,
             // }),            
-            strings: strings
+            testStrings: testStrings,
+            strings: strings,
         }}
             {...props as P}
         />

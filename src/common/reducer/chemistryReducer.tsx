@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { useCallback } from "react";
 import { AppDispatch, RootState } from "../store";
 import { useSelector } from "react-redux";
-import { useUserList } from "./userListReducer";
 import { TestResponse } from "./testResponseReducer";
 import { LoadStatus } from "../types/loadStatus";
 
@@ -33,7 +32,7 @@ const getUserIdString = (userIdList: UserId[]) => (userIdList.sort().join(','));
 
 const initialState: ChemistryState = {userData:{}, chemistry:{}, LoadStatus:LoadStatus.PENDING};
 
-const fetchChemistryByIdList = createAsyncThunk("user/chemistry/idList", 
+const fetchChemistryList = createAsyncThunk("user/chemistry/idList", 
     async (userIdList: UserId[], thunkAPI) => {
         try{
             const data = await useServerAPI({
@@ -46,7 +45,7 @@ const fetchChemistryByIdList = createAsyncThunk("user/chemistry/idList",
                     body: undefined,
                 }
             })
-            console.log(`fetchChemistryByIdList:${JSON.stringify(data)}`);
+            console.log(`fetchChemistryList:${JSON.stringify(data)}`);
             return data;
         }
         catch (e: any) {
@@ -73,7 +72,7 @@ const chemistrySlice = createSlice({
         },
     },
     extraReducers:(builder) => {
-        builder.addCase(fetchChemistryByIdList.fulfilled, (state, action: PayloadAction<{
+        builder.addCase(fetchChemistryList.fulfilled, (state, action: PayloadAction<{
             userData: {[userid: UserId]: TestResponse}
             chemistry:{}
         }>) => {
@@ -85,17 +84,17 @@ const chemistrySlice = createSlice({
             /* Set Chemistry */
             state.chemistry = action.payload.chemistry;
 
-            console.log(`fetchChemistryByIdList.fulfilled - 
+            console.log(`fetchChemistryList.fulfilled - 
             \naction.payload=${JSON.stringify(action.payload)}`);
 
             state.LoadStatus = LoadStatus.REST;
         });
-        builder.addCase(fetchChemistryByIdList.pending, (state) => {
-            console.log(`fetchChemistryByIdList.pending`);
+        builder.addCase(fetchChemistryList.pending, (state) => {
+            console.log(`fetchChemistryList.pending`);
             state.LoadStatus = LoadStatus.PENDING;
         });
-        builder.addCase(fetchChemistryByIdList.rejected, (state) => {
-            console.log(`fetchChemistryByIdList.rejected`);
+        builder.addCase(fetchChemistryList.rejected, (state) => {
+            console.log(`fetchChemistryList.rejected`);
             state.LoadStatus = LoadStatus.FAIL;
         });
     },
@@ -103,29 +102,29 @@ const chemistrySlice = createSlice({
 
 // const useChemistry = () => {
 //     return([
-//         useSelector((state:RootState)=>state.chemistry.chemistry),
-//         useSelector((state:RootState)=>state.chemistry.nationFilter),
+//         useSelector(( state:RootState )=>state.chemistry.chemistry),
+//         useSelector(( state:RootState )=>state.chemistry.nationFilter),
 //     ] as const);
 // }
 
-    /* Initiate state based on userList */
+    /* Initiate state based on userDataObject */
 // const useSetChemistryTestResult = () => {
 //     const dispatch = useDispatch();
-//     const userList = useUserList();   
+//     const userDataObject = useUserList();   
 //     dispatch(chemistrySlice.actions.setTestResult(userList));
 // }
 
 /* Fetch Chemistry from Id */
-const useFetchChemistryByIdList = () => {
+const useFetchChemistryList = () => {
     const dispatch = useDispatch<AppDispatch>(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */   
     return useCallback((userIdList: UserId[]) => 
-        dispatch(fetchChemistryByIdList(userIdList))
+        dispatch(fetchChemistryList(userIdList))
     , [dispatch]);
 }
 
 const useChemistryLoadStatus = () => {
     const dispatch = useDispatch(); /* Using useDispatch with createAsyncThunk. https://stackoverflow.com/questions/70143816/argument-of-type-asyncthunkactionany-void-is-not-assignable-to-paramete */
-    const status = useSelector((state:RootState)=>state.chemistry.LoadStatus);
+    const status = useSelector(( state:RootState )=>state.chemistry.LoadStatus);
     return ([
         status,
         useCallback((status: LoadStatus) =>
@@ -135,4 +134,4 @@ const useChemistryLoadStatus = () => {
 }
 
 export default chemistrySlice.reducer;
-export { useFetchChemistryByIdList, useChemistryLoadStatus }
+export { useFetchChemistryList, useChemistryLoadStatus }
